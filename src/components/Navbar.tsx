@@ -15,14 +15,15 @@ import {
   useDisclosure,
   useColorModeValue,
   Stack,
+  GenericAvatarIcon,
 } from "@chakra-ui/react";
-import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, CloseIcon, ChatIcon } from "@chakra-ui/icons";
 
 interface NavbarProps {
   children: ReactNode;
 }
 
-const Links = ["Dashboard", "Projects", "Team"];
+const Links = ["Dashboard", "Frentes de Trabalho", "Atividades"];
 
 const NavLink = ({ children }: { children: ReactNode }) => {
   return (
@@ -47,37 +48,29 @@ export const Navbar = ({ children }: NavbarProps) => {
 
   return (
     <>
-      <Box bg={useColorModeValue("gray.100", "gray.900")} px={10}>
+      <Box bg={useColorModeValue("gray.100", "gray.900")} px={6} py={1}>
         <Flex h={16} alignItems={"center"} justifyContent={"space-between"}>
-          <IconButton
-            size={"md"}
-            icon={isOpen ? <CloseIcon /> : <HamburgerIcon />}
-            aria-label={"Open Menu"}
-            display={{ md: "none" }}
-            onClick={isOpen ? onClose : onOpen}
-          />
-          <HStack spacing={8} alignItems={"center"}>
-            <img src="/logoEp.svg" />
-            <HStack
-              as={"nav"}
-              spacing={4}
-              display={{ base: "none", md: "flex" }}
-            >
-              {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
-              ))}
-            </HStack>
+          {/* ESQUERDA: Menu e logo */}
+          <HStack spacing={4} alignItems="center">
+            <IconButton
+              size={"md"}
+              border={"1px solid #666666"}
+              icon={
+                isOpen ? (
+                  <CloseIcon color={"gray.900"} />
+                ) : (
+                  <HamburgerIcon color={"gray.900"} />
+                )
+              }
+              aria-label={"Open Menu"}
+              onClick={isOpen ? onClose : onOpen}
+            />
+            <img src="/logoEp.svg" alt="Logo" height="32" />
           </HStack>
+
+          {/* DIREITA: Ícones e Avatar */}
           <Flex alignItems={"center"}>
-            <Button
-              variant={"solid"}
-              colorScheme={"teal"}
-              size={"sm"}
-              mr={4}
-              leftIcon={<AddIcon />}
-            >
-              Action
-            </Button>
+            <ChatIcon mr={4} />
             <Menu>
               <MenuButton
                 as={Button}
@@ -86,12 +79,7 @@ export const Navbar = ({ children }: NavbarProps) => {
                 cursor={"pointer"}
                 minW={0}
               >
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
+                <Avatar size={"sm"} icon={<GenericAvatarIcon />} />
               </MenuButton>
               <MenuList>
                 <MenuItem>Link 1</MenuItem>
@@ -103,17 +91,19 @@ export const Navbar = ({ children }: NavbarProps) => {
           </Flex>
         </Flex>
 
-        {isOpen ? (
-          <Box pb={4} display={{ md: "none" }}>
-            <Stack as={"nav"} spacing={4}>
+        {/* MOBILE: Links colapsados */}
+        {isOpen && (
+          <Box pb={4}>
+            <Stack as="nav" spacing={4}>
               {Links.map((link) => (
                 <NavLink key={link}>{link}</NavLink>
               ))}
             </Stack>
           </Box>
-        ) : null}
+        )}
       </Box>
-      {/* passado via props */}
+
+      {/* Conteúdo da página */}
       <Box p={4}>{children}</Box>
     </>
   );
