@@ -1,12 +1,9 @@
-// src/routes/index.tsx
-// import React from "react";
-// import Home from "../pages/Home";
-// import About from "../pages/About";
+import { Navbar } from "../../components/Navbar";
 
 export const DashboardPage = () => {
   return (
     <>
-      <p>página de dashboard</p>
+      <Navbar />
     </>
   );
 };

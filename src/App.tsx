@@ -1,5 +1,5 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
-import { AppRoutes } from "./routes/routes";
+import { AppRoutes } from "./routes/Routes";
 
 const theme = extendTheme({
   colors: {
