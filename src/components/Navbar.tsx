@@ -19,14 +19,13 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon, AddIcon } from "@chakra-ui/icons";
 
-interface Props {
-  children: React.ReactNode;
+interface NavbarProps {
+  children: ReactNode;
 }
 
 const Links = ["Dashboard", "Projects", "Team"];
 
-const NavLink = (props: Props) => {
-  const { children } = props;
+const NavLink = ({ children }: { children: ReactNode }) => {
   return (
     <Box
       as="a"
@@ -44,7 +43,7 @@ const NavLink = (props: Props) => {
   );
 };
 
-export const Navbar = () => {
+export const Navbar = ({ children }: NavbarProps) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -115,8 +114,8 @@ export const Navbar = () => {
           </Box>
         ) : null}
       </Box>
-
-      <Box p={4}>Main Content Here</Box>
+      {/* passado via props */}
+      <Box p={4}>{children}</Box>
     </>
   );
 };
