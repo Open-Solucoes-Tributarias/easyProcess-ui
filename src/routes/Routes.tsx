@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import { DashboardPage } from "../pages/dashboard/DashboardPage";
-import { ControlPanel } from "../pages/dashboard/controlPanel/ControlPanel";
+import { ControlPanel } from "../pages/controlPanel/ControlPanel";
 
 
 export const AppRoutes = () => {
