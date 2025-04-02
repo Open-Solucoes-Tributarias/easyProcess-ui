@@ -14,15 +14,22 @@ import {
   MenuDivider,
   GenericAvatarIcon,
 } from "@chakra-ui/react";
+import { useNavigate } from "react-router-dom";
 import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 
 interface NavbarProps {
   children: ReactNode;
 }
 
-const Links = ["Dashboard", "Frentes de Trabalho", "Atividades"];
+const Links = [
+  { label: "Dashboard", path: "/" },
+  { label: "Painel de controle", path: "/painel" },
+  { label: "Gerenciar Clientes", path: "/" },
+];
 
 export const Navbar = ({ children }: NavbarProps) => {
+  const navigate = useNavigate();
+
   return (
     <>
       <Box bg={"#fff"} px={6} py={1}>
@@ -38,12 +45,15 @@ export const Navbar = ({ children }: NavbarProps) => {
               />
               <MenuList>
                 {Links.map((link) => (
-                  <MenuItem key={link}>{link}</MenuItem>
+                  <MenuItem key={link.label} onClick={() => navigate(link.path)}>
+                    {link.label}
+                  </MenuItem>
                 ))}
               </MenuList>
             </Menu>
             <img src="/logoEp.svg" alt="Logo" height="32" />
           </HStack>
+
           <Flex alignItems={"center"}>
             <ChatIcon mr={4} />
             <Menu>
@@ -57,17 +67,16 @@ export const Navbar = ({ children }: NavbarProps) => {
                 <Avatar size={"sm"} icon={<GenericAvatarIcon />} />
               </MenuButton>
               <MenuList>
-                <MenuItem>Perfil</MenuItem>
-                <MenuItem>Configurações</MenuItem>
+                <MenuItem onClick={() => navigate("/")}>Perfil</MenuItem>
+                <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem>
                 <MenuDivider />
-                <MenuItem>Sair</MenuItem>
+                <MenuItem onClick={() => navigate("/")}>Sair</MenuItem>
               </MenuList>
             </Menu>
           </Flex>
         </Flex>
       </Box>
       <hr color="#d0d0d0" />
-      {/* Conteúdo da página */}
       <Box p={4}>{children}</Box>
     </>
   );
