@@ -13,15 +13,39 @@ const theme = extendTheme({
   },
   styles: {
     global: () => ({
-      'html, body': {
-        color: '#4c4c4c',
-        lineHeight: 'tall',
-        bg: 'white',
+      "html, body": {
+        color: "#4c4c4c",
+        lineHeight: "tall",
+        bg: "white",
       },
       a: {
-        color: 'teal.500',
+        color: "teal.500",
       },
     }),
+  },
+  components: {
+    Button: {
+      baseStyle: {
+        fontWeight: 600,
+      },
+      variants: {
+        solid: {
+          bg: "#68D391",
+          color: "white",
+          _hover: {
+            bg: "brand.600",
+          },
+        },
+        outline: {
+          bg: "#EDF2F7",
+          color: "#7a7a7a",
+          fontWeight: 600,
+          _hover: {
+            bg: "brand.600",
+          },
+        },
+      },
+    },
   },
 });
 

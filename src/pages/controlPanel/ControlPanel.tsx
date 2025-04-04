@@ -3,6 +3,7 @@ import { SearchIcon } from "@chakra-ui/icons";
 import { Navbar } from "../../components/Navbar";
 import {
   Box,
+  Button,
   Grid,
   GridItem,
   Input,
@@ -37,6 +38,8 @@ export const ControlPanel = () => {
             <Text as="b" fontSize="xl">
               Frentes de Trabalho | Atividades
             </Text>
+            <Button>Salvar</Button>
+            <Button variant={"outline"}>Cancelar</Button>
             <Box style={styles.content}></Box>
           </GridItem>
         </Grid>
