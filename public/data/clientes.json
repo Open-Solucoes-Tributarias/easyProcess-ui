@@ -1,0 +1,37 @@
+[
+  {
+    "id": 1,
+    "nomeFantasia": "TechPlus Solutions",
+    "razaoSocial": "TechPlus Soluções em Tecnologia LTDA",
+    "cnpj": "12.345.678/0001-90",
+    "dataCadastro": "2025-01-15T10:00:00.000Z"
+  },
+  {
+    "id": 2,
+    "nomeFantasia": "Alpha Contabilidade",
+    "razaoSocial": "Alpha Contabilidade e Assessoria Financeira LTDA",
+    "cnpj": "98.765.432/0001-21",
+    "dataCadastro": "2025-02-01T14:30:00.000Z"
+  },
+  {
+    "id": 3,
+    "nomeFantasia": "Green Agro",
+    "razaoSocial": "Green Agro Comércio e Exportação S/A",
+    "cnpj": "45.789.123/0001-55",
+    "dataCadastro": "2025-03-10T09:15:00.000Z"
+  },
+  {
+    "id": 4,
+    "nomeFantasia": "Nova Saúde",
+    "razaoSocial": "Nova Saúde Serviços Médicos LTDA",
+    "cnpj": "67.890.123/0001-88",
+    "dataCadastro": "2025-03-20T11:45:00.000Z"
+  },
+  {
+    "id": 5,
+    "nomeFantasia": "LogiTrans",
+    "razaoSocial": "LogiTrans Logística e Transporte LTDA",
+    "cnpj": "23.456.789/0001-33",
+    "dataCadastro": "2025-04-01T08:20:00.000Z"
+  }
+]

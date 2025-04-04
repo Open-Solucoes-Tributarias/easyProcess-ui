@@ -1,16 +1,7 @@
 "use client";
-import { SearchIcon } from "@chakra-ui/icons";
 import { Navbar } from "../../components/Navbar";
-import {
-  Box,
-  Button,
-  Grid,
-  GridItem,
-  Input,
-  InputGroup,
-  InputRightElement,
-  Text,
-} from "@chakra-ui/react";
+import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Clients } from "./sections/Clients";
 
 export const ControlPanel = () => {
   return (
@@ -22,24 +13,13 @@ export const ControlPanel = () => {
               Clientes
             </Text>
             <Box style={styles.content}>
-              <InputGroup>
-                <Input placeholder="Pesquisar..." focusBorderColor="#68d391" />
-                <InputRightElement
-                  pointerEvents="none"
-                  color="gray.300"
-                  fontSize="1.2em"
-                >
-                  <SearchIcon color="#68d391" />
-                </InputRightElement>
-              </InputGroup>
+              <Clients />
             </Box>
           </GridItem>
           <GridItem>
             <Text as="b" fontSize="xl">
               Frentes de Trabalho | Atividades
             </Text>
-            <Button>Salvar</Button>
-            <Button variant={"outline"}>Cancelar</Button>
             <Box style={styles.content}></Box>
           </GridItem>
         </Grid>
