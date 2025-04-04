@@ -7,7 +7,7 @@ export const ControlPanel = () => {
   return (
     <>
       <Navbar>
-        <Grid templateColumns="1fr 2fr" gap={6} p={3}>
+        <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap={6} p={3}>
           <GridItem>
             <Text as="b" fontSize="xl">
               Clientes
