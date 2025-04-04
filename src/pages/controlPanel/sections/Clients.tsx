@@ -1,15 +1,7 @@
 "use client";
 
-import {
-  Grid,
-  GridItem,
-  List,
-  ListItem,
-  ListIcon,
-  Text,
-} from "@chakra-ui/react";
+import { Grid, GridItem, List, ListItem } from "@chakra-ui/react";
 import { SearchInput } from "../../../components/InputSearch";
-import { CheckCircleIcon } from "@chakra-ui/icons";
 
 const clients = [
   "TechPlus Solutions",
@@ -25,11 +17,10 @@ export const Clients = () => {
       <GridItem>
         <SearchInput />
       </GridItem>
-      <GridItem pb={4} paddingInline={4}>
-        <List spacing={3}>
+      <GridItem pb={4} paddingInline={5}>
+        <List styleType="disc" spacing={3}>
           {clients.map((client, index) => (
-            <ListItem key={index}>
-              {/* <ListIcon as={CheckCircleIcon} color="green.500" /> */}
+            <ListItem sx={styles.listItem} key={index}>
               {client}
             </ListItem>
           ))}
@@ -39,4 +30,11 @@ export const Clients = () => {
   );
 };
 
-const styles = {};
+const styles = {
+  listItem: {
+    _hover: {
+      color: "#68D391",
+      cursor: "pointer",
+    },
+  },
+};
