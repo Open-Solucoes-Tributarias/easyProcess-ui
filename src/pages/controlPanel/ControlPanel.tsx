@@ -2,6 +2,7 @@
 import { Navbar } from "../../components/Navbar";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { Clients } from "./sections/Clients";
+import { FrontWorks } from "./sections/FrontWorks";
 
 export const ControlPanel = () => {
   return (
@@ -20,7 +21,9 @@ export const ControlPanel = () => {
             <Text as="b" fontSize="xl">
               Frentes de Trabalho | Atividades
             </Text>
-            <Box style={styles.content}></Box>
+            <Box style={styles.content}>
+              <FrontWorks/>
+            </Box>
           </GridItem>
         </Grid>
       </Navbar>
