@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { CheckCircleIcon, InfoOutlineIcon, MinusIcon, SearchIcon } from "@chakra-ui/icons";
 import { FaEdit } from "react-icons/fa";
+import { SearchInput } from "../../../components/InputSearch";
 
 // Mock de dados de frentes e atividades
 const mockFrentes = [
@@ -53,12 +54,7 @@ export const FrontWorks = () => {
   return (
     <Grid templateColumns="1fr" gap={6} p={4}>
       <GridItem>
-        <InputGroup>
-          <InputLeftElement pointerEvents="none">
-            <SearchIcon color="gray.400" />
-          </InputLeftElement>
-          <Input placeholder="Pesquisar" />
-        </InputGroup>
+        <SearchInput/>
       </GridItem>
 
       <GridItem>
@@ -104,9 +100,9 @@ export const FrontWorks = () => {
                             aria-label="Info"
                             icon={<InfoOutlineIcon />}
                             variant="ghost"
-                            size="sm"
+                            size="xs"
                           />
-                          <Avatar name={atividade.responsavel} size="sm" />
+                          <Avatar name={atividade.responsavel} size="xs" />
                         </Flex>
                       </Flex>
                     ))}

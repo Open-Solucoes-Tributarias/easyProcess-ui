@@ -3,6 +3,7 @@ import { Navbar } from "../../components/Navbar";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { Clients } from "./sections/Clients";
 import { FrontWorks } from "./sections/FrontWorks";
+import { FloatingButton } from "../../components/FloatButton";
 
 export const ControlPanel = () => {
   return (
@@ -26,6 +27,7 @@ export const ControlPanel = () => {
             </Box>
           </GridItem>
         </Grid>
+        <FloatingButton/>
       </Navbar>
     </>
   );
