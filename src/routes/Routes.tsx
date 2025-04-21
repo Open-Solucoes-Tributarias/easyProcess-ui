@@ -3,6 +3,7 @@ import { DashboardPage } from "../pages/dashboard/DashboardPage";
 import { ControlPanel } from "../pages/controlPanel/ControlPanel";
 import { LoginPage } from "../pages/login/LoginPage";
 import { PrivateRoute } from "./PrivateRoute";
+import { RegisterPage } from "../pages/login/RegisterPage";
 
 
 export const AppRoutes = () => {
@@ -10,6 +11,7 @@ export const AppRoutes = () => {
     <Router>
       <Routes>
         {/* rota publica */}
+        <Route path="/cadastro" element={<RegisterPage/>} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<LoginPage />} />
         {/* rotas privadas */}

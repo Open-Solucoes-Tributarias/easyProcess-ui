@@ -3,7 +3,6 @@ import imageLogin from "/easyProcess-ui/src/assets/imgLogin.png";
 import {
   Button,
   Flex,
-  Text,
   FormControl,
   FormLabel,
   Heading,
@@ -11,39 +10,45 @@ import {
   Stack,
   Image,
   useToast,
-  Tooltip,
   Link,
 } from '@chakra-ui/react'
 import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { login, LoginRequest } from '../../services/authService'
+import { useNavigate } from 'react-router-dom'
+import { register, RegisterRequest } from "../../services/registerService";
 
-export const LoginPage = () => {
+export const RegisterPage = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [nome, setNome] = useState('')
   const [loading, setLoading] = useState(false)
 
   const navigate = useNavigate()
   const toast = useToast()
 
   const handleSubmit = async () => {
-    const payload: LoginRequest = { email, senha: password }
+    const payload: RegisterRequest = {
+      nome,
+      email,
+      senha: password,
+      clienteId: null,
+      perfil: 0
+    }
 
     try {
       setLoading(true)
-      const response = await login(payload)
+      const response = await register(payload)
       localStorage.setItem('token', response.token)
       toast({
-        title: 'Login realizado com sucesso.',
+        title: 'Cadastro realizado com sucesso.',
         status: 'success',
         duration: 2000,
         isClosable: true,
       })
-      navigate('/dashboard') // ou para /dashboard
+      navigate('/dashboard')
     } catch (error) {
       toast({
-        title: 'Erro ao fazer login.',
-        description: 'Verifique seu e-mail e senha.',
+        title: 'Erro ao cadastrar.',
+        description: 'Verifique os dados e tente novamente.',
         status: 'error',
         duration: 3000,
         isClosable: true,
@@ -57,9 +62,17 @@ export const LoginPage = () => {
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
-        <Image width={60} src="/logoEp.svg" alt="Logo" />
-          <Heading fontSize={'2xl'}></Heading>
-          <FormControl id="email">
+          <Image width={60} src="/logoEp.svg" alt="Logo" />
+          <Heading fontSize={'2xl'}>Crie sua conta</Heading>
+          <FormControl id="nome" isRequired>
+            <FormLabel>Nome</FormLabel>
+            <Input
+              type="text"
+              value={nome}
+              onChange={(e) => setNome(e.target.value)}
+            />
+          </FormControl>
+          <FormControl id="email" isRequired>
             <FormLabel>E-mail</FormLabel>
             <Input
               type="email"
@@ -67,7 +80,7 @@ export const LoginPage = () => {
               onChange={(e) => setEmail(e.target.value)}
             />
           </FormControl>
-          <FormControl id="password">
+          <FormControl id="password" isRequired>
             <FormLabel>Senha</FormLabel>
             <Input
               type="password"
@@ -80,26 +93,21 @@ export const LoginPage = () => {
               direction={{ base: 'row', sm: 'row' }}
               align={'start'}
               justify={'space-between'}>
-              {/* <Checkbox>Remember me</Checkbox> */}
-              <Tooltip label="Função em desenvolvimento">
-              <Text color={'blue.500'} cursor={'not-allowed'} fontStyle={'italic'}>Esqueci a senha</Text>
-              </Tooltip>
-              <Link onClick={() => navigate('/cadastro')}>Primeiro acesso</Link>
+              <Link onClick={() => navigate('/')}>Já tenho uma conta</Link>
             </Stack>
             <Button
               colorScheme={'blue'}
               variant={'solid'}
               isLoading={loading}
               onClick={handleSubmit}>
-              Acessar
+              Cadastrar
             </Button>
           </Stack>
         </Stack>
       </Flex>
       <Flex flex={1}>
-        
         <Image
-          alt={'Login Image'}
+          alt={'Imagem de Cadastro'}
           objectFit={'fill'}
           maxHeight={'100%'}
           maxWidth={'100%'}
