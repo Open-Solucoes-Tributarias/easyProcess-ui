@@ -37,7 +37,7 @@ export const LoginPage = () => {
         duration: 2000,
         isClosable: true,
       })
-      navigate('/') // ou para /dashboard
+      navigate('/dashboard') // ou para /dashboard
     } catch (error) {
       toast({
         title: 'Erro ao fazer login.',
