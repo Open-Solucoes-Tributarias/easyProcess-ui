@@ -70,7 +70,9 @@ export const Navbar = ({ children }: NavbarProps) => {
                 <MenuItem onClick={() => navigate("/")}>Perfil</MenuItem>
                 <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem>
                 <MenuDivider />
-                <MenuItem onClick={() => navigate("/")}>Sair</MenuItem>
+                <MenuItem onClick={() => {
+                  localStorage.removeItem('token')
+                  navigate("/login")}}>Sair</MenuItem>
               </MenuList>
             </Menu>
           </Flex>
