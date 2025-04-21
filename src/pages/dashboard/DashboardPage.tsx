@@ -1,6 +1,6 @@
 'use client'
 import { Navbar } from "../../components/Navbar";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 import {
   Box,
   chakra,
@@ -9,8 +9,13 @@ import {
   Stat,
   StatLabel,
   StatNumber,
+  Text,
+  Heading,
+  Badge,
+  Stack,
 } from '@chakra-ui/react'
-import { TriangleUpIcon } from "@chakra-ui/icons";
+import { CheckIcon } from "@chakra-ui/icons";
+import { getResumo, ResumoResponse } from "../../services/resumeService"
 
 interface StatsCardProps {
   title: string
@@ -18,29 +23,22 @@ interface StatsCardProps {
   icon: ReactNode
 }
 
-function StatsCard(props: StatsCardProps) {
-  const { title, stat, icon } = props
+function StatsCard({ title, stat, icon }: StatsCardProps) {
   return (
     <Stat
-      px={{ base: 2, md: 4 }}
-      py={'5'}
-      shadow={'xl'}
+      px={4}
+      py={5}
+      shadow={'md'}
       border={'1px solid'}
-      borderColor={'#4c4c4c'}
-      rounded={'lg'}>
+      borderColor={'gray.200'}
+      rounded={'lg'}
+      bg="white">
       <Flex justifyContent={'space-between'}>
-        <Box pl={{ base: 2, md: 4 }}>
-          <StatLabel fontWeight={'medium'} isTruncated>
-            {title}
-          </StatLabel>
-          <StatNumber fontSize={'2xl'} fontWeight={'medium'}>
-            {stat}
-          </StatNumber>
+        <Box>
+          <StatLabel fontWeight="medium" color="gray.600">{title}</StatLabel>
+          <StatNumber fontSize={'2xl'} fontWeight="bold">{stat}</StatNumber>
         </Box>
-        <Box
-          my={'auto'}
-          color={"#4c4c4c"}
-          alignContent={'center'}>
+        <Box my={'auto'} color={'blue.500'}>
           {icon}
         </Box>
       </Flex>
@@ -48,23 +46,93 @@ function StatsCard(props: StatsCardProps) {
   )
 }
 
-
 export const DashboardPage = () => {
-  
+  const [estatisticas, setEstatisticas] = useState<ResumoResponse | null>(null)
+
+  useEffect(() => {
+    const fetchResumo = async () => {
+      try {
+        const dados = await getResumo()
+        setEstatisticas(dados)
+      } catch (err) {
+        console.error('Erro ao buscar resumo:', err)
+      }
+    }
+
+    fetchResumo()
+  }, [])
+
+  const status = estatisticas?.statusResumo
+  const frentesPorEmpresa = estatisticas?.frentesPorEmpresa || []
+  const atividadesPorFrente = estatisticas?.atividadesPorFrente || []
+  const atividadesPorUsuario = estatisticas?.atividadesPorUsuario || []
+
+  const frentesAgrupadas = frentesPorEmpresa.reduce((acc, item) => {
+    if (!acc[item.empresa]) acc[item.empresa] = []
+    acc[item.empresa].push(item.frenteDeTrabalhoNome)
+    return acc
+  }, {} as Record<string, string[]>)
+
   return (
-    <>
-      <Navbar>
-      <Box maxW="7xl" mx={'auto'} pt={5} px={{ base: 2, sm: 12, md: 17 }}>
-      <chakra.h1 textAlign={'center'} fontSize={'4xl'} py={10} fontWeight={'bold'}>
-        Suas estatisticas atuais
-      </chakra.h1>
-      <SimpleGrid columns={{ base: 1, md: 3 }} spacing={{ base: 5, lg: 8 }}>
-        <StatsCard title={'Clientes'} stat={'5'} icon={<TriangleUpIcon boxSize="15px" />} />
-        <StatsCard title={'Frentes de Trabalho'} stat={'8'} icon={<TriangleUpIcon boxSize="15px" />} />
-        <StatsCard title={'Atividades'} stat={'7'} icon={<TriangleUpIcon boxSize="15px" />} />
-      </SimpleGrid>
-    </Box>
-      </Navbar>
-    </>
-  );
-};
+    <Navbar>
+      <Box maxW="7xl" mx="auto" py={8} px={6}>
+        <chakra.h1 textAlign="center" fontSize="4xl" fontWeight="bold" mb={10}>
+         Suas estatísticas atuais
+        </chakra.h1>
+
+        {/* Grid de cards de status */}
+        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={10}>
+          <StatsCard title="Atividades concluídas" stat={`${status?.totalConcluidas ?? 0}`} icon={<CheckIcon color={"green"} />} />
+          <StatsCard title="Atividade pendentes" stat={`${status?.totalPendentes ?? 0}`} icon={<CheckIcon />} />
+          <StatsCard title="Atividade atrasadas" stat={`${status?.totalAtrasadas ?? 0}`} icon={<CheckIcon color={"red"} />} />
+        </SimpleGrid>
+
+        {/* Grid principal com 2 colunas */}
+        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
+          {/* Frentes por empresa */}
+          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
+            <Heading size="md" mb={4}>Frentes por Empresa</Heading>
+            <Stack spacing={4}>
+              {Object.entries(frentesAgrupadas).map(([empresa, frentes]) => (
+                <Box key={empresa}>
+                  <Text fontWeight="semibold" color="gray.700" mb={1}>{empresa}</Text>
+                  <Flex wrap="wrap" gap={2}>
+                    {frentes.map((f, i) => (
+                      <Badge key={i} colorScheme="blue">{f}</Badge>
+                    ))}
+                  </Flex>
+                </Box>
+              ))}
+            </Stack>
+          </Box>
+
+          {/* Atividades por frente */}
+          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
+            <Heading size="md" mb={4}>Atividades por Frente</Heading>
+            <Stack spacing={3}>
+              {atividadesPorFrente.map((item, i) => (
+                <Flex key={i} justify="space-between">
+                  <Text color="gray.700">{item.frenteDeTrabalho}</Text>
+                  <Text fontWeight="bold">{item.totalAtividades}</Text>
+                </Flex>
+              ))}
+            </Stack>
+          </Box>
+
+          {/* Atividades por usuário */}
+          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
+            <Heading size="md" mb={4}>Atividades por Usuário</Heading>
+            <Stack spacing={3}>
+              {atividadesPorUsuario.map((item, i) => (
+                <Flex key={i} justify="space-between">
+                  <Text color="gray.700">{item.usuarioNome}</Text>
+                  <Text fontWeight="bold">{item.totalAtividades}</Text>
+                </Flex>
+              ))}
+            </Stack>
+          </Box>
+        </SimpleGrid>
+      </Box>
+    </Navbar>
+  )
+}

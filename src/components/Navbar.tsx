@@ -22,7 +22,7 @@ interface NavbarProps {
 }
 
 const Links = [
-  { label: "Dashboard", path: "/" },
+  { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
   { label: "Gerenciar Clientes", path: "/" },
 ];

@@ -11,6 +11,7 @@ import {
   Stack,
   Image,
   useToast,
+  Tooltip,
 } from '@chakra-ui/react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -79,7 +80,9 @@ export const LoginPage = () => {
               align={'start'}
               justify={'space-between'}>
               {/* <Checkbox>Remember me</Checkbox> */}
-              <Text color={'blue.500'}>Esqueci a senha</Text>
+              <Tooltip label="Função em desenvolvimento">
+              <Text color={'blue.500'} cursor={'not-allowed'} fontStyle={'italic'}>Esqueci a senha</Text>
+              </Tooltip>
             </Stack>
             <Button
               colorScheme={'blue'}
