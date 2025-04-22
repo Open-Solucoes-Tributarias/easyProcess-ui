@@ -5,15 +5,9 @@ import { Grid, GridItem, List, ListItem, Text } from '@chakra-ui/react'
 import { SearchInput } from '../../../components/InputSearch'
 import { getEmpresas, Empresa } from '../../../services/companyService'
 
-export const Clients = () => {
+export const Clients = ({ onEmpresaSelecionada }: ClientsProps) => {
   const [empresas, setEmpresas] = useState<Empresa[]>([])
   const [loading, setLoading] = useState(true)
-
-  //capturar empresa clicada
-  const handleEmpresa = (empresa: Empresa) => {
-    alert(`Empresa selecionada: ${empresa.nome}`)
-    console.log("Nome da empresa selecionada:", empresa.nome)
-  }
 
   useEffect(() => {
     const fetchEmpresas = async () => {
@@ -29,6 +23,11 @@ export const Clients = () => {
 
     fetchEmpresas()
   }, [])
+
+    //capturar empresa clicada
+    const handleEmpresa = (empresa: Empresa) => {
+      onEmpresaSelecionada(empresa)
+    }
 
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>

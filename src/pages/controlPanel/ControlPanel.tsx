@@ -1,11 +1,21 @@
 "use client";
+import { useState } from "react";
 import { Navbar } from "../../components/Navbar";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { Clients } from "./sections/Clients";
 import { FrontWorks } from "./sections/FrontWorks";
 import { FloatingButton } from "../../components/FloatButton";
+import { Empresa } from "../../services/companyService";
 
 export const ControlPanel = () => {
+
+  const [empresaSelecionada, setEmpresaSelecionada] = useState<Empresa | null>(null)
+
+  const handleSelecionarEmpresa = (empresa: Empresa) => {
+    setEmpresaSelecionada(empresa)
+    console.log("Empresa no pai:", empresa)
+  }
+
   return (
     <>
       <Navbar>
@@ -15,7 +25,7 @@ export const ControlPanel = () => {
               Clientes
             </Text>
             <Box style={styles.content}>
-              <Clients />
+              <Clients onEmpresaSelecionada={handleSelecionarEmpresa}/>
             </Box>
           </GridItem>
           <GridItem>
