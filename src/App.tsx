@@ -24,6 +24,21 @@ const theme = extendTheme({
     }),
   },
   components: {
+    Input: {
+      defaultProps: {
+        focusBorderColor: "#68D391",
+      },
+    },
+    Select: {
+      defaultProps: {
+        focusBorderColor: "#68D391",
+      },
+    },
+    Textarea: {
+      defaultProps: {
+        focusBorderColor: "#68D391",
+      },
+    },
     Button: {
       baseStyle: {
         fontWeight: 600,
@@ -46,7 +61,7 @@ const theme = extendTheme({
         },
       },
     },
-  },
+  }
 });
 
 function App() {
