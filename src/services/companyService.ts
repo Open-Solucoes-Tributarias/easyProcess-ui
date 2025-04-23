@@ -5,7 +5,7 @@ export interface Empresa {
   nome: string
   cnpj: string
   dataAssinaturaContrato: string
-  clienteId: number
+  clienteId: number || null
   frenteDeTrabalhoIds: number[]
 }
 
