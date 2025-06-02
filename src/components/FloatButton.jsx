@@ -8,7 +8,7 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import { FaUser, FaPaperclip, FaClipboardList } from "react-icons/fa";
 import { useState } from "react";
-import { ModalCadastroEmpresa } from "../components/ModalCadastroEmpresa"; // ajuste o path conforme necessário
+import { ModalCadastroEmpresa } from "./ModalCadastroEmpresa"; // ajuste o path conforme necessário
 
 export const FloatingButton = () => {
   const [isOpen, setIsOpen] = useState(false);

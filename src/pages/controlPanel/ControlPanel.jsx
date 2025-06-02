@@ -5,16 +5,14 @@ import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { Clients } from "./sections/Clients";
 import { FrontWorks } from "./sections/FrontWorks";
 import { FloatingButton } from "../../components/FloatButton";
-import { Empresa } from "../../services/companyService";
 
 export const ControlPanel = () => {
+  const [empresaSelecionada, setEmpresaSelecionada] = useState(null);
 
-  const [empresaSelecionada, setEmpresaSelecionada] = useState<Empresa | null>(null)
-
-  const handleSelecionarEmpresa = (empresa: Empresa) => {
-    setEmpresaSelecionada(empresa)
-    console.log("Empresa no pai:", empresa)
-  }
+  const handleSelecionarEmpresa = (empresa) => {
+    setEmpresaSelecionada(empresa);
+    console.log("Empresa no pai:", empresa);
+  };
 
   return (
     <>
@@ -25,7 +23,7 @@ export const ControlPanel = () => {
               Clientes
             </Text>
             <Box style={styles.content}>
-              <Clients onEmpresaSelecionada={handleSelecionarEmpresa}/>
+              <Clients onEmpresaSelecionada={handleSelecionarEmpresa} />
             </Box>
           </GridItem>
           <GridItem>
@@ -33,11 +31,11 @@ export const ControlPanel = () => {
               Frentes de Trabalho | Atividades
             </Text>
             <Box style={styles.content}>
-              <FrontWorks/>
+              <FrontWorks />
             </Box>
           </GridItem>
         </Grid>
-        <FloatingButton/>
+        <FloatingButton />
       </Navbar>
     </>
   );

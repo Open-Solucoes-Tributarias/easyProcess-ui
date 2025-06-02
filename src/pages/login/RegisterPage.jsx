@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import imageLogin from "/easyProcess-ui/src/assets/imgLogin.png";
 import {
   Button,
@@ -11,40 +11,40 @@ import {
   Image,
   useToast,
   Link,
-} from '@chakra-ui/react'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { register, RegisterRequest } from "../../services/registerService";
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { register } from "../../services/registerService";
 
 export const RegisterPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [nome, setNome] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [nome, setNome] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
-  const toast = useToast()
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async () => {
-    const payload: RegisterRequest = {
+    const payload = {
       nome,
       email,
       senha: password,
       clienteId: null,
-      perfil: 0
-    }
+      perfil: 0,
+    };
 
     try {
-      setLoading(true)
-      const response = await register(payload)
-      localStorage.setItem('token', response.token)
+      setLoading(true);
+      const response = await register(payload);
+      localStorage.setItem('token', response.token);
       toast({
         title: 'Cadastro realizado com sucesso.',
         status: 'success',
         duration: 2000,
         isClosable: true,
-      })
-      navigate('/dashboard')
+      });
+      navigate('/dashboard');
     } catch (error) {
       toast({
         title: 'Erro ao cadastrar.',
@@ -52,11 +52,11 @@ export const RegisterPage = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
@@ -115,5 +115,5 @@ export const RegisterPage = () => {
         />
       </Flex>
     </Stack>
-  )
-}
+  );
+};

@@ -1,6 +1,6 @@
-'use client'
+"use client";
 import { Navbar } from "../../components/Navbar";
-import { ReactNode, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Box,
   chakra,
@@ -13,17 +13,11 @@ import {
   Heading,
   Badge,
   Stack,
-} from '@chakra-ui/react'
+} from '@chakra-ui/react';
 import { CheckIcon } from "@chakra-ui/icons";
-import { getResumo, ResumoResponse } from "../../services/resumeService"
+import { getResumo } from "../../services/resumeService";
 
-interface StatsCardProps {
-  title: string
-  stat: string
-  icon: ReactNode
-}
-
-function StatsCard({ title, stat, icon }: StatsCardProps) {
+function StatsCard({ title, stat, icon }) {
   return (
     <Stat
       px={4}
@@ -32,7 +26,8 @@ function StatsCard({ title, stat, icon }: StatsCardProps) {
       border={'1px solid'}
       borderColor={'gray.200'}
       rounded={'lg'}
-      bg="white">
+      bg="white"
+    >
       <Flex justifyContent={'space-between'}>
         <Box>
           <StatLabel fontWeight="medium" color="gray.600">{title}</StatLabel>
@@ -43,53 +38,50 @@ function StatsCard({ title, stat, icon }: StatsCardProps) {
         </Box>
       </Flex>
     </Stat>
-  )
+  );
 }
 
 export const DashboardPage = () => {
-  const [estatisticas, setEstatisticas] = useState<ResumoResponse | null>(null)
+  const [estatisticas, setEstatisticas] = useState(null);
 
   useEffect(() => {
     const fetchResumo = async () => {
       try {
-        const dados = await getResumo()
-        setEstatisticas(dados)
+        const dados = await getResumo();
+        setEstatisticas(dados);
       } catch (err) {
-        console.error('Erro ao buscar resumo:', err)
+        console.error('Erro ao buscar resumo:', err);
       }
-    }
+    };
 
-    fetchResumo()
-  }, [])
+    fetchResumo();
+  }, []);
 
-  const status = estatisticas?.statusResumo
-  const frentesPorEmpresa = estatisticas?.frentesPorEmpresa || []
-  const atividadesPorFrente = estatisticas?.atividadesPorFrente || []
-  const atividadesPorUsuario = estatisticas?.atividadesPorUsuario || []
+  const status = estatisticas?.statusResumo;
+  const frentesPorEmpresa = estatisticas?.frentesPorEmpresa || [];
+  const atividadesPorFrente = estatisticas?.atividadesPorFrente || [];
+  const atividadesPorUsuario = estatisticas?.atividadesPorUsuario || [];
 
   const frentesAgrupadas = frentesPorEmpresa.reduce((acc, item) => {
-    if (!acc[item.empresa]) acc[item.empresa] = []
-    acc[item.empresa].push(item.frenteDeTrabalhoNome)
-    return acc
-  }, {} as Record<string, string[]>)
+    if (!acc[item.empresa]) acc[item.empresa] = [];
+    acc[item.empresa].push(item.frenteDeTrabalhoNome);
+    return acc;
+  }, {});
 
   return (
     <Navbar>
       <Box maxW="7xl" mx="auto" py={8} px={6}>
         <chakra.h1 textAlign="center" fontSize="4xl" fontWeight="bold" mb={10}>
-         Suas estatísticas atuais
+          Suas estatísticas atuais
         </chakra.h1>
 
-        {/* Grid de cards de status */}
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={10}>
           <StatsCard title="Atividades concluídas" stat={`${status?.totalConcluidas ?? 0}`} icon={<CheckIcon color={"green"} />} />
           <StatsCard title="Atividade pendentes" stat={`${status?.totalPendentes ?? 0}`} icon={<CheckIcon />} />
           <StatsCard title="Atividade atrasadas" stat={`${status?.totalAtrasadas ?? 0}`} icon={<CheckIcon color={"red"} />} />
         </SimpleGrid>
 
-        {/* Grid principal com 2 colunas */}
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-          {/* Frentes por empresa */}
           <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
             <Heading size="md" mb={4}>Frentes por Empresa</Heading>
             <Stack spacing={4}>
@@ -106,7 +98,6 @@ export const DashboardPage = () => {
             </Stack>
           </Box>
 
-          {/* Atividades por frente */}
           <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
             <Heading size="md" mb={4}>Atividades por Frente</Heading>
             <Stack spacing={3}>
@@ -119,7 +110,6 @@ export const DashboardPage = () => {
             </Stack>
           </Box>
 
-          {/* Atividades por usuário */}
           <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
             <Heading size="md" mb={4}>Atividades por Usuário</Heading>
             <Stack spacing={3}>
@@ -134,5 +124,5 @@ export const DashboardPage = () => {
         </SimpleGrid>
       </Box>
     </Navbar>
-  )
-}
+  );
+};

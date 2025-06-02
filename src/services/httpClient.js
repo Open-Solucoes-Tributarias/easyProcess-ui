@@ -1,27 +1,27 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosError, AxiosResponse } from 'axios';
+import axios from 'axios';
 const apiUrl = import.meta.env.VITE_API_URL;
 
 // Cria instância do axios
-const httpClient: AxiosInstance = axios.create({
-  baseURL: apiUrl as string,
+const httpClient = axios.create({
+  baseURL: apiUrl,
 });
 
 // Interceptador de requisição: adiciona token se existir
 httpClient.interceptors.request.use(
-  (config: AxiosRequestConfig) => {
+  (config) => {
     const token = localStorage.getItem('token');
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
-  (error: AxiosError) => Promise.reject(error)
+  (error) => Promise.reject(error)
 );
 
 // Interceptador de resposta: trata erros 401
 httpClient.interceptors.response.use(
-  (response: AxiosResponse) => response,
-  (error: AxiosError) => {
+  (response) => response,
+  (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token');
       window.location.href = '/login';

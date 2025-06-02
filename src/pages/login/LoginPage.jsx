@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import imageLogin from "/easyProcess-ui/src/assets/imgLogin.png";
 import {
   Button,
@@ -13,33 +13,33 @@ import {
   useToast,
   Tooltip,
   Link,
-} from '@chakra-ui/react'
-import { useState } from 'react'
-import { Navigate, useNavigate } from 'react-router-dom'
-import { login, LoginRequest } from '../../services/authService'
+} from '@chakra-ui/react';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { login } from '../../services/authService';
 
 export const LoginPage = () => {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const navigate = useNavigate()
-  const toast = useToast()
+  const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async () => {
-    const payload: LoginRequest = { email, senha: password }
+    const payload = { email, senha: password };
 
     try {
-      setLoading(true)
-      const response = await login(payload)
-      localStorage.setItem('token', response.token)
+      setLoading(true);
+      const response = await login(payload);
+      localStorage.setItem('token', response.token);
       toast({
         title: 'Login realizado com sucesso.',
         status: 'success',
         duration: 2000,
         isClosable: true,
-      })
-      navigate('/dashboard') // ou para /dashboard
+      });
+      navigate('/dashboard');
     } catch (error) {
       toast({
         title: 'Erro ao fazer login.',
@@ -47,17 +47,17 @@ export const LoginPage = () => {
         status: 'error',
         duration: 3000,
         isClosable: true,
-      })
+      });
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
-  }
+  };
 
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
         <Stack spacing={4} w={'full'} maxW={'md'}>
-        <Image width={60} src="/logoEp.svg" alt="Logo" />
+          <Image width={60} src="/logoEp.svg" alt="Logo" />
           <Heading fontSize={'2xl'}></Heading>
           <FormControl id="email">
             <FormLabel>E-mail</FormLabel>
@@ -80,9 +80,10 @@ export const LoginPage = () => {
               direction={{ base: 'row', sm: 'row' }}
               align={'start'}
               justify={'space-between'}>
-              {/* <Checkbox>Remember me</Checkbox> */}
               <Tooltip label="Função em desenvolvimento">
-              <Text color={'blue.500'} cursor={'not-allowed'} fontStyle={'italic'}>Esqueci a senha</Text>
+                <Text color={'blue.500'} cursor={'not-allowed'} fontStyle={'italic'}>
+                  Esqueci a senha
+                </Text>
               </Tooltip>
               <Link onClick={() => navigate('/cadastro')}>Primeiro acesso</Link>
             </Stack>
@@ -97,7 +98,6 @@ export const LoginPage = () => {
         </Stack>
       </Flex>
       <Flex flex={1}>
-        
         <Image
           alt={'Login Image'}
           objectFit={'fill'}
@@ -107,5 +107,5 @@ export const LoginPage = () => {
         />
       </Flex>
     </Stack>
-  )
-}
+  );
+};

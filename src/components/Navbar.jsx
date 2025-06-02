@@ -1,5 +1,4 @@
 "use client";
-import { ReactNode } from "react";
 import {
   Box,
   Flex,
@@ -17,17 +16,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 
-interface NavbarProps {
-  children: ReactNode;
-}
-
 const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
   { label: "Gerenciar Clientes", path: "/" },
 ];
 
-export const Navbar = ({ children }: NavbarProps) => {
+export const Navbar = ({ children }) => {
   const navigate = useNavigate();
 
   return (
@@ -70,9 +65,14 @@ export const Navbar = ({ children }: NavbarProps) => {
                 <MenuItem onClick={() => navigate("/")}>Perfil</MenuItem>
                 <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem>
                 <MenuDivider />
-                <MenuItem onClick={() => {
-                  localStorage.removeItem('token')
-                  navigate("/login")}}>Sair</MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    localStorage.removeItem("token");
+                    navigate("/login");
+                  }}
+                >
+                  Sair
+                </MenuItem>
               </MenuList>
             </Menu>
           </Flex>
