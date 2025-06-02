@@ -1,6 +1,5 @@
 "use client";
 import { useState } from "react";
-import { Navbar } from "../../components/Navbar";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
 import { Clients } from "./sections/Clients";
 import { FrontWorks } from "./sections/FrontWorks";
@@ -16,7 +15,6 @@ export const ControlPanel = () => {
 
   return (
     <>
-      <Navbar>
         <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap={6} p={3}>
           <GridItem>
             <Text as="b" fontSize="xl">
@@ -36,7 +34,6 @@ export const ControlPanel = () => {
           </GridItem>
         </Grid>
         <FloatingButton />
-      </Navbar>
     </>
   );
 };

@@ -13,9 +13,6 @@ import {
   GridItem,
   Icon,
   IconButton,
-  Input,
-  InputGroup,
-  InputLeftElement,
   Text,
   VStack,
 } from "@chakra-ui/react";

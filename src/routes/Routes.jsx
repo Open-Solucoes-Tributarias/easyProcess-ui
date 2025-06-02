@@ -4,6 +4,7 @@ import { ControlPanel } from "../pages/controlPanel/ControlPanel";
 import { LoginPage } from "../pages/login/LoginPage";
 import { PrivateRoute } from "./PrivateRoute";
 import { RegisterPage } from "../pages/login/RegisterPage";
+import { DashboardLayout } from "../layouts/DashboardLayout";
 
 
 export const AppRoutes = () => {
@@ -11,13 +12,16 @@ export const AppRoutes = () => {
     <Router>
       <Routes>
         {/* rota publica */}
-        <Route path="/cadastro" element={<RegisterPage/>} />
+        <Route path="/cadastro" element={<RegisterPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/" element={<LoginPage />} />
-        {/* rotas privadas */}
+        {/* rotas privadas, checagem de permissão */}
         <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/painel" element={<ControlPanel />} />
+          {/* layout visual do dashboard para rotas privadas */}
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<DashboardPage />} />
+            <Route path="/painel" element={<ControlPanel />} />
+          </Route>
         </Route>
         {/* Rota error */}
         <Route path="*" element={<Navigate to="/" />} />

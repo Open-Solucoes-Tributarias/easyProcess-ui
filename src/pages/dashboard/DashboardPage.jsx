@@ -69,7 +69,6 @@ export const DashboardPage = () => {
   }, {});
 
   return (
-    <Navbar>
       <Box maxW="7xl" mx="auto" py={8} px={6}>
         <chakra.h1 textAlign="center" fontSize="4xl" fontWeight="bold" mb={10}>
           Suas estatísticas atuais
@@ -123,6 +122,5 @@ export const DashboardPage = () => {
           </Box>
         </SimpleGrid>
       </Box>
-    </Navbar>
   );
 };

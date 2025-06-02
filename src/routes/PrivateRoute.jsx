@@ -4,7 +4,7 @@ import { isTokenValid } from "../utils/auth";
 export const PrivateRoute = () => {
     const isAuth = isTokenValid()
   
-    if (!isAuth) {
+    if (!isAuth) { //remover em produção
       localStorage.removeItem('token')
       return <Navigate to="/login" replace />
     }
