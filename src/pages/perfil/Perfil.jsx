@@ -21,6 +21,7 @@ import { RxAvatar } from 'react-icons/rx';
 import { getUsers } from '../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../components/DialogModal';
+import { getPerfilLabel } from '../../utils/labelUtils';
 
 export const Perfil = () => {
 
@@ -55,13 +56,18 @@ export const Perfil = () => {
                         display="flex"
                         justifyContent="space-between"
                         alignItems="center"
+                        border="1px solid"
+                        borderColor="#d0d0d0"
                         px={3}
                         py={2}
                         borderRadius="md"
                     >
-                        <Flex align="center" gap={2} flex="1" onClick={() => selecionarUsuario(usuario)} cursor="pointer">
+                        <Flex align="center" gap={2} onClick={() => selecionarUsuario(usuario)}>
                             <ListIcon as={RxAvatar} color="gray.600" />
-                            <Text>{usuario?.nome}</Text>
+                            <Flex direction={'column'}>
+                                <Text>{usuario?.nome}</Text>
+                                <Text fontSize={12} fontStyle={'italic'}>{usuario?.email} - {getPerfilLabel(usuario?.perfil)}</Text>
+                            </Flex>
                         </Flex>
                         <IconButton
                             aria-label="Editar"
@@ -85,9 +91,7 @@ export const Perfil = () => {
     return (
         <>
             <Grid templateColumns={{ base: "1fr", md: "1fr 1fr" }} gap={10}>
-                <GridItem>
-
-                </GridItem>
+                
                 <GridItem>
                     <Text as="b" fontSize="xl">
                         Usuários
@@ -101,6 +105,9 @@ export const Perfil = () => {
                             abrirModalEdicao={() => setIsEditOpen(true)}
                         />
                     </Flex>
+                </GridItem>
+                <GridItem>
+
                 </GridItem>
             </Grid>
             <DialogModal
@@ -157,6 +164,7 @@ const styles = {
     content: {
         width: "100%",
         height: "75vh",
+        overflowY: "auto",
         border: "1px solid",
         borderColor: "#d0d0d0",
         borderRadius: 10,
