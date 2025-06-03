@@ -1,10 +1,12 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import { DashboardPage } from "../pages/dashboard/DashboardPage";
-import { ControlPanel } from "../pages/controlPanel/ControlPanel";
-import { LoginPage } from "../pages/login/LoginPage";
+import { Dashboard } from "../pages/dashboard/Dashboard";
+import { Painel } from "../pages/controlPanel/Painel";
+import { LoginPage } from "../pages/login/Login";
 import { PrivateRoute } from "./PrivateRoute";
-import { RegisterPage } from "../pages/login/RegisterPage";
+import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
+import { Clientes } from "../pages/clientes/Clientes";
+import { Perfil } from "../pages/perfil/Perfil";
 
 
 export const AppRoutes = () => {
@@ -19,8 +21,10 @@ export const AppRoutes = () => {
         <Route element={<PrivateRoute />}>
           {/* layout visual do dashboard para rotas privadas */}
           <Route element={<DashboardLayout />}>
-            <Route path="/dashboard" element={<DashboardPage />} />
-            <Route path="/painel" element={<ControlPanel />} />
+            <Route path="/dashboard" element={<Dashboard/>} />
+            <Route path="/painel" element={<Painel />} />
+            <Route path="/clientes" element={<Clientes />} />
+            <Route path="/perfil" element={<Perfil />} />
           </Route>
         </Route>
         {/* Rota error */}

@@ -3,29 +3,30 @@
 import { useEffect, useState } from 'react';
 import { Grid, GridItem, List, ListItem, Text } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
-import { getEmpresas } from '../../../services/companyService';
+import { getClientes } from '../../../services/companyService';
+import { Informativo } from '../../../components/Informativo';
 
-export const Clients = ({ onEmpresaSelecionada }) => {
-  const [empresas, setEmpresas] = useState([]);
+export const Clients = ({ onClienteSelecionada }) => {
+  const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchEmpresas = async () => {
+    const fetchClientes = async () => {
       try {
-        const data = await getEmpresas();
-        setEmpresas(data);
+        const data = await getClientes();
+        setClientes(data);
       } catch (error) {
-        console.error('Erro ao carregar empresas:', error);
+        console.error('Erro ao carregar clientes:', error);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchEmpresas();
+    fetchClientes();
   }, []);
 
-  const handleEmpresa = (empresa) => {
-    onEmpresaSelecionada(empresa);
+  const handleCliente = (cliente) => {
+    onClienteSelecionada(cliente);
   };
 
   return (
@@ -37,19 +38,19 @@ export const Clients = ({ onEmpresaSelecionada }) => {
       <GridItem pb={4} paddingInline={5}>
         {loading ? (
           <Text fontStyle="italic" color="gray.500">
-            Carregando empresas...
+            Carregando clientes...
           </Text>
-        ) : empresas.length === 0 ? (
-          <Text color="gray.500">Nenhuma empresa encontrada.</Text>
+        ) : clientes.length === 0 ? (
+          <Informativo/>
         ) : (
           <List styleType="disc" spacing={3}>
-            {empresas.map((empresa) => (
+            {clientes.map((cliente) => (
               <ListItem
                 sx={styles.listItem}
-                key={empresa.id}
-                onClick={() => handleEmpresa(empresa)}
+                key={cliente.id}
+                onClick={() => handleCliente(cliente)}
               >
-                {empresa.nome}
+                {cliente.nome}
               </ListItem>
             ))}
           </List>

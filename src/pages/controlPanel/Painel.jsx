@@ -1,16 +1,16 @@
 "use client";
 import { useState } from "react";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
-import { Clients } from "./sections/Clients";
-import { FrontWorks } from "./sections/FrontWorks";
+import { Clients } from "./sections/Clientes";
+import { FrontWorks } from "./sections/FrentesTrabalho";
 import { FloatingButton } from "../../components/FloatButton";
 
-export const ControlPanel = () => {
-  const [empresaSelecionada, setEmpresaSelecionada] = useState(null);
+export const Painel = () => {
+  const [clienteSelecionada, setClienteSelecionada] = useState(null);
 
-  const handleSelecionarEmpresa = (empresa) => {
-    setEmpresaSelecionada(empresa);
-    console.log("Empresa no pai:", empresa);
+  const handleSelecionarCliente = (cliente) => {
+    setClienteSelecionada(cliente);
+    console.log("Cliente no pai:", cliente);
   };
 
   return (
@@ -21,7 +21,7 @@ export const ControlPanel = () => {
               Clientes
             </Text>
             <Box style={styles.content}>
-              <Clients onEmpresaSelecionada={handleSelecionarEmpresa} />
+              <Clients onClienteSelecionada={handleSelecionarCliente} />
             </Box>
           </GridItem>
           <GridItem>

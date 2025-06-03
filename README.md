@@ -1,54 +1,33 @@
-# React + TypeScript + Vite
+## 🏗 Arquitetura do Projeto
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Este projeto utiliza uma **estrutura modular por responsabilidade**, também conhecida como **modular pattern**, com elementos pontuais da arquitetura **feature-based**. A estrutura é pensada para garantir organização, reutilização de código e facilidade de manutenção.
 
-Currently, two official plugins are available:
+### 📂 Estrutura de Pastas
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+/
+├── vite.config.js # Arquivo de configuração do Vite
+├── assets/ # Arquivos estáticos: imagens, ícones, fontes, etc.
+├── components/ # Componentes reutilizáveis (ex: botões, inputs, cards)
+├── layouts/ # Componentes de layout (ex: Header, Footer, Sidebar)
+├── pages/ # Páginas da aplicação, organizadas por rota
+│ ├── dashboard/
+│ │ └── Dashboard.jsx
+│ └── about/
+│ └── About.jsx
+├── routes/ # Arquivos de definição de rotas (React Router)
+├── services/ # Módulos utilitários e chamadas de API por responsabilidade
 
-## Expanding the ESLint configuration
+markdown
+Copiar
+Editar
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### 📌 Detalhes da Arquitetura
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- **`assets/`**: armazena todos os arquivos estáticos usados na aplicação.
+- **`components/`**: contém componentes reutilizáveis e desacoplados de contexto de página.
+- **`layouts/`**: layouts globais ou específicos para rotas, como estrutura de dashboards.
+- **`pages/`**: representa cada página/rota da aplicação, com subpastas nomeadas conforme o caminho.
+- **`routes/`**: gerencia a configuração do React Router e as rotas disponíveis no app.
+- **`services/`**: camada de abstração para chamadas HTTP e utilitários de integração com APIs.
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+Essa arquitetura é **flexível e escalável**, sendo adequada tanto para projetos pequenos quanto médio

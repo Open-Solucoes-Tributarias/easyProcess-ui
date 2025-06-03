@@ -14,9 +14,9 @@ import {
   useToast,
 } from '@chakra-ui/react';
 import { useRef, useState } from 'react';
-import { createEmpresa } from '../services/companyService';
+import { createCliente } from '../services/companyService';
 
-export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
+export const ModalCadastroCliente = ({ isOpen, onClose }) => {
   const initialRef = useRef(null);
   const toast = useToast();
 
@@ -27,7 +27,7 @@ export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
 
   const handleSubmit = async () => {
     try {
-      await createEmpresa({
+      await createCliente({
         nome,
         cnpj,
         dataAssinaturaContrato,
@@ -35,7 +35,7 @@ export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
         clienteId: null,
       });
       toast({
-        title: 'Empresa cadastrada com sucesso.',
+        title: 'Cliente cadastrada com sucesso.',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -43,7 +43,7 @@ export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
       onClose();
     } catch (error) {
       toast({
-        title: 'Erro ao cadastrar empresa.',
+        title: 'Erro ao cadastrar cliente.',
         description: 'Tente novamente.',
         status: 'error',
         duration: 3000,
@@ -56,7 +56,7 @@ export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
     <Modal initialFocusRef={initialRef} isOpen={isOpen} onClose={onClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Cadastrar nova empresa</ModalHeader>
+        <ModalHeader>Cadastrar nova cliente</ModalHeader>
         <ModalCloseButton />
         <ModalBody pb={6}>
           <FormControl mb={3}>
@@ -65,7 +65,7 @@ export const ModalCadastroEmpresa = ({ isOpen, onClose }) => {
               ref={initialRef}
               value={nome}
               onChange={(e) => setNome(e.target.value)}
-              placeholder="Nome da empresa"
+              placeholder="Nome da cliente"
             />
           </FormControl>
 

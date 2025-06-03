@@ -1,5 +1,4 @@
 "use client";
-import { Navbar } from "../../components/Navbar";
 import { useEffect, useState } from "react";
 import {
   Box,
@@ -41,7 +40,7 @@ function StatsCard({ title, stat, icon }) {
   );
 }
 
-export const DashboardPage = () => {
+export const Dashboard = () => {
   const [estatisticas, setEstatisticas] = useState(null);
 
   useEffect(() => {
@@ -58,13 +57,13 @@ export const DashboardPage = () => {
   }, []);
 
   const status = estatisticas?.statusResumo;
-  const frentesPorEmpresa = estatisticas?.frentesPorEmpresa || [];
+  const frentesPorCliente = estatisticas?.frentesPorCliente || [];
   const atividadesPorFrente = estatisticas?.atividadesPorFrente || [];
   const atividadesPorUsuario = estatisticas?.atividadesPorUsuario || [];
 
-  const frentesAgrupadas = frentesPorEmpresa.reduce((acc, item) => {
-    if (!acc[item.empresa]) acc[item.empresa] = [];
-    acc[item.empresa].push(item.frenteDeTrabalhoNome);
+  const frentesAgrupadas = frentesPorCliente.reduce((acc, item) => {
+    if (!acc[item.cliente]) acc[item.cliente] = [];
+    acc[item.cliente].push(item.frenteDeTrabalhoNome);
     return acc;
   }, {});
 
@@ -82,11 +81,11 @@ export const DashboardPage = () => {
 
         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
           <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
-            <Heading size="md" mb={4}>Frentes por Empresa</Heading>
+            <Heading size="md" mb={4}>Frentes por Cliente</Heading>
             <Stack spacing={4}>
-              {Object.entries(frentesAgrupadas).map(([empresa, frentes]) => (
-                <Box key={empresa}>
-                  <Text fontWeight="semibold" color="gray.700" mb={1}>{empresa}</Text>
+              {Object.entries(frentesAgrupadas).map(([cliente, frentes]) => (
+                <Box key={cliente}>
+                  <Text fontWeight="semibold" color="gray.700" mb={1}>{cliente}</Text>
                   <Flex wrap="wrap" gap={2}>
                     {frentes.map((f, i) => (
                       <Badge key={i} colorScheme="blue">{f}</Badge>

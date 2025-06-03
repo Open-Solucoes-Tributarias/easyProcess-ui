@@ -19,7 +19,7 @@ import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
-  { label: "Gerenciar Clientes", path: "/" },
+  { label: "Gerenciar clientes", path: "/clientes" },
 ];
 
 export const Navbar = ({ children }) => {
@@ -62,7 +62,7 @@ export const Navbar = ({ children }) => {
                 <Avatar size={"sm"} icon={<GenericAvatarIcon />} />
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => navigate("/")}>Perfil</MenuItem>
+                <MenuItem onClick={() => navigate("/perfil")}>Perfil</MenuItem>
                 <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem>
                 <MenuDivider />
                 <MenuItem

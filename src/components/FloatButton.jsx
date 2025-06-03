@@ -8,14 +8,14 @@ import {
 import { AddIcon } from "@chakra-ui/icons";
 import { FaUser, FaPaperclip, FaClipboardList } from "react-icons/fa";
 import { useState } from "react";
-import { ModalCadastroEmpresa } from "./ModalCadastroEmpresa"; // ajuste o path conforme necessário
+// import { ModalCadastroCliente } from "./ModalCadastroCliente"; // ajuste o path conforme necessário
 
 export const FloatingButton = () => {
   const [isOpen, setIsOpen] = useState(false);
   const {
-    isOpen: isOpenEmpresa,
-    onOpen: onOpenEmpresa,
-    onClose: onCloseEmpresa,
+    isOpen: isOpenCliente,
+    onOpen: onOpenCliente,
+    onClose: onCloseCliente,
   } = useDisclosure();
 
   return (
@@ -31,15 +31,15 @@ export const FloatingButton = () => {
         <VStack spacing={3} align="center">
           {isOpen && (
             <>
-              <Tooltip label="Gerenciar empresas" placement="left" hasArrow>
+              <Tooltip label="Gerenciar clientes" placement="left" hasArrow>
                 <IconButton
-                  aria-label="Gerenciar empresas"
+                  aria-label="Gerenciar clientes"
                   icon={<FaUser />}
                   size="sm"
                   borderRadius="full"
                   bg="gray.600"
                   _hover={{ bg: "gray.500" }}
-                  onClick={onOpenEmpresa} // ← ABRE MODAL
+                  onClick={onOpenCliente} // ← ABRE MODAL
                 />
               </Tooltip>
 
@@ -80,7 +80,7 @@ export const FloatingButton = () => {
       </Box>
 
       {/* MODAL RENDERIZADO AQUI */}
-      <ModalCadastroEmpresa isOpen={isOpenEmpresa} onClose={onCloseEmpresa} />
+      {/* <ModalCadastroCliente isOpen={isOpenCliente} onClose={onCloseCliente} /> */}
     </>
   );
 };

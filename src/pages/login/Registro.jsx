@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from "../../services/registerService";
+import { register } from "../../services/authService";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState('');
