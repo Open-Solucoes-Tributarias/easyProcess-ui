@@ -18,28 +18,39 @@ export const DialogModal = ({ isOpen, onClose, title, children, onSave, onDelete
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>
                 <ModalCloseButton />
-                <ModalBody>
-                    {children}
-                </ModalBody>
-                <ModalFooter>
-                    <Flex w="100%" justifyContent="space-between" alignItems="center">
-                        {showDelete && (
-                            <Button variant="text" color="red" onClick={onDelete}>
-                                Deletar
-                            </Button>
-                        )}
-                        <Flex gap={3}>
-                            <Button variant="ghost" onClick={onClose}>
-                                Cancelar
-                            </Button>
-                            <Button colorScheme="blue" onClick={onSave}>
-                                Salvar
-                            </Button>
-                        </Flex>
-                    </Flex>
-                </ModalFooter>
 
+                <form
+                    onSubmit={(e) => {
+                        e.preventDefault(); // evita recarregar a página
+                        onSave();           // executa a função de salvar
+                    }}
+                >
+                    <ModalBody>
+                        {children}
+                    </ModalBody>
+
+                    <ModalFooter>
+                        <Flex w="100%" justifyContent="space-between" alignItems="center">
+                            <Flex>
+                                {onDelete && (
+                                    <Button variant="text" color="red" onClick={onDelete}>
+                                        Deletar
+                                    </Button>
+                                )}
+                            </Flex>
+                            <Flex gap={3}>
+                                <Button variant="ghost" onClick={onClose}>
+                                    Cancelar
+                                </Button>
+                                <Button colorScheme="blue" type="submit">
+                                    Salvar
+                                </Button>
+                            </Flex>
+                        </Flex>
+                    </ModalFooter>
+                </form>
             </ModalContent>
         </Modal>
+
     );
 };

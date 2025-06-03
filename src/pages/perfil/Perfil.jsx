@@ -18,7 +18,7 @@ import {
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
-import { getUsers } from '../../services/UsersService';
+import { getUsers, registerUser } from '../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../components/DialogModal';
 import { getPerfilLabel } from '../../utils/labelUtils';
@@ -28,6 +28,7 @@ export const Perfil = () => {
     const [usuarios, setUsuarios] = useState([]); //array usuarios
     const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
     const [isEditOpen, setIsEditOpen] = useState(false);
+    const [modoEdicao, setModoEdicao] = useState(false);
 
     //funcao buscar dados dos usuarios
     const ListarUsuarios = async () => {
@@ -43,6 +44,19 @@ export const Perfil = () => {
     useEffect(() => {
         ListarUsuarios();
     }, []);
+
+    //enviar dados do usuario
+
+const handleSubmit = async () => {
+  try {
+    await registerUser(usuarioSelecionado);
+    alert("Usuário registrado");
+    setIsEditOpen(false);
+    // ListarUsuarios(); // recarrega lista
+  } catch (error) {
+    console.error("Erro ao registrar usuário", error);
+  }
+};
 
 
     //componente de lista de usuarios
@@ -76,6 +90,7 @@ export const Perfil = () => {
                             size="sm"
                             onClick={() => {
                                 selecionarUsuario(usuario);
+                                setModoEdicao(true);
                                 abrirModalEdicao();
                             }}
                         />
@@ -96,7 +111,11 @@ export const Perfil = () => {
                     <Text as="b" fontSize="xl">
                         Usuários
                     </Text>
-                    <Button variant='text' color='#68D391' leftIcon={<FaPlus />}>
+                    <Button variant='text' color='#68D391' leftIcon={<FaPlus />} onClick={() => {
+                        setUsuarioSelecionado({});
+                        setModoEdicao(false); // define modo de adicionar
+                        setIsEditOpen(true);
+                    }}>
                         Adicionar
                     </Button>
                     <Flex style={styles.content}>
@@ -113,10 +132,10 @@ export const Perfil = () => {
             <DialogModal
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
-                title="Editar Usuário"
-                onSave={() => console.log("Salvar:", usuarioSelecionado)}
-                onDelete={() => console.log("Deletar:", usuarioSelecionado)}
-                showDelete
+                title={modoEdicao ? "Editar Usuário" : "Adicionar Usuário"}
+                onSave={handleSubmit}
+                onDelete={modoEdicao ? () => console.log("Deletar:", usuarioSelecionado) : null}
+                // showDelete={modoEdicao}
             >
                 <Stack spacing={4}>
                     <FormControl>
