@@ -22,67 +22,74 @@ import {
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
-import { getUsers, registerUser } from '../../services/UsersService';
+import { getUsers, registerUser } from '../../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
-import { DialogModal } from '../../components/DialogModal';
-import { getPerfilLabel } from '../../utils/labelUtils';
+import { DialogModal } from '../../../components/DialogModal';
+import { getPerfilLabel } from '../../../utils/labelUtils';
 import { InfoIcon } from '@chakra-ui/icons';
-import { Informativo } from '../../components/Informativo';
+import { Informativo } from '../../../components/Informativo';
+import { getCliente } from '../../../services/ClienteService';
 
-export const Perfil = () => {
+export const Clientes = () => {
 
-    const [usuarios, setUsuarios] = useState([]); //array usuarios
-    const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
+    const [clientes, setClientes] = useState([]); //array clientes
+    const [clienteSelecionado, setUsuarioSelecionado] = useState({});
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [modoEdicao, setModoEdicao] = useState(false);
 
-    //funcao buscar dados dos usuarios
-    const ListarUsuarios = async () => {
+    //mock 
+    const clientesMock = [
+        {
+            id: 1,
+            nomeFantasia: "Tech Solutions",
+            razaoSocial: "Tech Solutions Tecnologia LTDA",
+            cnpj: "12.345.678/0001-90",
+            dataCadastro: "2025-06-04T15:27:44.273Z"
+        },
+        {
+            id: 2,
+            nomeFantasia: "Construtora Alpha",
+            razaoSocial: "Construtora Alpha Engenharia e Serviços LTDA",
+            cnpj: "98.765.432/0001-12",
+            dataCadastro: "2025-05-28T09:13:00.000Z"
+        }
+    ];
+
+    //funcao buscar dados dos clientes
+    const ListarClientes = async () => {
         try {
-            const dadosUsuarios = await getUsers();
-            setUsuarios(dadosUsuarios);
+            const dadosClientes = await getCliente();
+            setClientes(dadosClientes);
 
         } catch (error) {
-            console.error("não foi possivel buscar usuarios")
+            console.error("não foi possivel buscar clientes")
         };
+        
     };
 
     useEffect(() => {
-        ListarUsuarios();
+        ListarClientes();
     }, []);
+    
 
-    //enviar dados do usuario
+    //enviar dados do cliente
 
-const handleSubmit = async () => {
-  try {
-    await registerUser(usuarioSelecionado);
-    alert("Usuário registrado");
-    setIsEditOpen(false);
-    // ListarUsuarios(); // recarrega lista
-  } catch (error) {
-    console.error("Erro ao registrar usuário", error);
-  }
-};
-
-    //Indica o usuario atual na lista
-    const usuarioAtual = (userName) => {
-        const userData = localStorage.getItem('user');
-        if (!userData) return false;
-
+    const handleSubmit = async () => {
         try {
-            const user = JSON.parse(userData);
-            return userName === user.usuario;
-        } catch (err) {
-            return false;
+            await registerUser(clienteSelecionado);
+            alert("Usuário registrado");
+            setIsEditOpen(false);
+            // ListarClientes(); // recarrega lista
+        } catch (error) {
+            console.error("Erro ao registrar usuário", error);
         }
     };
 
-
-    //componente de lista de usuarios
-    const ListaUsuarios = ({ selecionarUsuario, abrirModalEdicao }) => {
+    //componente de lista de clientes
+    const ListaClientes = ({ selecionarUsuario, abrirModalEdicao }) => {
         return (
             <List spacing={3} w="100%">
-                {usuarios.map((usuario, index) => (
+                {clientes.map((cliente, index) => (
                     <ListItem
                         key={index}
                         w="100%"
@@ -95,19 +102,14 @@ const handleSubmit = async () => {
                         py={2}
                         borderRadius="md"
                     >
-                        <Flex align="center" gap={2} onClick={() => selecionarUsuario(usuario)}>
+                        <Flex align="center" gap={2} onClick={() => selecionarUsuario(cliente)}>
                             <Flex align="center">
                                 <Avatar src={RxAvatar} size='sm' />
                                 <Box ml='3'>
                                     <Text fontWeight={500} color="gray.600" fontSize={14}>
-                                        {usuario?.nome}
-                                        {usuarioAtual(usuario?.nome) && (
-                                            <Badge ml='1' colorScheme='green'>
-                                                Meu usuário
-                                            </Badge>
-                                        )}
+                                        {cliente?.razaoSocial}
                                     </Text>
-                                    <Text fontSize={13}>{usuario?.email} - {getPerfilLabel(usuario?.perfil)}</Text>
+                                    <Text fontSize={13}>{cliente?.cnpj}</Text>
                                 </Box>
                             </Flex>
                         </Flex>
@@ -117,7 +119,7 @@ const handleSubmit = async () => {
                             variant="outline"
                             size="sm"
                             onClick={() => {
-                                selecionarUsuario(usuario);
+                                selecionarUsuario(cliente);
                                 setModoEdicao(true);
                                 abrirModalEdicao();
                             }}
@@ -129,6 +131,8 @@ const handleSubmit = async () => {
         );
     };
 
+      console.log(clientes)
+
 
 
     return (
@@ -137,7 +141,7 @@ const handleSubmit = async () => {
                 
                 <GridItem>
                     <Text as="b" fontSize="xl">
-                        Usuários
+                        Clientes
                     </Text>
                     <Button variant='text' color='#68D391' leftIcon={<FaPlus />} onClick={() => {
                         setUsuarioSelecionado({});
@@ -147,7 +151,7 @@ const handleSubmit = async () => {
                         Adicionar
                     </Button>
                     <Flex style={styles.content}>
-                        <ListaUsuarios
+                        <ListaClientes
                             selecionarUsuario={setUsuarioSelecionado}
                             abrirModalEdicao={() => setIsEditOpen(true)}
                         />
@@ -156,24 +160,24 @@ const handleSubmit = async () => {
                 <GridItem>
                     <Informativo
                         tipo="info"
-                        titulo="Administração de Usuários"
-                        mensagem="Gerencie, edite e organize os usuários do sistema com facilidade."
+                        titulo="Gerenciamento de Clientes"
+                        mensagem="Clientes são empresas às quais devem ser atribuídos processos e fluxos de trabalho, organizados em frentes que contêm atividades específicas. Cada frente possui supervisores responsáveis pelo acompanhamento da demanda e executores encarregados de sua realização."
                     />
                 </GridItem>
             </Grid>
-            <DialogModal
+            {/* <DialogModal
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
                 title={modoEdicao ? "Editar Usuário" : "Adicionar Usuário"}
                 onSave={handleSubmit}
-                onDelete={modoEdicao ? () => console.log("Deletar:", usuarioSelecionado) : null}
+                onDelete={modoEdicao ? () => console.log("Deletar:", clienteSelecionado) : null}
                 // showDelete={modoEdicao}
             >
                 <Stack spacing={4}>
                     <FormControl>
                         <FormLabel>Usuário</FormLabel>
                         <Input
-                            value={usuarioSelecionado?.nome || ''}
+                            value={clienteSelecionado?.nome || ''}
                             onChange={(e) =>
                                 setUsuarioSelecionado((prev) => ({ ...prev, nome: e.target.value }))
                             }
@@ -182,7 +186,7 @@ const handleSubmit = async () => {
                     <FormControl>
                         <FormLabel>E-mail</FormLabel>
                         <Input
-                            value={usuarioSelecionado?.email || ''}
+                            value={clienteSelecionado?.email || ''}
                             onChange={(e) =>
                                 setUsuarioSelecionado((prev) => ({ ...prev, email: e.target.value }))
                             }
@@ -191,7 +195,7 @@ const handleSubmit = async () => {
                     <FormControl>
                         <FormLabel>Perfil</FormLabel>
                         <Select
-                            value={usuarioSelecionado?.perfil ?? ''}
+                            value={clienteSelecionado?.perfil ?? ''}
                             onChange={(e) =>
                                 setUsuarioSelecionado((prev) => ({
                                     ...prev,
@@ -206,7 +210,7 @@ const handleSubmit = async () => {
                         </Select>
                     </FormControl>
                 </Stack>
-            </DialogModal>
+            </DialogModal> */}
         </>
     );
 };
@@ -214,7 +218,8 @@ const handleSubmit = async () => {
 const styles = {
     content: {
         width: "100%",
-        height: "75vh",
+        minHeight: "50vh",
+        height: "100%",
         overflowY: "auto",
         border: "1px solid",
         borderColor: "#d0d0d0",

@@ -5,8 +5,8 @@ import { LoginPage } from "../pages/login/Login";
 import { PrivateRoute } from "./PrivateRoute";
 import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
-import { Clientes } from "../pages/clientes/Clientes";
-import { Perfil } from "../pages/perfil/Perfil";
+import { Gerenciar } from "../pages/gerenciar/Gerenciar";
+import { Perfil } from "../pages/gerenciar/secoes/Perfil";
 
 
 export const AppRoutes = () => {
@@ -23,7 +23,7 @@ export const AppRoutes = () => {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/painel" element={<Painel />} />
-            <Route path="/clientes" element={<Clientes />} />
+            <Route path="/gerenciar" element={<Gerenciar />} />
             <Route path="/perfil" element={<Perfil />} />
           </Route>
         </Route>

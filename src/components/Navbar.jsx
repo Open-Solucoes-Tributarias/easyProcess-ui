@@ -19,7 +19,7 @@ import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
-  { label: "Gerenciar clientes", path: "/clientes" },
+  { label: "Gerenciar", path: "/gerenciar" },
 ];
 
 export const Navbar = ({ children }) => {

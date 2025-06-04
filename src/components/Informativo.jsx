@@ -12,7 +12,7 @@ const tipoPadrao = {
   },
   info: {
     icon: InfoIcon,
-    color: "blue.500",
+    color: "#48bb78",
   },
   alerta: {
     icon: WarningIcon,
