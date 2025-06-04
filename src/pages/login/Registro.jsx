@@ -36,8 +36,8 @@ export const RegisterPage = () => {
 
     try {
       setLoading(true);
-      const response = await register(payload);
-      localStorage.setItem('token', response.token);
+        await register(payload);
+        // localStorage.setItem('token', response.token);
       toast({
         title: 'Cadastro realizado com sucesso.',
         status: 'success',

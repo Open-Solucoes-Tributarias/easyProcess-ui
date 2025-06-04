@@ -15,6 +15,9 @@ import {
     Select,
     IconButton,
     Stack,
+    Box,
+    Badge,
+    Avatar,
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
@@ -77,10 +80,17 @@ const handleSubmit = async () => {
                         borderRadius="md"
                     >
                         <Flex align="center" gap={2} onClick={() => selecionarUsuario(usuario)}>
-                            <ListIcon as={RxAvatar} color="gray.600" />
-                            <Flex direction={'column'}>
-                                <Text>{usuario?.nome}</Text>
-                                <Text fontSize={12} fontStyle={'italic'}>{usuario?.email} - {getPerfilLabel(usuario?.perfil)}</Text>
+                            <Flex align="center">
+                                <Avatar src={RxAvatar} size='sm' />
+                                <Box ml='3'>
+                                    <Text fontWeight={500} color="gray.600" fontSize={14}>
+                                        {usuario?.nome}
+                                        {/* <Badge ml='1' colorScheme='green'>
+                                            New
+                                        </Badge> */}
+                                    </Text>
+                                    <Text fontSize={13}>{usuario?.email} - {getPerfilLabel(usuario?.perfil)}</Text>
+                                </Box>
                             </Flex>
                         </Flex>
                         <IconButton

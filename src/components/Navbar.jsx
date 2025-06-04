@@ -68,6 +68,7 @@ export const Navbar = ({ children }) => {
                 <MenuItem
                   onClick={() => {
                     localStorage.removeItem("token");
+                    localStorage.removeItem("user");
                     navigate("/login");
                   }}
                 >
