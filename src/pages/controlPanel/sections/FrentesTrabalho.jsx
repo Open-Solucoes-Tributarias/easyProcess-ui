@@ -47,7 +47,7 @@ const mockFrentes = [
   },
 ];
 
-export const FrentesTrabalho = () => {
+export const FrentesTrabalho = ({ clienteSelecionado }) => {
   return (
     <Grid templateColumns="1fr" gap={6} p={4}>
       <GridItem>
@@ -56,8 +56,8 @@ export const FrentesTrabalho = () => {
 
       <GridItem>
         <Accordion allowMultiple defaultIndex={[0]}>
-          {mockFrentes.map((frente, i) => (
-            <AccordionItem key={i} border="none">
+          {mockFrentes.map((frente, index) => (
+            <AccordionItem key={index} border="none">
               <h2>
                 <AccordionButton px={0} _hover={{ bg: "transparent" }}>
                 <AccordionIcon />

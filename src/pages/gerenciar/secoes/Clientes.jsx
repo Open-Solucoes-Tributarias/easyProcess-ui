@@ -17,7 +17,7 @@ import {
     Avatar,
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
-import { RxAvatar } from 'react-icons/rx';
+import { RxAvatar, RxReader } from 'react-icons/rx';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
@@ -77,7 +77,7 @@ export const Clientes = () => {
                     >
                         <Flex align="center" gap={2} onClick={() => selecionarUsuario(cliente)}>
                             <Flex align="center">
-                                <Avatar src={RxAvatar} size='sm' />
+                                 <RxReader/>
                                 <Box ml='3'>
                                     <Text fontWeight={500} color="gray.600" fontSize={14}>
                                         {cliente?.razaoSocial}

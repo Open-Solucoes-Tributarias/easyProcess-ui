@@ -6,11 +6,12 @@ import { FrentesTrabalho } from "./sections/FrentesTrabalho";
 import { FloatingButton } from "../../components/FloatButton";
 
 export const Painel = () => {
-  const [clienteSelecionada, setClienteSelecionada] = useState(null);
+  const [clienteSelecionado, setClienteSelecionado] = useState(null);
 
+  //recebe a empresa (cliente) clicado no elemento filho Clientes
   const handleSelecionarCliente = (cliente) => {
-    setClienteSelecionada(cliente);
-    console.log("Cliente no pai:", cliente);
+    setClienteSelecionado(cliente);
+    console.log("Cliente selecionado:", cliente);
   };
 
   return (
@@ -18,7 +19,7 @@ export const Painel = () => {
         <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap={6} p={3}>
           <GridItem>
             <Text as="b" fontSize="xl">
-              Clientes
+              Contratos
             </Text>
             <Box style={styles.content}>
               <Clientes onClienteSelecionada={handleSelecionarCliente} />
@@ -26,10 +27,10 @@ export const Painel = () => {
           </GridItem>
           <GridItem>
             <Text as="b" fontSize="xl">
-              Frentes de Trabalho | Atividades
+              Atividades | Frentes de Trabalho
             </Text>
             <Box style={styles.content}>
-              <FrentesTrabalho />
+              <FrentesTrabalho clienteSelecionado={clienteSelecionado} />
             </Box>
           </GridItem>
         </Grid>

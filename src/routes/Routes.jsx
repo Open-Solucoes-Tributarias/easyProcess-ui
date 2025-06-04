@@ -24,7 +24,7 @@ export const AppRoutes = () => {
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/painel" element={<Painel />} />
             <Route path="/gerenciar" element={<Gerenciar />} />
-            <Route path="/perfil" element={<Perfil />} />
+            <Route path="/perfil" element={"/"} />
           </Route>
         </Route>
         {/* Rota error */}

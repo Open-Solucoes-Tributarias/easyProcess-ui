@@ -22,8 +22,8 @@ export const FloatingButton = () => {
     <>
       <Box
         position="fixed"
-        bottom="20px"
-        right="20px"
+        bottom="25px"
+        right="25px"
         zIndex={999}
         onMouseEnter={() => setIsOpen(true)}
         onMouseLeave={() => setIsOpen(false)}
