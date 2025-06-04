@@ -18,6 +18,7 @@ import {
     Box,
     Badge,
     Avatar,
+    Heading,
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
@@ -25,6 +26,8 @@ import { getUsers, registerUser } from '../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../components/DialogModal';
 import { getPerfilLabel } from '../../utils/labelUtils';
+import { InfoIcon } from '@chakra-ui/icons';
+import { Informativo } from '../../components/Informativo';
 
 export const Perfil = () => {
 
@@ -61,6 +64,19 @@ const handleSubmit = async () => {
   }
 };
 
+    //Indica o usuario atual na lista
+    const usuarioAtual = (userName) => {
+        const userData = localStorage.getItem('user');
+        if (!userData) return false;
+
+        try {
+            const user = JSON.parse(userData);
+            return userName === user.usuario;
+        } catch (err) {
+            return false;
+        }
+    };
+
 
     //componente de lista de usuarios
     const ListaUsuarios = ({ selecionarUsuario, abrirModalEdicao }) => {
@@ -85,9 +101,11 @@ const handleSubmit = async () => {
                                 <Box ml='3'>
                                     <Text fontWeight={500} color="gray.600" fontSize={14}>
                                         {usuario?.nome}
-                                        {/* <Badge ml='1' colorScheme='green'>
-                                            New
-                                        </Badge> */}
+                                        {usuarioAtual(usuario?.nome) && (
+                                            <Badge ml='1' colorScheme='green'>
+                                                Meu usuário
+                                            </Badge>
+                                        )}
                                     </Text>
                                     <Text fontSize={13}>{usuario?.email} - {getPerfilLabel(usuario?.perfil)}</Text>
                                 </Box>
@@ -136,7 +154,11 @@ const handleSubmit = async () => {
                     </Flex>
                 </GridItem>
                 <GridItem>
-
+                    <Informativo
+                        tipo="info"
+                        titulo="Administração de Usuários"
+                        mensagem="Gerencie, edite e organize os usuários do sistema com facilidade."
+                    />
                 </GridItem>
             </Grid>
             <DialogModal
