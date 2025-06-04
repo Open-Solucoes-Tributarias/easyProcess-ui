@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
 import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
-import { Clients } from "./sections/Clientes";
-import { FrontWorks } from "./sections/FrentesTrabalho";
+import { Clientes } from "./sections/Clientes";
+import { FrentesTrabalho } from "./sections/FrentesTrabalho";
 import { FloatingButton } from "../../components/FloatButton";
 
 export const Painel = () => {
@@ -21,7 +21,7 @@ export const Painel = () => {
               Clientes
             </Text>
             <Box style={styles.content}>
-              <Clients onClienteSelecionada={handleSelecionarCliente} />
+              <Clientes onClienteSelecionada={handleSelecionarCliente} />
             </Box>
           </GridItem>
           <GridItem>
@@ -29,7 +29,7 @@ export const Painel = () => {
               Frentes de Trabalho | Atividades
             </Text>
             <Box style={styles.content}>
-              <FrontWorks />
+              <FrentesTrabalho />
             </Box>
           </GridItem>
         </Grid>

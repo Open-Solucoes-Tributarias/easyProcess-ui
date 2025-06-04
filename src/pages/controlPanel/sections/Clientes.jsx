@@ -1,28 +1,32 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { Grid, GridItem, List, ListItem, Text } from '@chakra-ui/react';
+import { Avatar, Box, Flex, Grid, GridItem, IconButton, List, ListItem, Text } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
-import { getClientes } from '../../../services/companyService';
 import { Informativo } from '../../../components/Informativo';
+import { getCliente } from '../../../services/ClienteService';
+import { color } from 'framer-motion';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import { RxAvatar } from 'react-icons/rx';
 
-export const Clients = ({ onClienteSelecionada }) => {
+export const Clientes = ({ onClienteSelecionada }) => {
   const [clientes, setClientes] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const fetchClientes = async () => {
-      try {
-        const data = await getClientes();
-        setClientes(data);
-      } catch (error) {
-        console.error('Erro ao carregar clientes:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  //funcao buscar dados dos clientes
+  const ListarClientes = async () => {
+    try {
+      const dadosClientes = await getCliente();
+      setClientes(dadosClientes);
 
-    fetchClientes();
+    } catch (error) {
+      console.error("não foi possivel buscar clientes")
+    } finally {
+      setLoading(false);
+    }
+  };
+  useEffect(() => {
+    ListarClientes();
   }, []);
 
   const handleCliente = (cliente) => {
@@ -41,16 +45,38 @@ export const Clients = ({ onClienteSelecionada }) => {
             Carregando clientes...
           </Text>
         ) : clientes.length === 0 ? (
-          <Informativo/>
+          <Informativo />
         ) : (
-          <List styleType="disc" spacing={3}>
-            {clientes.map((cliente) => (
+          <List spacing={3} w="100%">
+            {clientes.map((cliente, index) => (
               <ListItem
-                sx={styles.listItem}
-                key={cliente.id}
+                key={index}
                 onClick={() => handleCliente(cliente)}
+                w="100%"
+                display="flex"
+                justifyContent="space-between"
+                alignItems="center"
+                border="1px solid"
+                borderColor="#d0d0d0"
+                px={3}
+                py={2}
+                borderRadius="md"
+                _hover={{
+                  background: 'gray.100',                 
+                  cursor: 'pointer',
+                }}
               >
-                {cliente.nome}
+                <Flex align="center" gap={2}>
+                  <Flex align="center">
+                    {/* <Avatar src={RxAvatar} size='sm' /> */}
+                    <Box ml='3'>
+                      <Text fontWeight={500} color="gray.600" fontSize={14}>
+                        {cliente?.razaoSocial}
+                      </Text>
+                      <Text fontSize={13}>{cliente?.cnpj}</Text>
+                    </Box>
+                  </Flex>
+                </Flex>               
               </ListItem>
             ))}
           </List>
@@ -58,13 +84,4 @@ export const Clients = ({ onClienteSelecionada }) => {
       </GridItem>
     </Grid>
   );
-};
-
-const styles = {
-  listItem: {
-    _hover: {
-      color: '#68D391',
-      cursor: 'pointer',
-    },
-  },
 };

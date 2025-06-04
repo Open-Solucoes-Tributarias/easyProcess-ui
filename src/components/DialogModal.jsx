@@ -13,7 +13,7 @@ import {
 
 export const DialogModal = ({ isOpen, onClose, title, children, onSave, onDelete, showDelete }) => {
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered size='xl'>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>

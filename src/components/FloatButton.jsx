@@ -78,9 +78,6 @@ export const FloatingButton = () => {
           />
         </VStack>
       </Box>
-
-      {/* MODAL RENDERIZADO AQUI */}
-      {/* <ModalCadastroCliente isOpen={isOpenCliente} onClose={onCloseCliente} /> */}
     </>
   );
 };

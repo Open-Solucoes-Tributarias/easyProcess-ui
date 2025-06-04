@@ -11,24 +11,17 @@ import {
     Text,
     List,
     ListItem,
-    ListIcon,
-    Select,
     IconButton,
     Stack,
     Box,
-    Badge,
     Avatar,
-    Heading,
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
-import { getUsers, registerUser } from '../../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
-import { getPerfilLabel } from '../../../utils/labelUtils';
-import { InfoIcon } from '@chakra-ui/icons';
 import { Informativo } from '../../../components/Informativo';
-import { getCliente } from '../../../services/ClienteService';
+import { getCliente, registerCliente } from '../../../services/ClienteService';
 
 export const Clientes = () => {
 
@@ -36,24 +29,6 @@ export const Clientes = () => {
     const [clienteSelecionado, setUsuarioSelecionado] = useState({});
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [modoEdicao, setModoEdicao] = useState(false);
-
-    //mock 
-    const clientesMock = [
-        {
-            id: 1,
-            nomeFantasia: "Tech Solutions",
-            razaoSocial: "Tech Solutions Tecnologia LTDA",
-            cnpj: "12.345.678/0001-90",
-            dataCadastro: "2025-06-04T15:27:44.273Z"
-        },
-        {
-            id: 2,
-            nomeFantasia: "Construtora Alpha",
-            razaoSocial: "Construtora Alpha Engenharia e Serviços LTDA",
-            cnpj: "98.765.432/0001-12",
-            dataCadastro: "2025-05-28T09:13:00.000Z"
-        }
-    ];
 
     //funcao buscar dados dos clientes
     const ListarClientes = async () => {
@@ -71,15 +46,13 @@ export const Clientes = () => {
         ListarClientes();
     }, []);
     
-
     //enviar dados do cliente
-
     const handleSubmit = async () => {
         try {
-            await registerUser(clienteSelecionado);
+            await registerCliente(clienteSelecionado);
             alert("Usuário registrado");
             setIsEditOpen(false);
-            // ListarClientes(); // recarrega lista
+            ListarClientes(); // recarrega lista
         } catch (error) {
             console.error("Erro ao registrar usuário", error);
         }
@@ -127,13 +100,8 @@ export const Clientes = () => {
                     </ListItem>
                 ))}
             </List>
-
         );
     };
-
-      console.log(clientes)
-
-
 
     return (
         <>
@@ -165,52 +133,55 @@ export const Clientes = () => {
                     />
                 </GridItem>
             </Grid>
-            {/* <DialogModal
+            <DialogModal
                 isOpen={isEditOpen}
                 onClose={() => setIsEditOpen(false)}
-                title={modoEdicao ? "Editar Usuário" : "Adicionar Usuário"}
+                title={modoEdicao ? "Editar Clientes" : "Adicionar Clientes"}
                 onSave={handleSubmit}
                 onDelete={modoEdicao ? () => console.log("Deletar:", clienteSelecionado) : null}
                 // showDelete={modoEdicao}
             >
                 <Stack spacing={4}>
                     <FormControl>
-                        <FormLabel>Usuário</FormLabel>
+                        <FormLabel>Nome Fantasia</FormLabel>
                         <Input
-                            value={clienteSelecionado?.nome || ''}
+                            value={clienteSelecionado?.nomeFantasia || ''}
                             onChange={(e) =>
-                                setUsuarioSelecionado((prev) => ({ ...prev, nome: e.target.value }))
+                                setUsuarioSelecionado((prev) => ({ ...prev, nomeFantasia: e.target.value }))
                             }
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>E-mail</FormLabel>
+                        <FormLabel>Razão Social</FormLabel>
                         <Input
-                            value={clienteSelecionado?.email || ''}
+                            value={clienteSelecionado?.razaoSocial || ''}
                             onChange={(e) =>
-                                setUsuarioSelecionado((prev) => ({ ...prev, email: e.target.value }))
+                                setUsuarioSelecionado((prev) => ({ ...prev, razaoSocial: e.target.value }))
                             }
                         />
                     </FormControl>
                     <FormControl>
-                        <FormLabel>Perfil</FormLabel>
-                        <Select
-                            value={clienteSelecionado?.perfil ?? ''}
+                        <FormLabel>CNPJ</FormLabel>
+                        <Input
+                            value={clienteSelecionado?.cnpj || ''}
                             onChange={(e) =>
-                                setUsuarioSelecionado((prev) => ({
-                                    ...prev,
-                                    perfil: Number(e.target.value),
-                                }))
+                                setUsuarioSelecionado((prev) => ({ ...prev, cnpj: e.target.value }))
                             }
-                        >
-                            <option value={0}>Administrador do sistema</option>
-                            <option value={1}>Administrador</option>
-                            <option value={2}>Supervisor</option>
-                            <option value={3}>Colaborador</option>
-                        </Select>
+                        />
                     </FormControl>
+                    {modoEdicao &&
+                        <FormControl>
+                            <FormLabel>Data de cadastro</FormLabel>
+                            <Input
+                                value={clienteSelecionado?.dataCadastro || ''}
+                                onChange={(e) =>
+                                    setUsuarioSelecionado((prev) => ({ ...prev, email: e.target.value }))
+                                }
+                            />
+                        </FormControl>
+                    }                
                 </Stack>
-            </DialogModal> */}
+            </DialogModal>
         </>
     );
 };

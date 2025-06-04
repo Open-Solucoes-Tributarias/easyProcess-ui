@@ -47,7 +47,7 @@ const mockFrentes = [
   },
 ];
 
-export const FrontWorks = () => {
+export const FrentesTrabalho = () => {
   return (
     <Grid templateColumns="1fr" gap={6} p={4}>
       <GridItem>

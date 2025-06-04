@@ -1,32 +1,25 @@
 'use client'
 import {
-    Flex,
-    Button,
-    Grid,
-    GridItem,
-    Text,
     Tab,
     Tabs,
     TabList,
     TabPanel,
     TabPanels
 } from '@chakra-ui/react'
-import { FaPlus } from 'react-icons/fa';
-import { Informativo } from '../../components/Informativo';
 import { Clientes } from './secoes/Clientes';
 import { Perfil } from './secoes/Perfil';
 
 export const Gerenciar = () => {
 
     return (
-        <Tabs variant='enclosed' verflow='hidden' minHeight='100vh' height='100vh'>
-            <TabList colorScheme='green'>
+        <Tabs variant='soft-rounded' colorScheme='green'>
+            <TabList>
                 <Tab>Clientes</Tab>
                 <Tab>Usuários</Tab>
             </TabList>
             <TabPanels overflow='hidden' minHeight='100vh' height='100vh'>
                 <TabPanel>
-                    <Clientes/>
+                    <Clientes />
                 </TabPanel>
                 <TabPanel>
                     <Perfil />
