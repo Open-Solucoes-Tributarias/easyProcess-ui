@@ -18,6 +18,7 @@ import {
 } from "@chakra-ui/react";
 import { SearchInput } from "../../../components/InputSearch";
 import { getAtividadesContrato } from "../../../services/atividadesContrato";
+import { dateConverter } from "../../../utils/utils";
 
 
 export const FrentesTrabalho = ({ contratoSelecionado }) => {
@@ -50,7 +51,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
       <GridItem>
         <SearchInput />
       </GridItem>
-      <Accordion>
+      <Accordion variant='mul'>
         {/* ordenar o array pelo valor "sequencia" antes de mapear */}
         {atvContrato
           .slice() //copia segura antes de alterar o array
@@ -58,14 +59,13 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
           .map((atv, index) => (
             <AccordionItem key={atv.id}>
               <h2>
-              <AccordionButton>
+              <AccordionButton _expanded={{ bg: 'gray.100' }}>
                 <AccordionIcon />
                 <Box as='span' pl={4} textAlign='left'>
                   <Text fontWeight={600} color="gray.600" fontSize={14}>
                     {atv?.descricaoCustomizada}
                   </Text>
-                  <Text fontSize={13}>{atv?.datalimite}</Text>
-                  <Text>{atv?.sequencia}</Text>
+                  <Text fontSize={12}>Data limite: {dateConverter(atv?.dataLimite)}</Text>
                 </Box>
               </AccordionButton>
             </h2>
