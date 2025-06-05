@@ -7,7 +7,7 @@ export const getCliente= async () => {
 };
 
 // GET por ID
-export const getByIdCliente = async ({id}) => {
+export const getByIdCliente = async (id) => {
   const response = await httpClient.get(`'/api/clientes'${id}`);
   return response.data;
 };
@@ -20,14 +20,14 @@ export const registerCliente = async (data) => {
 
 //PUT
 
-export const editCliente = async ({id}) => {
+export const editCliente = async (id) => {
   const response = await httpClient.put(`'/api/clientes'${id}`);
   return response.data;
 };
 
 
 //DELETE
-export const deleteCliente = async ({id}) => {
+export const deleteCliente = async (id) => {
   const response = await httpClient.delete(`'/api/clientes'${id}`);
   return response.data;
 };

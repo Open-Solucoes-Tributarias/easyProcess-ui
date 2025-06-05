@@ -1,17 +1,19 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Box, Flex, Grid, GridItem, IconButton, List, ListItem, Text } from '@chakra-ui/react';
+import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, GridItem, IconButton, List, ListItem, Text } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
 import { getCliente } from '../../../services/ClienteService';
 import { RxReader } from 'react-icons/rx';
+import { getContrato } from '../../../services/contratosService';
 
-export const Clientes = ({ onClienteSelecionada }) => {
+export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
   const [clientes, setClientes] = useState([]);
+  const [contratos, setContratos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   //funcao buscar dados dos clientes
-  const ListarClientes = async () => {
+  const listarClientes = async () => {
     try {
       const dadosClientes = await getCliente();
       setClientes(dadosClientes);
@@ -23,11 +25,20 @@ export const Clientes = ({ onClienteSelecionada }) => {
     }
   };
   useEffect(() => {
-    ListarClientes();
+    listarClientes();
   }, []);
 
-  const handleCliente = (cliente) => {
-    onClienteSelecionada(cliente);
+  //funcao listar contratos de cada cliente
+  const listarContratos = async (clienteId) => {
+    try {
+      const dadosContratos = await getContrato(clienteId);
+      console.log("contratos existem para", clienteId, dadosContratos);
+      setContratos(dadosContratos);
+    } catch (error) {
+      console.error("erro ao buscar contratos");
+    } finally {
+
+    }
   };
 
   return (
@@ -44,39 +55,66 @@ export const Clientes = ({ onClienteSelecionada }) => {
         ) : clientes.length === 0 ? (
           <Informativo />
         ) : (
-          <List spacing={3} w="100%">
+          <Accordion>
             {clientes.map((cliente, index) => (
-              <ListItem
-                key={index}
-                onClick={() => handleCliente(cliente)}
-                w="100%"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                border="1px solid"
-                borderColor="#e2e8f0"
-                px={3}
-                py={2}
-                borderRadius="md"
-                _hover={{
-                  background: 'gray.100',                 
-                  cursor: 'pointer',
-                }}
-              >
-                <Flex align="center" gap={2}>
-                  <Flex align="center">
-                    <RxReader/>
-                    <Box ml='3'>
-                      <Text fontWeight={500} color="gray.600" fontSize={14}>
+              <AccordionItem key={index}>
+                <h2>
+                  <AccordionButton onClick={() => { handleSelecionarCliente(cliente), listarContratos(cliente?.id); }}>
+                    <AccordionIcon />
+                    <Box as='span' pl={4} textAlign='left'>
+                      <Text fontWeight={600} color="gray.600" fontSize={14}>
                         {cliente?.razaoSocial}
                       </Text>
                       <Text fontSize={13}>{cliente?.cnpj}</Text>
                     </Box>
-                  </Flex>
-                </Flex>               
-              </ListItem>
+                  </AccordionButton>
+                </h2>
+                <AccordionPanel pb={4}>
+                  {contratos.length > 0 ? (
+                    <List spacing={3} w="100%">
+                      {contratos.map((contrato, index) => (
+                        <ListItem
+                          key={index}
+                          onClick={() => handleContratoSelecionado(contrato)}
+                          w="100%"
+                          display="flex"
+                          justifyContent="left"
+                          alignItems="center"
+                          paddingLeft={10}
+                          fontStyle='italic'
+                          fontWeight={400}
+                          borderRadius="md"
+                          _hover={{
+                            background: 'gray.100',
+                            cursor: 'pointer',
+                          }}
+                        >
+
+                          <Flex align="center" gap={2}>
+                            <Flex align="center">
+                              <RxReader />
+                              <Box ml='3'>
+                                <Text fontWeight={500} color="gray.600" fontSize={14}>
+                                  {contrato?.descricao}
+                                </Text>
+                              </Box>
+                            </Flex>
+                          </Flex>
+                        </ListItem>
+                      ))}
+                    </List>
+                  ) : (
+                    <Box px={4}>
+                      {/* <Text fontStyle="italic" color="gray.500">
+                        Não existem informações disponíveis.
+                      </Text> */}
+                      <Informativo titulo={"Ops..."} mensagem={"Ainda não existem contratos atribuidos "} />
+                    </Box>
+                  )}
+                </AccordionPanel>
+              </AccordionItem>
             ))}
-          </List>
+          </Accordion>
         )}
       </GridItem>
     </Grid>
