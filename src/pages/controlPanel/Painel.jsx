@@ -23,6 +23,8 @@ export const Painel = () => {
     console.log('contrato selecionado', contrato);
   }
 
+  console.log('contrato no pai state', contratoSelecionado)
+
   return (
     <>
       <Grid templateColumns={{ base: "1fr", md: "1fr 2fr" }} gap={6} p={3}>
