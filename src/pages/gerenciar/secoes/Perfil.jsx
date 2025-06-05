@@ -22,17 +22,25 @@ import {
 } from '@chakra-ui/react'
 import { BsThreeDotsVertical } from 'react-icons/bs'
 import { RxAvatar } from 'react-icons/rx';
-import { getUsers, registerUser } from '../../../services/UsersService';
+import { editUser, getUsers, registerUser } from '../../../services/UsersService';
 import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
 import { getPerfilLabel } from '../../../utils/labelUtils';
-import { InfoIcon } from '@chakra-ui/icons';
 import { Informativo } from '../../../components/Informativo';
+
+const usuarioInicial = {
+    id: 0,
+    nome: '',
+    email: '',
+    senha: '',      // Apenas para novo usuário
+    perfil: 2,      // padrão: Colaborador
+    empresaId: '' 
+}
 
 export const Perfil = () => {
 
     const [usuarios, setUsuarios] = useState([]); //array usuarios
-    const [usuarioSelecionado, setUsuarioSelecionado] = useState({});
+    const [usuarioSelecionado, setUsuarioSelecionado] = useState(usuarioInicial);
     const [isEditOpen, setIsEditOpen] = useState(false);
     const [modoEdicao, setModoEdicao] = useState(false);
 
@@ -51,16 +59,26 @@ export const Perfil = () => {
         ListarUsuarios();
     }, []);
 
-    //enviar dados do usuario
-
 const handleSubmit = async () => {
   try {
-    await registerUser(usuarioSelecionado);
-    alert("Usuário registrado");
+    if (modoEdicao) {
+      await editUser(usuarioSelecionado?.id, usuarioSelecionado);
+      alert("Usuário editado com sucesso");
+    } else {
+      const novoUsuario = {
+        ...usuarioSelecionado,
+        id: 0, // redundante mas explícito
+      };
+      await registerUser(novoUsuario);
+      alert("Usuário criado com sucesso");
+    }
+
+    setUsuarioSelecionado();
     setIsEditOpen(false);
-    // ListarUsuarios(); // recarrega lista
+    ListarUsuarios();
+
   } catch (error) {
-    console.error("Erro ao registrar usuário", error);
+    console.error("Erro ao salvar usuário", error);
   }
 };
 
@@ -201,8 +219,7 @@ const handleSubmit = async () => {
                         >
                             <option value={0}>Administrador do sistema</option>
                             <option value={1}>Administrador</option>
-                            <option value={2}>Supervisor</option>
-                            <option value={3}>Colaborador</option>
+                            <option value={2}>Colaborador</option>
                         </Select>
                     </FormControl>
                 </Stack>
@@ -214,8 +231,6 @@ const handleSubmit = async () => {
 const styles = {
     content: {
         width: "100%",
-        // height: "75vh",
-        // maxheight: "75vh",
         overflowY: "auto",
         border: "1px solid",
         borderColor: "#d0d0d0",

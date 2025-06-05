@@ -1,24 +1,20 @@
 "use client";
 import { useState, useEffect } from "react";
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
-  Avatar,
   Box,
   Flex,
   Grid,
   GridItem,
   Icon,
   IconButton,
+  List,
+  ListItem,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 import { SearchInput } from "../../../components/InputSearch";
 import { getAtividadesContrato } from "../../../services/atividadesContrato";
 import { dateConverter } from "../../../utils/utils";
+import { BsThreeDotsVertical } from "react-icons/bs";
 
 
 export const FrentesTrabalho = ({ contratoSelecionado }) => {
@@ -51,70 +47,43 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
       <GridItem>
         <SearchInput />
       </GridItem>
-      <Accordion variant='mul'>
-        {/* ordenar o array pelo valor "sequencia" antes de mapear */}
+      <List spacing={3} w="100%">
         {atvContrato
           .slice() //copia segura antes de alterar o array
           .sort((a, b) => a.sequence - b.sequence)
           .map((atv, index) => (
-            <AccordionItem key={atv.id}>
-              <h2>
-              <AccordionButton _expanded={{ bg: 'gray.100' }}>
-                <AccordionIcon />
-                <Box as='span' pl={4} textAlign='left'>
-                  <Text fontWeight={600} color="gray.600" fontSize={14}>
-                    {atv?.descricaoCustomizada}
-                  </Text>
-                  <Text fontSize={12}>Data limite: {dateConverter(atv?.dataLimite)}</Text>
-                </Box>
-              </AccordionButton>
-            </h2>
-            <AccordionPanel pb={4}>
-              {/* {contratos.length > 0 ? (
-                        <List spacing={3} w="100%">
-                          {contratos.map((contrato, index) => (
-                            <ListItem
-                              key={index}
-                              onClick={() => handleContratoSelecionado(contrato)}
-                              w="100%"
-                              display="flex"
-                              justifyContent="left"
-                              alignItems="center"
-                              paddingLeft={10}
-                              fontStyle='italic'
-                              fontWeight={400}
-                              borderRadius="md"
-                              _hover={{
-                                background: 'gray.100',
-                                cursor: 'pointer',
-                              }}
-                            >
-    
-                              <Flex align="center" gap={2}>
-                                <Flex align="center">
-                                  <RxReader />
-                                  <Box ml='3'>
-                                    <Text fontWeight={500} color="gray.600" fontSize={14}>
-                                      {contrato?.descricao}
-                                    </Text>
-                                  </Box>
-                                </Flex>
-                              </Flex>
-                            </ListItem>
-                          ))}
-                        </List>
-                      ) : (
-                        <Box px={4}>
-                          <Text fontStyle="italic" color="gray.500">
-                            Não existem informações disponíveis.
-                          </Text>
-                          <Informativo titulo={"Ops..."} mensagem={"Ainda não existem contratos atribuidos "} />
-                        </Box>
-                      )} */}
-            </AccordionPanel>
-          </AccordionItem>
-        ))}
-      </Accordion>
+            <ListItem
+              key={atv.id}
+              w="100%"
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+              border="1px solid"
+              borderColor="#d0d0d0"
+              px={3}
+              py={2}
+              borderRadius="md"
+            >
+              <Flex align="center" gap={2} onClick={() => selecionarUsuario(cliente)}>
+                <Flex align="center">
+
+                  <Box ml='3'>
+                    <Text fontWeight={600} color="gray.600" fontSize={14}>
+                      {atv?.descricaoCustomizada}
+                    </Text>
+                    <Text fontSize={12}>Data limite: {dateConverter(atv?.dataLimite)}</Text>
+                  </Box>
+                </Flex>
+              </Flex>
+              <IconButton
+                aria-label="Editar"
+                icon={<BsThreeDotsVertical />}
+                variant="outline"
+                size="sm"
+              />
+            </ListItem>
+          ))}
+      </List>
       <GridItem>
 
 
