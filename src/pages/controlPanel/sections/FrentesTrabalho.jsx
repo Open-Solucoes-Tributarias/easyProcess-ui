@@ -51,9 +51,13 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
         <SearchInput />
       </GridItem>
       <Accordion>
-        {atvContrato.map((atv, index) => (
-          <AccordionItem key={index}>
-            <h2>
+        {/* ordenar o array pelo valor "sequencia" antes de mapear */}
+        {atvContrato
+          .slice() //copia segura antes de alterar o array
+          .sort((a, b) => a.sequence - b.sequence)
+          .map((atv, index) => (
+            <AccordionItem key={atv.id}>
+              <h2>
               <AccordionButton>
                 <AccordionIcon />
                 <Box as='span' pl={4} textAlign='left'>
