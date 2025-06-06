@@ -7,7 +7,6 @@ import {
   Flex,
   Grid,
   GridItem,
-  Icon,
   IconButton,
   List,
   ListItem,
@@ -17,12 +16,15 @@ import {
 import { SearchInput } from "../../../components/InputSearch";
 import { getAtividadesContrato } from "../../../services/atividadesContrato";
 import { dateConverter } from "../../../utils/utils";
-import { BsThreeDotsVertical } from "react-icons/bs";
 import { EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { ModalEditarAtv } from "../components/ModalEditarAtv";
 
 
 export const FrentesTrabalho = ({ contratoSelecionado }) => {
   const [atvContrato, setAtvContrato] = useState([]);
+
+  //states do modal editar atv
+  const [open, setOpen] = useState(false);
 
   //buscar atividades do contrato selecionado
   const listarAtvContrato = async (id) => {
@@ -47,6 +49,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
   console.log("atividades do contrato selecionado", atvContrato);
 
   return (
+    <>
     <Grid templateColumns="1fr" gap={6} p={4}>
       <GridItem>
         <SearchInput />
@@ -85,6 +88,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
                   icon={<EditIcon />}
                   variant="outline"
                   size="sm"
+                  onClick={() => setOpen(true)}
                 />
                 <IconButton
                   aria-label="Editar"
@@ -104,10 +108,8 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
             </ListItem>
           ))}
       </List>
-      <GridItem>
-
-
-      </GridItem>
     </Grid>
+    <ModalEditarAtv open={open} setOpen={setOpen} />
+    </>
   );
 };
