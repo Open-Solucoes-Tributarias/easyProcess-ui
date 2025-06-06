@@ -1,7 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
 import {
+  Avatar,
   Box,
+  Checkbox,
   Flex,
   Grid,
   GridItem,
@@ -10,11 +12,13 @@ import {
   List,
   ListItem,
   Text,
+  Tooltip,
 } from "@chakra-ui/react";
 import { SearchInput } from "../../../components/InputSearch";
 import { getAtividadesContrato } from "../../../services/atividadesContrato";
 import { dateConverter } from "../../../utils/utils";
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 
 
 export const FrentesTrabalho = ({ contratoSelecionado }) => {
@@ -66,7 +70,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
             >
               <Flex align="center" gap={2} onClick={() => selecionarUsuario(cliente)}>
                 <Flex align="center">
-
+                  <Checkbox colorScheme="green" isChecked />
                   <Box ml='3'>
                     <Text fontWeight={600} color="gray.600" fontSize={14}>
                       {atv?.descricaoCustomizada}
@@ -75,12 +79,28 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
                   </Box>
                 </Flex>
               </Flex>
-              <IconButton
-                aria-label="Editar"
-                icon={<BsThreeDotsVertical />}
-                variant="outline"
-                size="sm"
-              />
+              <Flex gap={2}>
+                <IconButton
+                  aria-label="Editar"
+                  icon={<EditIcon />}
+                  variant="outline"
+                  size="sm"
+                />
+                <IconButton
+                  aria-label="Editar"
+                  icon={<Avatar size='xs' />}
+                  variant="outline"
+                  size="sm"
+                />
+                <Tooltip label='Descrição da tarefa' placement='top'>
+                  <IconButton
+                    aria-label="Editar"
+                    icon={<InfoIcon size='xl' />}
+                    variant="outline"
+                    size="sm"
+                  />
+                </Tooltip>
+              </Flex>
             </ListItem>
           ))}
       </List>
