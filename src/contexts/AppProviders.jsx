@@ -1,11 +1,14 @@
 // components/AppProviders.jsx
-import { ClienteProvider } from '../contexts/ClientesContext';;
+import { ClienteProvider } from '../contexts/ClientesContext'; import { UsuariosProvider } from './UsuariosContext';
+;
 
 export const AppProviders = ({ children }) => {
-    //compoente global de contexts providers para globalizar funcoes de CRUD na aplicação
+    //componente global de contexts providers para globalizar funcoes de CRUD na aplicação
     return (
         <ClienteProvider>
-            {children}
+            <UsuariosProvider>
+                {children}
+            </UsuariosProvider>
         </ClienteProvider>
     );
 };

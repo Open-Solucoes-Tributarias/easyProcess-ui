@@ -7,7 +7,7 @@ import {
     TabPanels
 } from '@chakra-ui/react'
 import { Clientes } from './secoes/Clientes';
-import { Perfil } from './secoes/Perfil';
+import { Usuarios } from './secoes/Usuarios';
 
 export const Gerenciar = () => {
 
@@ -22,7 +22,7 @@ export const Gerenciar = () => {
                     <Clientes />
                 </TabPanel>
                 <TabPanel>
-                    <Perfil />
+                    <Usuarios />
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -62,7 +62,7 @@ export const Navbar = ({ children }) => {
                 <Avatar size={"sm"} icon={<GenericAvatarIcon />} />
               </MenuButton>
               <MenuList>
-                <MenuItem onClick={() => navigate("/perfil")}>Perfil</MenuItem>
+                <MenuItem onClick={() => navigate("/usuarios")}>Perfil</MenuItem>
                 <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem>
                 <MenuDivider />
                 <MenuItem

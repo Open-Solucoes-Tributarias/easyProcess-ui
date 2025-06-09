@@ -6,7 +6,6 @@ import { PrivateRoute } from "./PrivateRoute";
 import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { Gerenciar } from "../pages/gerenciar/Gerenciar";
-import { Perfil } from "../pages/gerenciar/secoes/Perfil";
 
 
 export const AppRoutes = () => {
@@ -24,7 +23,7 @@ export const AppRoutes = () => {
             <Route path="/dashboard" element={<Dashboard/>} />
             <Route path="/painel" element={<Painel />} />
             <Route path="/gerenciar" element={<Gerenciar />} />
-            <Route path="/perfil" element={"/"} />
+            <Route path="/usuarios" element={"/"} />
           </Route>
         </Route>
         {/* Rota error */}
