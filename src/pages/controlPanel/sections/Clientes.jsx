@@ -1,29 +1,34 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, GridItem, IconButton, List, ListItem, Text } from '@chakra-ui/react';
+import {
+  Accordion,
+  AccordionButton,
+  AccordionIcon,
+  AccordionItem,
+  AccordionPanel,
+  Box,
+  Flex,
+  Grid,
+  GridItem,
+  List,
+  ListItem,
+  Text
+} from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
-import { buscarClientes } from '../../../services/ClienteService';
 import { RxReader } from 'react-icons/rx';
-import { getContrato } from '../../../services/contratosService';
+
 import { useCliente } from '../../../contexts/ClientesContext';
+import { useContrato } from '../../../contexts/ContratosContext';
 
 export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
+  const { clientes } = useCliente();
+
   const {
-    clientes,
-  } = useCliente();
-
-  const [contratos, setContratos] = useState([]);
-  const [loading, setLoading] = useState(false);
-
-  const listarContratos = async (clienteId) => {
-    try {
-      const dadosContratos = await getContrato(clienteId);
-      setContratos(dadosContratos);
-    } catch (error) {
-      console.error("erro ao buscar contratos");
-    }
-  };
+    contratos,
+    listarContratos,
+    contratoLoading
+  } = useContrato();
 
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>
@@ -32,7 +37,7 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
       </GridItem>
 
       <GridItem>
-        {loading ? (
+        {contratoLoading ? (
           <Text fontStyle="italic" color="gray.500">
             Carregando contratos...
           </Text>
@@ -43,10 +48,12 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
             {clientes.map((cliente, index) => (
               <AccordionItem key={index}>
                 <h2>
-                  <AccordionButton onClick={() => {
-                    handleSelecionarCliente(cliente);
-                    listarContratos(cliente.id);
-                  }}>
+                  <AccordionButton
+                    onClick={() => {
+                      handleSelecionarCliente(cliente);
+                      listarContratos(cliente.id); // função do context
+                    }}
+                  >
                     <AccordionIcon />
                     <Box as='span' pl={4} textAlign='left'>
                       <Text fontWeight={600} color="gray.600" fontSize={14}>
@@ -89,7 +96,10 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
                     </List>
                   ) : (
                     <Box px={4}>
-                      <Informativo titulo={"Ops..."} mensagem={"Ainda não existem contratos atribuídos"} />
+                      <Informativo
+                        titulo={"Ops..."}
+                        mensagem={"Ainda não existem contratos atribuídos"}
+                      />
                     </Box>
                   )}
                 </AccordionPanel>

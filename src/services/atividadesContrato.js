@@ -24,7 +24,6 @@ export const editAtividadesContrato = async (id) => {
   return response.data;
 };
 
-
 //DELETE
 export const deleteAtividadesContrato = async (id) => {
   const response = await httpClient.delete(`'/api/atividadescontrato'${id}`);

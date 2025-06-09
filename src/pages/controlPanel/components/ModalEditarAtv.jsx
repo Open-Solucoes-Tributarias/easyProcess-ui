@@ -168,7 +168,7 @@ console.log('lista de movimentacoes', movimentacoesAtv);
                                     ml={-1}
                                     mr={3}
                                 />
-                                <TagLabel>Responsável</TagLabel>
+                                <TagLabel>{atvSelecionada?.nomeUsuarioDelegado}</TagLabel>
                             </Tag>                          
                         </Stack>
                     </Flex>
