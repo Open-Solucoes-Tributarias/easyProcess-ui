@@ -22,6 +22,7 @@ import { ModalEditarAtv } from "../components/ModalEditarAtv";
 
 export const FrentesTrabalho = ({ contratoSelecionado }) => {
   const [atvContrato, setAtvContrato] = useState([]);
+  const [atvSelecionada, setAtvSelecionada] = useState({}); //atividade selecionado na lista
 
   //states do modal editar atv
   const [open, setOpen] = useState(false);
@@ -47,6 +48,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
 
   console.log('contrato no filho frentes', contratoSelecionado);
   console.log("atividades do contrato selecionado", atvContrato);
+
 
   return (
     <>
@@ -88,7 +90,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
                   icon={<EditIcon />}
                   variant="outline"
                   size="sm"
-                  onClick={() => setOpen(true)}
+                  onClick={() => { setAtvSelecionada(atv), setOpen(true) }}
                 />
                 <IconButton
                   aria-label="Editar"
@@ -109,7 +111,7 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
           ))}
       </List>
     </Grid>
-    <ModalEditarAtv open={open} setOpen={setOpen} />
+    <ModalEditarAtv open={open} setOpen={setOpen} atvSelecionada={atvSelecionada} />
     </>
   );
 };

@@ -11,9 +11,10 @@ import {
     Flex
 } from "@chakra-ui/react";
 
-export const DialogModal = ({ isOpen, onClose, title, children, onSave, onDelete, showDelete }) => {
+export const DialogModal = ({ isOpen, onClose, title, size, children, onSave, onDelete, showDelete }) => {
+
     return (
-        <Modal isOpen={isOpen} onClose={onClose} isCentered size='xl'>
+        <Modal isOpen={isOpen} onClose={onClose} isCentered size={String(size) || 'xl'}>
             <ModalOverlay />
             <ModalContent>
                 <ModalHeader>{title}</ModalHeader>
