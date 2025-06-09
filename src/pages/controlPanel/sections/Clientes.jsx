@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { Accordion, AccordionButton, AccordionIcon, AccordionItem, AccordionPanel, Box, Flex, Grid, GridItem, IconButton, List, ListItem, Text } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
-import { getCliente } from '../../../services/ClienteService';
+import { buscarClientes } from '../../../services/ClienteService';
 import { RxReader } from 'react-icons/rx';
 import { getContrato } from '../../../services/contratosService';
 
@@ -15,7 +15,7 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
   //funcao buscar dados dos clientes
   const listarClientes = async () => {
     try {
-      const dadosClientes = await getCliente();
+      const dadosClientes = await buscarClientes();
       setClientes(dadosClientes);
 
     } catch (error) {

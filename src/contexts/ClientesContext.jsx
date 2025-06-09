@@ -1,16 +1,25 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import {
-  getCliente,
-  registerCliente,
-  editCliente,
-  deleteCliente,
+  buscarClientes,
+  registrarCliente,
+  editarCliente,
+  removerCliente,
 } from "../services/ClienteService";
 
 const ClienteContext = createContext();
 
+
+const clienteInicial = {
+  id: 0,
+  nomeFantasia: '',
+  razaoSocial: '',
+  cnpj: '',
+  dataCadastro: new Date().toISOString(),
+};
+
 export const ClienteProvider = ({ children }) => {
-  const [clientes, setClientes] = useState([]);
-  const [clienteSelecionado, setClienteSelecionado] = useState(null);
+    const [clientes, setClientes] = useState([]);
+  const [clienteSelecionado, setClienteSelecionado] = useState(clienteInicial);
   const [clienteIsEditOpen, setClienteIsEditOpen] = useState(false);
   const [clienteModoEdicao, setClienteModoEdicao] = useState(false);
   const [clienteLoading, setClienteLoading] = useState(false);
@@ -19,9 +28,7 @@ export const ClienteProvider = ({ children }) => {
   // Lista todos os clientes
   const listarClientes = async () => {
     try {
-      const dados = await getCliente();
-      alert('cliente requisitados')
-      console.log('clientes requisitados', clientes);
+      const dados = await buscarClientes();
       setClientes(dados);
     } catch (err) {
       console.error("Erro ao listar clientes", err);
@@ -39,7 +46,7 @@ const handleChangeCliente = (e) => {
 
   // Abrir modal para cadastro
   const clienteAbrirCadastro = () => {
-    setClienteSelecionado({});
+    setClienteSelecionado(clienteInicial);
     setClienteModoEdicao(false);
     setClienteIsEditOpen(true);
   };
@@ -57,9 +64,9 @@ const handleChangeCliente = (e) => {
       setClienteLoading(true);
 
       if (clienteModoEdicao && clienteSelecionado?.id) {
-        await editCliente(clienteSelecionado.id, clienteSelecionado);
+        await editarCliente(clienteSelecionado.id, clienteSelecionado);
       } else {
-        await registerCliente(clienteSelecionado);
+        await registrarCliente(clienteSelecionado);
       }
 
       await listarClientes();
@@ -75,8 +82,8 @@ const handleChangeCliente = (e) => {
   const excluirCliente = async (id) => {
     try {
       setClienteLoading(true);
-      await deleteCliente(id);
-      await listarClientes();
+      await removerCliente(id);
+      await buscarClientes();
     } catch (err) {
       console.error("Erro ao deletar cliente", err);
     } finally {
