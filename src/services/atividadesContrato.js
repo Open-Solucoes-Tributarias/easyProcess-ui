@@ -1,31 +1,31 @@
 import httpClient from './httpClient';
 
 // GET
-export const getAtividadesContrato = async (id) => {
+export const buscarAtividadesContrato = async (id) => {
   const response = await httpClient.get(`/api/atividadescontrato/contrato/${id}`);
   return response.data;
 };
 
 // GET por ID
-export const getByIdAtividadesContrato = async (id) => {
+export const buscarPorIdAtividadesContrato = async (id) => {
   const response = await httpClient.get(`/api/atividadescontrato'${id}`);
   return response.data;
 };
 
 //POST
-export const registerAtividadesContrato = async (data) => {
+export const registrarAtividadesContrato = async (data) => {
   const response = await httpClient.post('/api/atividadescontrato', data);
   return response.data;
 };
 
 //PUT
-export const editAtividadesContrato = async (id) => {
+export const editarAtividadesContrato = async (id) => {
   const response = await httpClient.put(`/api/atividadescontrato'${id}`);
   return response.data;
 };
 
 //DELETE
-export const deleteAtividadesContrato = async (id) => {
+export const removerAtividadesContrato = async (id) => {
   const response = await httpClient.delete(`'/api/atividadescontrato'${id}`);
   return response.data;
 };

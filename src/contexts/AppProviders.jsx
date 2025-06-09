@@ -1,6 +1,8 @@
 // components/AppProviders.jsx
-import { ClienteProvider } from '../contexts/ClientesContext';import { ContratoProvider } from './ContratosContext';
- import { UsuariosProvider } from './UsuariosContext';
+import { ClienteProvider } from '../contexts/ClientesContext'; import { AtividadesContratoProvider } from './AtividadesContratoContext';
+import { ContratoProvider } from './ContratosContext';
+import { ControleAtividadesProvider } from './ControleAtividadesContext';
+import { UsuariosProvider } from './UsuariosContext';
 ;
 
 export const AppProviders = ({ children }) => {
@@ -9,7 +11,11 @@ export const AppProviders = ({ children }) => {
         <ClienteProvider>
             <UsuariosProvider>
                 <ContratoProvider>
-                    {children}
+                    <AtividadesContratoProvider>
+                        <ControleAtividadesProvider>
+                            {children}
+                        </ControleAtividadesProvider>
+                    </AtividadesContratoProvider>
                 </ContratoProvider>
             </UsuariosProvider>
         </ClienteProvider>

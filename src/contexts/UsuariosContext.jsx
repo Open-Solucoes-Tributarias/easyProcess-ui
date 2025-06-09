@@ -8,9 +8,18 @@ import {
 
 const UsuariosContext = createContext();
 
+export const usuarioInicial = {
+  id: 0,
+  nome: "",
+  email: "",
+  senha: "", 
+  empresaId: 0,
+  perfil: 2, // padrão: colaborador
+};
+
 export const UsuariosProvider = ({ children }) => {
   const [usuarios, setUsuarios] = useState([]);
-  const [usuarioSelecionado, setUsuarioSelecionado] = useState(null);
+  const [usuarioSelecionado, setUsuarioSelecionado] = useState(usuarioInicial);
   const [usuarioIsEditOpen, setUsuarioIsEditOpen] = useState(false);
   const [usuarioModoEdicao, setUsuarioModoEdicao] = useState(false);
   const [usuarioLoading, setUsuarioLoading] = useState(false);
@@ -36,7 +45,7 @@ export const UsuariosProvider = ({ children }) => {
 
   // Abrir modal para cadastro
   const usuarioAbrirCadastro = () => {
-    setUsuarioSelecionado({});
+    setUsuarioSelecionado(usuarioInicial);
     setUsuarioModoEdicao(false);
     setUsuarioIsEditOpen(true);
   };
@@ -52,11 +61,14 @@ export const UsuariosProvider = ({ children }) => {
   const salvarUsuario = async () => {
     try {
       setUsuarioLoading(true);
-      if (usuarioModoEdicao && usuarioSelecionado?.id) {
+
+      if (usuarioModoEdicao && usuarioSelecionado?.id && usuarioSelecionado.id !== 0) {
         await editarUsuario(usuarioSelecionado.id, usuarioSelecionado);
       } else {
-        await registrarUsuario(usuarioSelecionado);
+        const novoUsuario = { ...usuarioSelecionado, id: 0 };
+        await registrarUsuario(novoUsuario);
       }
+
       await listarUsuarios();
       setUsuarioIsEditOpen(false);
     } catch (err) {
@@ -99,6 +111,7 @@ export const UsuariosProvider = ({ children }) => {
         salvarUsuario,
         excluirUsuario,
         handleChangeUsuario,
+        usuarioInicial,
       }}
     >
       {children}

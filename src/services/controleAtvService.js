@@ -2,7 +2,7 @@ import httpClient from './httpClient';
 
 // GET
 
-export const getControleAtv = async () => {
+export const buscarControleAtv = async () => {
   const response = await httpClient.get('/api/controleatividades/empresa');
   return response.data;
 };
@@ -16,7 +16,7 @@ export const getControleAtv = async () => {
 //   "anexo": "string"
 // }
 
-export const registerControleAtv = async (data) => {
+export const registrarControleAtv = async (data) => {
   const response = await httpClient.post('/api/controleatividades/movimentar', data);
   return response.data;
 };

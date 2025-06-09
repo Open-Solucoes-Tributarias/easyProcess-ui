@@ -8,7 +8,7 @@ import {
 
 const ContratoContext = createContext();
 
-const contratoInicial = {
+export const contratoInicial = {
   id: 0,
   clienteId: 0,
   empresaId: 0,
@@ -26,7 +26,7 @@ export const ContratoProvider = ({ children }) => {
   const [contratoModoEdicao, setContratoModoEdicao] = useState(false);
   const [contratoLoading, setContratoLoading] = useState(false);
 
-  // Listar todos os contratos
+  // Listar todos os contratos de um cliente (ou todos, se não filtrar)
   const listarContratos = async (clienteId) => {
     try {
       const dados = await buscarContratos(clienteId);
@@ -36,7 +36,7 @@ export const ContratoProvider = ({ children }) => {
     }
   };
 
-  // Manipular campos
+  // Alterar campos do contrato selecionado
   const handleChangeContrato = (e) => {
     const { name, value } = e.target;
     setContratoSelecionado((prev) => ({
@@ -45,14 +45,14 @@ export const ContratoProvider = ({ children }) => {
     }));
   };
 
-  // Abrir modal de cadastro
+  // Abrir modal para cadastro
   const contratoAbrirCadastro = () => {
     setContratoSelecionado(contratoInicial);
     setContratoModoEdicao(false);
     setContratoIsEditOpen(true);
   };
 
-  // Abrir modal de edição
+  // Abrir modal para edição
   const contratoAbrirEdicao = (contrato) => {
     setContratoSelecionado(contrato);
     setContratoModoEdicao(true);
@@ -63,12 +63,15 @@ export const ContratoProvider = ({ children }) => {
   const salvarContrato = async () => {
     try {
       setContratoLoading(true);
-      if (contratoModoEdicao && contratoSelecionado?.id) {
+
+      if (contratoModoEdicao && contratoSelecionado?.id && contratoSelecionado.id !== 0) {
         await editarContrato(contratoSelecionado.id, contratoSelecionado);
       } else {
-        await registrarContrato(contratoSelecionado);
+        const novoContrato = { ...contratoSelecionado, id: 0 };
+        await registrarContrato(novoContrato);
       }
-      await listarContratos();
+
+      await listarContratos(contratoSelecionado.clienteId);
       setContratoIsEditOpen(false);
     } catch (err) {
       console.error("Erro ao salvar contrato", err);
@@ -78,11 +81,11 @@ export const ContratoProvider = ({ children }) => {
   };
 
   // Excluir contrato
-  const excluirContrato = async (id) => {
+  const excluirContrato = async (id, clienteId) => {
     try {
       setContratoLoading(true);
       await removerContrato(id);
-      await listarContratos();
+      await listarContratos(clienteId);
     } catch (err) {
       console.error("Erro ao deletar contrato", err);
     } finally {
@@ -109,7 +112,8 @@ export const ContratoProvider = ({ children }) => {
         salvarContrato,
         excluirContrato,
         listarContratos,
-        handleChangeContrato
+        handleChangeContrato,
+        contratoInicial
       }}
     >
       {children}
