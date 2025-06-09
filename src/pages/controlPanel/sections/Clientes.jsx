@@ -6,38 +6,22 @@ import { Informativo } from '../../../components/Informativo';
 import { buscarClientes } from '../../../services/ClienteService';
 import { RxReader } from 'react-icons/rx';
 import { getContrato } from '../../../services/contratosService';
+import { useCliente } from '../../../contexts/ClientesContext';
 
 export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
-  const [clientes, setClientes] = useState([]);
+  const {
+    clientes,
+  } = useCliente();
+
   const [contratos, setContratos] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
 
-  //funcao buscar dados dos clientes
-  const listarClientes = async () => {
-    try {
-      const dadosClientes = await buscarClientes();
-      setClientes(dadosClientes);
-
-    } catch (error) {
-      console.error("não foi possivel buscar clientes")
-    } finally {
-      setLoading(false);
-    }
-  };
-  useEffect(() => {
-    listarClientes();
-  }, []);
-
-  //funcao listar contratos de cada cliente
   const listarContratos = async (clienteId) => {
     try {
       const dadosContratos = await getContrato(clienteId);
-      console.log("contratos existem para", clienteId, dadosContratos);
       setContratos(dadosContratos);
     } catch (error) {
       console.error("erro ao buscar contratos");
-    } finally {
-
     }
   };
 
@@ -55,11 +39,14 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
         ) : clientes.length === 0 ? (
           <Informativo />
         ) : (
-          <Accordion>
+          <Accordion allowMultiple>
             {clientes.map((cliente, index) => (
               <AccordionItem key={index}>
                 <h2>
-                  <AccordionButton onClick={() => { handleSelecionarCliente(cliente), listarContratos(cliente?.id); }}>
+                  <AccordionButton onClick={() => {
+                    handleSelecionarCliente(cliente);
+                    listarContratos(cliente.id);
+                  }}>
                     <AccordionIcon />
                     <Box as='span' pl={4} textAlign='left'>
                       <Text fontWeight={600} color="gray.600" fontSize={14}>
@@ -89,26 +76,20 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
                             cursor: 'pointer',
                           }}
                         >
-
                           <Flex align="center" gap={2}>
-                            <Flex align="center">
-                              <RxReader />
-                              <Box ml='3'>
-                                <Text fontWeight={500} color="gray.600" fontSize={14}>
-                                  {contrato?.descricao}
-                                </Text>
-                              </Box>
-                            </Flex>
+                            <RxReader />
+                            <Box ml='3'>
+                              <Text fontWeight={500} color="gray.600" fontSize={14}>
+                                {contrato?.descricao}
+                              </Text>
+                            </Box>
                           </Flex>
                         </ListItem>
                       ))}
                     </List>
                   ) : (
                     <Box px={4}>
-                      {/* <Text fontStyle="italic" color="gray.500">
-                        Não existem informações disponíveis.
-                      </Text> */}
-                      <Informativo titulo={"Ops..."} mensagem={"Ainda não existem contratos atribuidos "} />
+                      <Informativo titulo={"Ops..."} mensagem={"Ainda não existem contratos atribuídos"} />
                     </Box>
                   )}
                 </AccordionPanel>
