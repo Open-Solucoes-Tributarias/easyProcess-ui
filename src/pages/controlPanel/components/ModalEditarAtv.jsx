@@ -1,10 +1,11 @@
 "use client";
 import { useState, useEffect } from "react";
-import { FormControl, FormLabel, Input, Stack, Text, Grid, GridItem, Avatar, Button, AvatarGroup, Flex, Textarea, Select, List, ListItem, Accordion, AccordionItem, AccordionIcon, AccordionPanel, AccordionButton, Card, CardHeader, Heading, CardBody, StackDivider, Box, Tag, TagLabel, GenericAvatarIcon, Divider } from "@chakra-ui/react";
+import { FormControl, FormLabel, Input, Stack, Text, Grid, GridItem, Avatar, Button, AvatarGroup, Flex, Textarea, Select, List, ListItem, Accordion, AccordionItem, AccordionIcon, AccordionPanel, AccordionButton, Card, CardHeader, Heading, CardBody, StackDivider, Box, Tag, TagLabel, GenericAvatarIcon, Divider, Link } from "@chakra-ui/react";
 import { DialogModal } from "../../../components/DialogModal";
 import { registerControleAtv } from "../../../services/controleAtvService";
 import { getMovimentacoesAtv } from "../../../services/movimentacoesAtvService";
 import { dateAndHrConverter, dateConverter } from "../../../utils/utils";
+import { ExternalLinkIcon } from "@chakra-ui/icons";
 
 export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
 
@@ -125,7 +126,7 @@ console.log('lista de movimentacoes', movimentacoesAtv);
                         {/* lista de movimentações da atividade */}
                         <Card border='1px solid' borderColor={'gray.200'} borderRadius={10} boxShadow='none'>
                             <CardHeader bgColor='gray.100' p={2}>
-                                <Heading size={20}>Registro de Atividades</Heading>
+                                <Heading size={20} paddingLeft={2}>Movimentações</Heading>
                             </CardHeader>
                             <Divider />
                             <CardBody maxHeight={200} overflowY='auto'>
@@ -138,9 +139,12 @@ console.log('lista de movimentacoes', movimentacoesAtv);
                                         <Text fontSize='sm'>
                                             {mov?.observacao}
                                         </Text>
-                                         <Text fontSize='sm'>
+                                         <Link fontSize='sm'>
                                             {mov?.anexo || "link não atribuido"}
-                                        </Text>
+                                        </Link>
+                                        <Link href={mov?.anexo || null} isExternal>
+                                            {mov?.anexo} <ExternalLinkIcon mx='2px' />
+                                        </Link>
                                     </Box>
                                     ))}
                                 </Stack>

@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Box, Grid, GridItem, Text } from "@chakra-ui/react";
+import { Box, Button, Grid, GridItem, Input, Stack, Text } from "@chakra-ui/react";
 import { Clientes } from "./sections/Clientes";
 import { FrentesTrabalho } from "./sections/FrentesTrabalho";
-import { FloatingButton } from "../../components/FloatButton";
+import { FloatButton } from "../../components/FloatButton";
+import { FaClipboardList, FaPaperclip, FaPlus, FaUser } from "react-icons/fa";
 
 //gerencia estados selecionar Clientes, contratos de um cliente
 
@@ -32,6 +33,9 @@ export const Painel = () => {
           <Text as="b" fontSize="xl">
             Contratos
           </Text>
+          <Button variant='text' color='#68D391' leftIcon={<FaPlus />}>
+            Adicionar
+          </Button>
           <Box style={styles.content}>
             <Clientes handleSelecionarCliente={handleSelecionarCliente} handleContratoSelecionado={handleContratoSelecionado} />
           </Box>
@@ -45,7 +49,35 @@ export const Painel = () => {
           </Box>
         </GridItem>
       </Grid>
-      <FloatingButton />
+      <FloatButton // compoente di botão suspenso que recebe Fomrularios e states dos respectivos modais de adição.
+        actions={[
+          {
+            label: "Adicionar contrato",
+            icon: <FaUser />,
+            modalTitle: "Adicionar contratos",
+            modalBody: (
+              <Stack spacing={3}>
+                <Input placeholder="Nome do cliente" />
+                <Input placeholder="Email" />
+              </Stack>
+            ),
+            onSave: () => { },
+          },
+          {
+            label: "Adicionar atividades",
+            icon: <FaPaperclip />,
+            modalTitle: "Adicionar Atividades",
+            modalBody: (
+              <Stack spacing={3}>
+                <Input placeholder="Número do FT" />
+                <Input placeholder="Descrição" />
+              </Stack>
+            ),
+            onSave: () => { },
+          },
+        ]}
+      />
+
     </>
   );
 };

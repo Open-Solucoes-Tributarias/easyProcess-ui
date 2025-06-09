@@ -1,71 +1,63 @@
+import { useState } from "react";
 import {
   Box,
   IconButton,
   VStack,
   Tooltip,
-  useDisclosure,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { FaUser, FaPaperclip, FaClipboardList } from "react-icons/fa";
-import { useState } from "react";
-// import { ModalCadastroCliente } from "./ModalCadastroCliente"; // ajuste o path conforme necessário
+import { DialogModal } from "./DialogModal"; // ajuste o caminho conforme necessário
 
-export const FloatingButton = () => {
-  const [isOpen, setIsOpen] = useState(false);
-  const {
-    isOpen: isOpenCliente,
-    onOpen: onOpenCliente,
-    onClose: onCloseCliente,
-  } = useDisclosure();
+export const FloatButton = ({ actions = [] }) => {
+  const [showButtons, setShowButtons] = useState(false);
+  const [activeModalIndex, setActiveModalIndex] = useState(null);
+
+  const handleOpenModal = (index) => setActiveModalIndex(index);
+  const handleCloseModal = () => setActiveModalIndex(null);
 
   return (
     <>
+      {/* Renderiza modais dinamicamente */}
+      {actions.map((action, index) =>
+        action.modalBody ? (
+          <DialogModal
+            key={`modal-${index}`}
+            isOpen={activeModalIndex === index}
+            onClose={handleCloseModal}
+            title={action.modalTitle || action.label}
+            size={action.modalSize || "xl"}
+            onSave={action.onSave}
+            onDelete={action.onDelete}
+            showDelete={action.showDelete}
+          >
+            {action.modalBody}
+          </DialogModal>
+        ) : null
+      )}
+
       <Box
         position="fixed"
         bottom="25px"
         right="25px"
         zIndex={999}
-        onMouseEnter={() => setIsOpen(true)}
-        onMouseLeave={() => setIsOpen(false)}
+        onMouseEnter={() => setShowButtons(true)}
+        onMouseLeave={() => setShowButtons(false)}
       >
         <VStack spacing={3} align="center">
-          {isOpen && (
-            <>
-              <Tooltip label="Gerenciar clientes" placement="left" hasArrow>
+          {showButtons &&
+            actions.map((action, index) => (
+              <Tooltip key={`btn-${index}`} label={action.label} placement="left" hasArrow>
                 <IconButton
-                  aria-label="Gerenciar clientes"
-                  icon={<FaUser />}
+                  aria-label={action.label}
+                  icon={action.icon}
                   size="sm"
                   borderRadius="full"
                   bg="gray.600"
                   _hover={{ bg: "gray.500" }}
-                  onClick={onOpenCliente} // ← ABRE MODAL
+                  onClick={() => handleOpenModal(index)}
                 />
               </Tooltip>
-
-              <Tooltip label="Gerenciar FT's" placement="left" hasArrow>
-                <IconButton
-                  aria-label="Anexar"
-                  icon={<FaPaperclip />}
-                  size="sm"
-                  borderRadius="full"
-                  bg="gray.600"
-                  _hover={{ bg: "gray.500" }}
-                />
-              </Tooltip>
-
-              <Tooltip label="Gerenciar atividades" placement="left" hasArrow>
-                <IconButton
-                  aria-label="Ver tarefas"
-                  icon={<FaClipboardList />}
-                  size="sm"
-                  borderRadius="full"
-                  bg="gray.600"
-                  _hover={{ bg: "gray.500" }}
-                />
-              </Tooltip>
-            </>
-          )}
+            ))}
 
           <IconButton
             aria-label="Abrir menu"
