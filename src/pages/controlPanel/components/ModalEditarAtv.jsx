@@ -65,7 +65,7 @@ console.log('lista de movimentacoes', movimentacoesAtv);
     return (
         <DialogModal
             isOpen={open}
-            size='4xl'
+            size='5xl'
             onClose={() => setOpen(false)}
             title={'Detalhes da atividade'}
         // onSave={handleSubmit}
