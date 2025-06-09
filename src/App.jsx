@@ -1,5 +1,6 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppRoutes } from "./routes/Routes";
+import { AppProviders } from "./contexts/AppProviders";
 
 const theme = extendTheme({
   fonts: {
@@ -67,7 +68,9 @@ const theme = extendTheme({
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <AppRoutes />
+      <AppProviders>
+        <AppRoutes />
+      </AppProviders>
     </ChakraProvider>
   );
 }
