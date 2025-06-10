@@ -8,6 +8,7 @@ import {
 } from '@chakra-ui/react'
 import { Clientes } from './secoes/Clientes';
 import { Usuarios } from './secoes/Usuarios';
+import { FrentesTrabalho } from './secoes/Frentes';
 
 export const Gerenciar = () => {
 
@@ -16,6 +17,7 @@ export const Gerenciar = () => {
             <TabList>
                 <Tab>Clientes</Tab>
                 <Tab>Usuários</Tab>
+                <Tab>Frentes de trabalho</Tab>
             </TabList>
             <TabPanels overflow='hidden' minHeight='100vh' height='100vh'>
                 <TabPanel>
@@ -23,6 +25,9 @@ export const Gerenciar = () => {
                 </TabPanel>
                 <TabPanel>
                     <Usuarios />
+                </TabPanel>
+                <TabPanel>
+                    <FrentesTrabalho />
                 </TabPanel>
             </TabPanels>
         </Tabs>
