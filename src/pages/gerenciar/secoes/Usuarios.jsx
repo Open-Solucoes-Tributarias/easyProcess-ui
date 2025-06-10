@@ -168,6 +168,14 @@ export const Usuarios = () => {
               <option value={2}>Colaborador</option>
             </Select>
           </FormControl>
+          <FormControl>
+              <FormLabel>Senha</FormLabel>
+              <Input 
+                name='senha'
+                value={usuarioSelecionado?.senha}
+                onChange={handleChangeUsuario}
+              />
+          </FormControl>
         </Stack>
       </DialogModal>
     </>

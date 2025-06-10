@@ -28,6 +28,13 @@ const theme = extendTheme({
     Input: {
       defaultProps: {
         focusBorderColor: "#68D391",
+       fontSize: 10      
+      },
+    },
+    FormLabel: {
+      baseStyle: {
+        fontSize: 'sm',
+        marginBottom: 1
       },
     },
     Select: {

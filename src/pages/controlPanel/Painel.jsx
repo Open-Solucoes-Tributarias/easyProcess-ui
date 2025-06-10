@@ -33,9 +33,6 @@ export const Painel = () => {
           <Text as="b" fontSize="xl">
             Contratos
           </Text>
-          <Button variant='text' color='#68D391' leftIcon={<FaPlus />}>
-            Adicionar
-          </Button>
           <Box style={styles.content}>
             <Clientes handleSelecionarCliente={handleSelecionarCliente} handleContratoSelecionado={handleContratoSelecionado} />
           </Box>

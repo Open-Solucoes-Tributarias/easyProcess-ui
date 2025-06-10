@@ -33,6 +33,7 @@ import { ExternalLinkIcon } from "@chakra-ui/icons";
 import { GenericAvatarIcon } from "@chakra-ui/icons";
 import { dateAndHrConverter } from "../../../utils/utils";
 import { useControleAtividades } from "../../../contexts/ControleAtividadesContext";
+import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
 
 export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
   const [atividade, setAtividade] = useState({});
@@ -46,6 +47,8 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
     listarMovimentacoesAtividade,
     controleAtvInicial
   } = useControleAtividades();
+
+  const { excluirAtividadeContrato } = useAtividadesContrato();
 
   useEffect(() => {
     if (atvSelecionada?.id) {
@@ -61,11 +64,13 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
       size="5xl"
       onClose={() => setOpen(false)}
       title={"Detalhes da atividade"}
+      onDelete={() => excluirAtividadeContrato(atividade?.id, atividade?.contratoId )}
     >
       <Grid templateColumns="2fr 1fr" gap={2}>
         <GridItem>
           <Stack spacing={2}>
             <FormControl>
+              <FormLabel>Descrição da atividade</FormLabel>
               <Input readOnly value={atividade?.descricaoCustomizada || ""} />
             </FormControl>
 
@@ -143,7 +148,8 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
 
         <GridItem>
           <Flex direction="column" gap={2}>
-            <FormControl>
+             <FormControl>
+              <FormLabel>Prazo limite</FormLabel>
               <Input
                 type="datetime-local"
                 name="dataLimite"

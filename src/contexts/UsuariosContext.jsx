@@ -83,6 +83,7 @@ export const UsuariosProvider = ({ children }) => {
     try {
       setUsuarioLoading(true);
       await deletarUsuario(id);
+      setUsuarioIsEditOpen(false);
       await listarUsuarios();
     } catch (err) {
       console.error("Erro ao excluir usuário", err);
