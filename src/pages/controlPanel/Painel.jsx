@@ -1,10 +1,10 @@
 "use client";
 import { useState } from "react";
-import { Box, Button, Grid, GridItem, Input, Stack, Text } from "@chakra-ui/react";
-import { Clientes } from "./sections/Clientes";
+import { Box, Grid, GridItem, Input, Stack, Text } from "@chakra-ui/react";
+import { Contratos } from "./sections/Contratos";
 import { FrentesTrabalho } from "./sections/FrentesTrabalho";
 import { FloatButton } from "../../components/FloatButton";
-import { FaClipboardList, FaPaperclip, FaPlus, FaUser } from "react-icons/fa";
+import { FaPaperclip, FaUser } from "react-icons/fa";
 
 //gerencia estados selecionar Clientes, contratos de um cliente
 
@@ -34,7 +34,7 @@ export const Painel = () => {
             Contratos
           </Text>
           <Box style={styles.content}>
-            <Clientes handleSelecionarCliente={handleSelecionarCliente} handleContratoSelecionado={handleContratoSelecionado} />
+            <Contratos handleSelecionarCliente={handleSelecionarCliente} handleContratoSelecionado={handleContratoSelecionado} />
           </Box>
         </GridItem>
         <GridItem>

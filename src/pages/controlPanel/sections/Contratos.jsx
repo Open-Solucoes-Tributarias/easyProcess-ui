@@ -5,22 +5,22 @@ import {
   AccordionIcon,
   AccordionItem,
   AccordionPanel,
+  Avatar,
   Box,
   Flex,
   Grid,
   GridItem,
+  Heading,
   List,
-  ListItem,
   Text
 } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
-import { RxReader } from 'react-icons/rx';
-
 import { useCliente } from '../../../contexts/ClientesContext';
 import { useContrato } from '../../../contexts/ContratosContext';
+import { RiContractFill } from 'react-icons/ri';
 
-export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
+export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
   const { clientes } = useCliente();
 
   const {
@@ -45,54 +45,42 @@ export const Clientes = ({ handleSelecionarCliente, handleContratoSelecionado })
         ) : (
           <Accordion allowMultiple>
             {clientes.map((cliente, index) => (
-              <AccordionItem key={index}>
+              <AccordionItem key={index} border='none'>
                 <h2>
                   <AccordionButton
                     onClick={() => {
                       handleSelecionarCliente(cliente);
                       listarContratos(cliente.id); // função do context
                     }}
+                    border='1px solid' borderColor='#d0d0d0' borderRadius={10}
                   >
                     <AccordionIcon />
                     <Box as='span' pl={4} textAlign='left'>
-                      <Text fontWeight={600} color="gray.600" fontSize={14}>
+                      <Heading size='sm'>
                         {cliente?.razaoSocial}
-                      </Text>
+                      </Heading>
                       <Text fontSize={13}>{cliente?.cnpj}</Text>
                     </Box>
                   </AccordionButton>
                 </h2>
-                <AccordionPanel pb={4}>
+                <AccordionPanel paddingRight={0} paddingLeft={5}>
                   {contratos.length > 0 ? (
-                    <List spacing={3} w="100%">
+                    <>
                       {contratos.map((contrato, index) => (
-                        <ListItem
-                          key={index}
-                          onClick={() => handleContratoSelecionado(contrato)}
-                          w="100%"
-                          display="flex"
-                          justifyContent="left"
-                          alignItems="center"
-                          paddingLeft={10}
-                          fontStyle='italic'
-                          fontWeight={400}
-                          borderRadius="md"
-                          _hover={{
+                        <Flex key={index} onClick={() => handleContratoSelecionado(contrato)} flex='1' gap='4' alignItems='center' border='1px solid' borderColor='#d0d0d0' borderRadius={10}
+                          paddingInline={5} paddingBlock={2} _hover={{
                             background: 'gray.100',
                             cursor: 'pointer',
-                          }}
-                        >
-                          <Flex align="center" gap={2}>
-                            <RxReader />
-                            <Box ml='3'>
-                              <Text fontWeight={500} color="gray.600" fontSize={14}>
-                                {contrato?.descricao}
-                              </Text>
-                            </Box>
-                          </Flex>
-                        </ListItem>
+                          }}>
+                            <Avatar size='xs' bg={'#48bb78'} icon={<RiContractFill size={15}/>} />
+                          <Box>
+                            <Heading size='sm'>{contrato?.descricao}</Heading>
+                            <Text fontSize={12}>Supervisor: {contrato?.nomeSupervisor}</Text>
+                            <Text fontSize={12}>Inicio {contrato?.dataInicio} / Fim {contrato?.dataFim}</Text>
+                          </Box>
+                        </Flex>
                       ))}
-                    </List>
+                    </>
                   ) : (
                     <Box px={4}>
                       <Informativo
