@@ -8,10 +8,12 @@ import {
 
 const ContratoContext = createContext();
 
+const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
+
 export const contratoInicial = {
   id: 0,
   clienteId: 0,
-  empresaId: 0,
+  empresaId: empresaId,
   supervisorUsuarioId: 0,
   descricao: '',
   dataInicio: new Date().toISOString(),

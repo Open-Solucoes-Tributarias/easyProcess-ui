@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Box, Grid, GridItem, Input, Stack, Text } from "@chakra-ui/react";
 import { Contratos } from "./sections/Contratos";
-import { FrentesTrabalho } from "./sections/FrentesTrabalho";
+import { AtvContrato } from "./sections/AtvContrato";
 import { FloatButton } from "../../components/FloatButton";
 import { FaPaperclip, FaUser } from "react-icons/fa";
 
@@ -42,7 +42,7 @@ export const Painel = () => {
             Atividades | Frentes de Trabalho
           </Text>
           <Box style={styles.content}>
-            <FrentesTrabalho contratoSelecionado={contratoSelecionado} />
+            <AtvContrato contratoSelecionado={contratoSelecionado} />
           </Box>
         </GridItem>
       </Grid>

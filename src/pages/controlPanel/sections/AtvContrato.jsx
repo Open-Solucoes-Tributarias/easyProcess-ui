@@ -2,6 +2,7 @@
 import { useEffect } from "react";
 import {
   Avatar,
+  AvatarBadge,
   Box,
   Checkbox,
   Flex,
@@ -19,7 +20,7 @@ import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { ModalEditarAtv } from "../components/ModalEditarAtv";
 import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
 
-export const FrentesTrabalho = ({ contratoSelecionado }) => {
+export const AtvContrato = ({ contratoSelecionado }) => {
   const {
     atividadesContrato,
     listarAtividadesContrato,
@@ -82,12 +83,14 @@ export const FrentesTrabalho = ({ contratoSelecionado }) => {
                       setModalEditarAberto(true);
                     }}
                   />
-                  <IconButton
-                    aria-label="Responsável"
-                    icon={<Avatar size="xs" />}
-                    variant="outline"
-                    size="sm"
-                  />
+                  <Tooltip label={atividadeSelecionada?.nomeUsuarioDelegado} placement='top'>
+                    <IconButton
+                      aria-label="Responsável"
+                      icon={<Avatar size="xs" name={atividadeSelecionada?.nomeUsuarioDelegado}><AvatarBadge boxSize='1' bg='green.500'/></Avatar>}
+                      variant="outline"
+                      size="sm"
+                    />
+                  </Tooltip>
                   <Tooltip label="Descrição da tarefa" placement="top">
                     <IconButton
                       aria-label="Info"

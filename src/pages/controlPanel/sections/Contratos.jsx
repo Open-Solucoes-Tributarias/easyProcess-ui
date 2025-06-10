@@ -11,7 +11,6 @@ import {
   Grid,
   GridItem,
   Heading,
-  List,
   Text
 } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
@@ -19,6 +18,7 @@ import { Informativo } from '../../../components/Informativo';
 import { useCliente } from '../../../contexts/ClientesContext';
 import { useContrato } from '../../../contexts/ContratosContext';
 import { RiContractFill } from 'react-icons/ri';
+import { dateConverter } from '../../../utils/utils';
 
 export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
   const { clientes } = useCliente();
@@ -43,9 +43,9 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
         ) : clientes.length === 0 ? (
           <Informativo />
         ) : (
-          <Accordion allowMultiple>
+          <Accordion allowToggle>
             {clientes.map((cliente, index) => (
-              <AccordionItem key={index} border='none'>
+              <AccordionItem key={index} border='none' paddingBlock={1}>
                 <h2>
                   <AccordionButton
                     onClick={() => {
@@ -76,7 +76,7 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
                           <Box>
                             <Heading size='sm'>{contrato?.descricao}</Heading>
                             <Text fontSize={12}>Supervisor: {contrato?.nomeSupervisor}</Text>
-                            <Text fontSize={12}>Inicio {contrato?.dataInicio} / Fim {contrato?.dataFim}</Text>
+                            <Text fontSize={12}>Inicio {dateConverter(contrato?.dataInicio)} / Fim {dateConverter(contrato?.dataFim)}</Text>
                           </Box>
                         </Flex>
                       ))}

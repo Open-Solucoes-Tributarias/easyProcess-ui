@@ -8,12 +8,14 @@ import {
 
 const UsuariosContext = createContext();
 
+const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
+
 export const usuarioInicial = {
   id: 0,
   nome: "",
   email: "",
   senha: "", 
-  empresaId: 0,
+  empresaId: empresaId,
   perfil: 2, // padrão: colaborador
 };
 

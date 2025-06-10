@@ -134,9 +134,8 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
                     <Box key={index}>
                       <Heading size="xs">{dateAndHrConverter(mov?.dataHora)}</Heading>
                       <Text fontSize="sm">{mov?.observacao}</Text>
-                      <Link fontSize="sm">{mov?.anexo || "link não atribuído"}</Link>
-                      <Link href={mov?.anexo || "#"} isExternal>
-                        {mov?.anexo} <ExternalLinkIcon mx="2px" />
+                      <Link href={mov?.anexo || null} isExternal fontSize={13} color='blue.700'>
+                        {mov?.anexo || "Arquivo não atribuido"} <ExternalLinkIcon mx="2px" />
                       </Link>
                     </Box>
                   ))}
