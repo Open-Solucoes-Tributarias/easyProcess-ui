@@ -9,6 +9,7 @@ import {
 import { Clientes } from './secoes/Clientes';
 import { Usuarios } from './secoes/Usuarios';
 import { FrentesTrabalho } from './secoes/Frentes';
+import { Atividades } from './secoes/Atividades';
 
 export const Gerenciar = () => {
 
@@ -18,6 +19,7 @@ export const Gerenciar = () => {
                 <Tab>Clientes</Tab>
                 <Tab>Usuários</Tab>
                 <Tab>Frentes de trabalho</Tab>
+                <Tab>Atividades</Tab>
             </TabList>
             <TabPanels overflow='hidden' minHeight='100vh' height='100vh'>
                 <TabPanel>
@@ -28,6 +30,9 @@ export const Gerenciar = () => {
                 </TabPanel>
                 <TabPanel>
                     <FrentesTrabalho />
+                </TabPanel>
+                <TabPanel>
+                    <Atividades />
                 </TabPanel>
             </TabPanels>
         </Tabs>

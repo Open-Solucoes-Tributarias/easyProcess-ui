@@ -21,7 +21,7 @@ export const registrarCliente = async (data) => {
 //PUT
 
 export const editarCliente = async (id, data) => {
-  const response = await httpClient.put(`/api/clientess/${id}`, data);
+  const response = await httpClient.put(`/api/clientes/${id}`, data);
   return response.data;
 };
 
