@@ -87,6 +87,7 @@ export const ContratoProvider = ({ children }) => {
     try {
       setContratoLoading(true);
       await removerContrato(id);
+      setContratoIsEditOpen(false);
       await listarContratos(clienteId);
     } catch (err) {
       console.error("Erro ao deletar contrato", err);
