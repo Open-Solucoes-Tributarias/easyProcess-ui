@@ -48,7 +48,7 @@ export const ContratoProvider = ({ children }) => {
     const { name, value } = e.target;
     setContratoSelecionado((prev) => ({
       ...prev,
-      [name]: name === 'clienteId' ? Number(value) : value
+      [name]: name === 'clienteId' || name === 'supervisorUsuarioId' ? Number(value) : value
     }));
   };
 
