@@ -41,7 +41,7 @@ export const UsuariosProvider = ({ children }) => {
     const { name, value } = e.target;
     setUsuarioSelecionado((prev) => ({
       ...prev,
-      [name]: value,
+      [name]:  name === 'perfil' ? Number(value) : value, //trata numeros que vem de um select
     }));
   };
 

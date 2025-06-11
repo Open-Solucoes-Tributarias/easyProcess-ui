@@ -10,6 +10,7 @@ import { Clientes } from './secoes/Clientes';
 import { Usuarios } from './secoes/Usuarios';
 import { FrentesTrabalho } from './secoes/Frentes';
 import { Atividades } from './secoes/Atividades';
+import { Contratos } from './secoes/Contratos';
 
 export const Gerenciar = () => {
 
@@ -20,6 +21,7 @@ export const Gerenciar = () => {
                 <Tab>Usuários</Tab>
                 <Tab>Frentes de trabalho</Tab>
                 <Tab>Atividades</Tab>
+                <Tab>Contratos</Tab>
             </TabList>
             <TabPanels overflow='hidden' minHeight='100vh' height='100vh'>
                 <TabPanel>
@@ -33,6 +35,9 @@ export const Gerenciar = () => {
                 </TabPanel>
                 <TabPanel>
                     <Atividades />
+                </TabPanel>
+                <TabPanel>
+                    <Contratos />
                 </TabPanel>
             </TabPanels>
         </Tabs>

@@ -10,11 +10,14 @@ const AtividadesContext = createContext();
 
 const empresaId = JSON.parse(localStorage.getItem("user"))?.empresaId;
 
+// Tipo da atividade
+// 1 = única, 2 = recorrente
+
 const atividadeInicial = {
   id: 0,
   nome: "",
-  tipo: 0,
-  recorrencia: 0,
+  tipo: 1,
+  recorrencia: "",
   empresaId: empresaId,
   instrucao: "",
   frenteDeTrabalhoIds: [],
@@ -39,13 +42,25 @@ export const AtividadesProvider = ({ children }) => {
     }
   };
 
-  const handleChangeAtividade = (e) => {
-    const { name, value } = e.target;
-    setAtividadeAtual((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+const handleChangeAtividade = (e) => {
+  const { name, value } = e.target;
+
+  let parsedValue = value;
+
+  if (name === 'tipo') {
+    parsedValue = Number(value);
+  }
+
+  if (name === 'frenteDeTrabalhoIds') {
+    parsedValue = value.map(Number); // garantir array numérico
+  }
+
+  setAtividadeAtual((prev) => ({
+    ...prev,
+    [name]: parsedValue,
+  }));
+};
+
 
   const abrirCadastroAtividade = () => {
     setAtividadeAtual(atividadeInicial);

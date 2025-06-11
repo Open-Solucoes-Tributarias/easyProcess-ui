@@ -9,3 +9,10 @@ const perfilLabels = {
 
 export const getPerfilLabel = (perfil) => perfilLabels[perfil] ?? "Perfil de permissão indefinido";
 
+const tipoAtvLabel = {
+  1: "Única",
+  2: "Recorrente",
+};
+
+export const getTipoAtvLabel = (tipo) => tipoAtvLabel[tipo] ?? "Tipo de atividade não atribuido";
+
