@@ -68,7 +68,7 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
                     <>
                       {contratos.map((contrato, index) => (
                         <Flex key={index} onClick={() => handleContratoSelecionado(contrato)} flex='1' gap='4' alignItems='center' border='1px solid' borderColor='#d0d0d0' borderRadius={10}
-                          paddingInline={5} paddingBlock={2} _hover={{
+                          paddingInline={5} paddingBlock={2} marginBlock={2} _hover={{
                             background: 'gray.100',
                             cursor: 'pointer',
                           }}>

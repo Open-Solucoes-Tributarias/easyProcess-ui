@@ -1,6 +1,11 @@
 import httpClient from './httpClient';
 
 // GET
+export const buscarContratosGeral = async () => {
+  const response = await httpClient.get(`/api/contratos`);
+  return response.data;
+};
+
 export const buscarContratos = async (id) => {
   const response = await httpClient.get(`/api/contratos/cliente/${id}`);
   return response.data;

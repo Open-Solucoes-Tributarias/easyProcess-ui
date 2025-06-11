@@ -13,6 +13,7 @@ import {
   IconButton,
   Stack,
   Box,
+  Select,
 } from '@chakra-ui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RxReader } from 'react-icons/rx';
@@ -21,6 +22,8 @@ import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
 import { useContrato } from '../../../contexts/ContratosContext';
+import { useCliente } from '../../../contexts/ClientesContext';
+import { useUsuarios } from '../../../contexts/UsuariosContext';
 
 export const Contratos = () => {
   const {
@@ -35,6 +38,10 @@ export const Contratos = () => {
     handleChangeContrato,
     setContratoIsEditOpen,
   } = useContrato();
+
+  const { clientes } = useCliente();
+  const { usuarios } = useUsuarios();
+  console.log('cliente selecionado no contrato', contratoSelecionado)
 
   const ListaContratos = () => (
     <List spacing={3} w="100%">
@@ -109,44 +116,51 @@ export const Contratos = () => {
         isOpen={contratoIsEditOpen}
         onClose={() => setContratoIsEditOpen(false)}
         title={contratoModoEdicao ? 'Editar Contrato' : 'Novo Contrato'}
-        onSave={salvarContrato}
+        onSave={() => salvarContrato(true)} // ← true para forçar listagem geral
         onDelete={
           contratoModoEdicao && contratoSelecionado?.id
-            ? () => excluirContrato(contratoSelecionado.id, contratoSelecionado.clienteId)
+            ? () => excluirContrato(contratoSelecionado.id, contratoSelecionado.clienteId, true) // ← true para listagem geral
             : null
         }
         showDelete={contratoModoEdicao}
       >
         <Stack spacing={4}>
           <FormControl>
-            <FormLabel>Cliente ID</FormLabel>
-            <Input
+            <FormLabel>Cliente</FormLabel>
+            <Select
               name="clienteId"
-              type="number"
-              value={contratoSelecionado?.clienteId || ''}
+              value={contratoSelecionado?.clienteId}
               onChange={handleChangeContrato}
-            />
+            >
+              {clientes.map((cliente) => (
+                <option key={cliente?.id} value={cliente?.id}>{cliente?.razaoSocial}</option>
+              ))}
+            </Select>
           </FormControl>
 
           <FormControl>
-            <FormLabel>Supervisor ID</FormLabel>
-            <Input
+            <FormLabel>Supervisor</FormLabel>           
+            <Select
               name="supervisorUsuarioId"
-              type="number"
-              value={contratoSelecionado?.supervisorUsuarioId || ''}
+              value={contratoSelecionado?.supervisorUsuarioId}
               onChange={handleChangeContrato}
-            />
+            >
+              {usuarios.map((usuario) => (
+                <option key={usuario?.id} value={usuario?.id}>{usuario?.nome}</option>
+              ))}
+            </Select>
           </FormControl>
-
-          <FormControl>
-            <FormLabel>Nome do Supervisor</FormLabel>
-            <Input
-              name="nomeSupervisor"
-              value={contratoSelecionado?.nomeSupervisor || ''}
-              onChange={handleChangeContrato}
-            />
-          </FormControl>
-
+          {contratoModoEdicao && (
+            <FormControl>
+              <FormLabel>Nome do Supervisor</FormLabel>
+              <Input
+                disabled
+                name="nomeSupervisor"
+                value={contratoSelecionado?.nomeSupervisor || ''}
+                onChange={handleChangeContrato}
+              />
+            </FormControl>
+          )}
           <FormControl>
             <FormLabel>Descrição</FormLabel>
             <Input
