@@ -83,6 +83,7 @@ const styles = {
   content: {
     width: "100%",
     height: "80vh",
+    overflowY: "auto",
     border: "1px solid",
     borderColor: "#d0d0d0",
     borderRadius: 10,

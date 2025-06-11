@@ -1,4 +1,5 @@
 'use client'
+import { useState } from 'react';
 import {
     Tab,
     Tabs,
@@ -13,47 +14,33 @@ import { Atividades } from './secoes/Atividades';
 import { Contratos } from './secoes/Contratos';
 
 export const Gerenciar = () => {
+  const [tabIndex, setTabIndex] = useState(0);
 
-    return (
-        <Tabs variant='soft-rounded' colorScheme='green'>
-            <TabList>
-                <Tab>Clientes</Tab>
-                <Tab>Usuários</Tab>
-                <Tab>Frentes de trabalho</Tab>
-                <Tab>Atividades</Tab>
-                <Tab>Contratos</Tab>
-            </TabList>
-            <TabPanels overflow='hidden' minHeight='100vh' height='100vh'>
-                <TabPanel>
-                    <Clientes />
-                </TabPanel>
-                <TabPanel>
-                    <Usuarios />
-                </TabPanel>
-                <TabPanel>
-                    <FrentesTrabalho />
-                </TabPanel>
-                <TabPanel>
-                    <Atividades />
-                </TabPanel>
-                <TabPanel>
-                    <Contratos />
-                </TabPanel>
-            </TabPanels>
-        </Tabs>
-    );
-};
+// Adicionado controle de tabIndex para evitar que o Tabs renderize todos os componentes de uma vez.
+// A lógica garante que cada componente só será montado quando a aba correspondente for selecionada.
 
-const styles = {
-    content: {
-        width: "100%",
-        height: "100vh",
-        overflowY: "auto",
-        border: "1px solid",
-        borderColor: "#d0d0d0",
-        borderRadius: 10,
-        paddingInline: 30,
-        paddingBlock: 30,
-    },
+  return (
+    <Tabs
+      index={tabIndex}
+      onChange={setTabIndex}
+      variant="soft-rounded"
+      colorScheme="green"
+    >
+      <TabList>
+        <Tab>Clientes</Tab>
+        <Tab>Usuários</Tab>
+        <Tab>Frentes de trabalho</Tab>
+        <Tab>Atividades</Tab>
+        <Tab>Contratos</Tab>
+      </TabList>
 
+      <TabPanels overflow="hidden" minHeight="100vh" height="100vh">
+        <TabPanel>{tabIndex === 0 && <Clientes />}</TabPanel>
+        <TabPanel>{tabIndex === 1 && <Usuarios />}</TabPanel>
+        <TabPanel>{tabIndex === 2 && <FrentesTrabalho />}</TabPanel>
+        <TabPanel>{tabIndex === 3 && <Atividades />}</TabPanel>
+        <TabPanel>{tabIndex === 4 && <Contratos />}</TabPanel>
+      </TabPanels>
+    </Tabs>
+  );
 };
