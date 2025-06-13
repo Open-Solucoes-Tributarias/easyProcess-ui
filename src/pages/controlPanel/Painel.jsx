@@ -49,7 +49,7 @@ export const Painel = () => {
       <FloatButton // compoente di botão suspenso que recebe Fomrularios e states dos respectivos modais de adição.
         actions={[
           {
-            label: "Adicionar contrato",
+            label: "Atribuir atividade em contrato",
             icon: <FaUser />,
             modalTitle: "Adicionar contratos",
             modalBody: (
