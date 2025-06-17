@@ -160,7 +160,7 @@ export const Usuarios = () => {
             <FormLabel>Perfil</FormLabel>
             <Select
               name="perfil"
-              value={usuarioSelecionado?.perfil}
+              value={Number(usuarioSelecionado?.perfil)}
               onChange={handleChangeUsuario}
             >
               <option value={0}>Administrador do sistema</option>

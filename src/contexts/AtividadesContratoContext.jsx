@@ -15,6 +15,7 @@ const atividadeInicial = {
   atividadeId: 0,
   usuarioDelegadoId: 0,
   sequencia: 0,
+  statusAtividade: 0,
   descricaoCustomizada: '',
   dataLimite: new Date().toISOString(),
   nomeUsuarioDelegado: ''
@@ -78,7 +79,9 @@ const handleChangeAtvContrato = (e) => {
   setAtividadeSelecionada((prev) => {
     const updated = {
       ...prev,
-      [name]: name === 'usuarioDelegadoId' ? Number(value) : value,
+      [name]: ['usuarioDelegadoId', 'statusAtividade'].includes(name)
+        ? Number(value)
+        : value,
     };
 
     return updated;

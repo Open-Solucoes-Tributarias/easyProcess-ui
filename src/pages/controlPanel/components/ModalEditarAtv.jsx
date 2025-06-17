@@ -191,9 +191,10 @@ useEffect(() => {
             <FormControl>
               <FormLabel>Status</FormLabel>
               <Select
-                name="status"
+                placeholder="Status da atividade"
+                name="statusAtividade"
                 value={atividadeSelecionada?.statusAtividade}
-              // onChange={handleChangeAtividade}
+                onChange={handleChangeAtvContrato}
               >
                 <option value={0}>Pendente</option>
                 <option value={1}>Em andamento</option>
