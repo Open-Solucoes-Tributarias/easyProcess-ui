@@ -13,6 +13,8 @@ import {
   IconButton,
   Stack,
   Box,
+  CheckboxGroup,
+  Checkbox,
 } from '@chakra-ui/react';
 import { BsThreeDotsVertical } from 'react-icons/bs';
 import { RxBackpack } from 'react-icons/rx';
@@ -21,6 +23,8 @@ import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
 import { useFrentes } from '../../../contexts/FrentesContext';
+import { useAtividades } from '../../../contexts/AtividadesContext';
+import { useFrenteDeTrabalhoAtv } from '../../../contexts/FrentesAtividades';
 
 export const FrentesTrabalho = () => {
   const {
@@ -35,6 +39,12 @@ export const FrentesTrabalho = () => {
     handleChangeFrente,
     setFrenteIsEditOpen,
   } = useFrentes();
+
+  const { atividades } = useAtividades();
+
+  const { atribuirMultiplasAtividades } = useFrenteDeTrabalhoAtv();
+
+  console.log('atividades listadas', atividades)
 
   const ListaFrentes = () => (
     <List spacing={3} w="100%">
@@ -92,6 +102,27 @@ export const FrentesTrabalho = () => {
           <Flex style={styles.content}>
             <ListaFrentes />
           </Flex>
+          <CheckboxGroup
+            colorScheme="green"
+            value={frenteAtual.atividadeIds?.map(String) || []}
+            onChange={(valoresSelecionados) =>
+              handleChangeFrente({
+                target: {
+                  name: 'atividadeIds',
+                  value: valoresSelecionados,
+                },
+              })
+            }
+          >
+            <Text>Atribuir atividades à frente</Text>
+            <Stack spacing={[1, 3]} direction={['column', 'row']} wrap="wrap">
+              {atividades.map((atividade) => (
+                <Checkbox key={atividade.id} value={String(atividade.id)}>
+                  {atividade.nome}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </GridItem>
 
         <GridItem>
@@ -107,7 +138,12 @@ export const FrentesTrabalho = () => {
         isOpen={frenteIsEditOpen}
         onClose={() => setFrenteIsEditOpen(false)}
         title={frenteModoEdicao ? 'Editar Frente' : 'Adicionar Frente'}
-        onSave={salvarFrente}
+        onSave={async () => {
+          await salvarFrente();
+          if (frenteAtual?.atividadeIds?.length) {
+            await atribuirMultiplasAtividades(frenteAtual.id, frenteAtual.atividadeIds);
+          }
+        }}
         onDelete={frenteModoEdicao ? () => deletarFrente(frenteAtual?.id) : null}
         showDelete={frenteModoEdicao}
       >
@@ -120,8 +156,31 @@ export const FrentesTrabalho = () => {
               onChange={handleChangeFrente}
             />
           </FormControl>
+
+          <CheckboxGroup
+            colorScheme="green"
+            value={frenteAtual.atividadeIds?.map(String) || []}
+            onChange={(valoresSelecionados) =>
+              handleChangeFrente({
+                target: {
+                  name: 'atividadeIds',
+                  value: valoresSelecionados,
+                },
+              })
+            }
+          >
+            <Text>Atribuir atividades à frente</Text>
+            <Stack spacing={[1, 3]} direction={['column', 'row']} wrap="wrap">
+              {atividades.map((atividade) => (
+                <Checkbox key={atividade.id} value={String(atividade.id)}>
+                  {atividade.nome}
+                </Checkbox>
+              ))}
+            </Stack>
+          </CheckboxGroup>
         </Stack>
       </DialogModal>
+
     </>
   );
 };

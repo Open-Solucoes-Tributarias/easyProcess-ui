@@ -1,8 +1,10 @@
 // components/AppProviders.jsx
-import { ClienteProvider } from '../contexts/ClientesContext';import { AtividadesProvider } from './AtividadesContext';
- import { AtividadesContratoProvider } from './AtividadesContratoContext';
+import { ClienteProvider } from '../contexts/ClientesContext'; 
+import { AtividadesProvider } from './AtividadesContext';
+import { AtividadesContratoProvider } from './AtividadesContratoContext';
 import { ContratoProvider } from './ContratosContext';
 import { ControleAtividadesProvider } from './ControleAtividadesContext';
+import { FrenteDeTrabalhoAtvProvider } from './FrentesAtividades';
 import { FrentesProvider } from './FrentesContext';
 import { UsuariosProvider } from './UsuariosContext';
 
@@ -16,7 +18,9 @@ export const AppProviders = ({ children }) => {
                         <ControleAtividadesProvider>
                             <FrentesProvider>
                                 <AtividadesProvider>
-                                    {children}
+                                    <FrenteDeTrabalhoAtvProvider>
+                                        {children}
+                                    </FrenteDeTrabalhoAtvProvider>
                                 </AtividadesProvider>
                             </FrentesProvider>
                         </ControleAtividadesProvider>
