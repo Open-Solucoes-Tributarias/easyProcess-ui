@@ -38,6 +38,8 @@ export const AtvContrato = ({ contratoSelecionado }) => {
     }
   }, [contratoSelecionado]);
 
+  console.log('atividades lista de sequencia', atividadesContrato)
+
   return (
     <>
       <Grid templateColumns="1fr" gap={6} p={4}>
@@ -52,7 +54,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
           ) : (
             atividadesContrato
               .slice()
-              .sort((a, b) => a.sequence - b.sequence)
+              .sort((a, b) => a.sequencia - b.sequencia) //ordena por n. da var sequencia
               .map((atv) => (
                 <ListItem
                   key={atv.id}

@@ -199,6 +199,16 @@ useEffect(() => {
                 <option value={false}>Em andamento</option>
               </Select>
             </FormControl>
+             <FormControl>
+              <FormLabel>Sequência</FormLabel>
+              <Input
+                type='number'
+                name="sequencia"
+                placeholder="Nº ordem da atividade"
+                value={atividadeSelecionada?.sequencia}
+                onChange={handleChangeAtvContrato}
+              />
+            </FormControl>
 
           </Flex>
         </GridItem>
