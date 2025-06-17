@@ -4,7 +4,8 @@ import { Box, Grid, GridItem, Input, Stack, Text } from "@chakra-ui/react";
 import { Contratos } from "./sections/Contratos";
 import { AtvContrato } from "./sections/AtvContrato";
 import { FloatButton } from "../../components/FloatButton";
-import { FaPaperclip, FaUser } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
+import { AtividadeContrato } from "./components/AtividadeContrato";
 
 //gerencia estados selecionar Clientes, contratos de um cliente
 
@@ -46,31 +47,14 @@ export const Painel = () => {
           </Box>
         </GridItem>
       </Grid>
-      <FloatButton // compoente di botão suspenso que recebe Fomrularios e states dos respectivos modais de adição.
+      <FloatButton
         actions={[
           {
-            label: "Atribuir atividade em contrato",
-            icon: <FaUser />,
-            modalTitle: "Adicionar contratos",
-            modalBody: (
-              <Stack spacing={3}>
-                <Input placeholder="Nome do cliente" />
-                <Input placeholder="Email" />
-              </Stack>
+            label: 'Nova Atividade',
+            icon: <FaPlus />,
+            component: ({ onClose }) => (
+              <AtividadeContrato isOpen={true} onClose={onClose} />
             ),
-            onSave: () => { },
-          },
-          {
-            label: "Adicionar atividades",
-            icon: <FaPaperclip />,
-            modalTitle: "Adicionar Atividades",
-            modalBody: (
-              <Stack spacing={3}>
-                <Input placeholder="Número do FT" />
-                <Input placeholder="Descrição" />
-              </Stack>
-            ),
-            onSave: () => { },
           },
         ]}
       />

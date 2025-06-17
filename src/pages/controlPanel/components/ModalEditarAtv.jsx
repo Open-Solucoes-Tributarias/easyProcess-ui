@@ -192,11 +192,13 @@ useEffect(() => {
               <FormLabel>Status</FormLabel>
               <Select
                 name="status"
-                value={atividadeSelecionada?.status}
+                value={atividadeSelecionada?.statusAtividade}
               // onChange={handleChangeAtividade}
               >
-                <option value={true}>Concluída</option>
-                <option value={false}>Em andamento</option>
+                <option value={0}>Pendente</option>
+                <option value={1}>Em andamento</option>
+                <option value={2}>Concluída</option>
+                <option value={3}>Atrasada</option>
               </Select>
             </FormControl>
              <FormControl>

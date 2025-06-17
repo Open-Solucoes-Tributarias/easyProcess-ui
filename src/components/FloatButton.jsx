@@ -6,32 +6,24 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { AddIcon } from "@chakra-ui/icons";
-import { DialogModal } from "./DialogModal"; // ajuste o caminho conforme necessário
 
 export const FloatButton = ({ actions = [] }) => {
   const [showButtons, setShowButtons] = useState(false);
-  const [activeModalIndex, setActiveModalIndex] = useState(null);
+  const [activeComponentIndex, setActiveComponentIndex] = useState(null);
 
-  const handleOpenModal = (index) => setActiveModalIndex(index);
-  const handleCloseModal = () => setActiveModalIndex(null);
+  const handleOpenComponent = (index) => setActiveComponentIndex(index);
+  const handleCloseComponent = () => setActiveComponentIndex(null);
 
   return (
     <>
-      {/* Renderiza modais dinamicamente */}
+      {/* Renderiza os componentes dinamicamente */}
       {actions.map((action, index) =>
-        action.modalBody ? (
-          <DialogModal
-            key={`modal-${index}`}
-            isOpen={activeModalIndex === index}
-            onClose={handleCloseModal}
-            title={action.modalTitle || action.label}
-            size={action.modalSize || "xl"}
-            onSave={action.onSave}
-            onDelete={action.onDelete}
-            showDelete={action.showDelete}
-          >
-            {action.modalBody}
-          </DialogModal>
+        activeComponentIndex === index && action.component ? (
+          <Box key={`component-${index}`} position="fixed" bottom="100px" right="25px" zIndex={998}>
+            {typeof action.component === "function"
+              ? action.component({ onClose: handleCloseComponent })
+              : action.component}
+          </Box>
         ) : null
       )}
 
@@ -54,7 +46,7 @@ export const FloatButton = ({ actions = [] }) => {
                   borderRadius="full"
                   bg="gray.600"
                   _hover={{ bg: "gray.500" }}
-                  onClick={() => handleOpenModal(index)}
+                  onClick={() => handleOpenComponent(index)}
                 />
               </Tooltip>
             ))}

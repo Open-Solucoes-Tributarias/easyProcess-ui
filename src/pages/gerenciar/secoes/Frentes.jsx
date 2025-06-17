@@ -114,14 +114,6 @@ export const FrentesTrabalho = () => {
               })
             }
           >
-            <Text>Atribuir atividades à frente</Text>
-            <Stack spacing={[1, 3]} direction={['column', 'row']} wrap="wrap">
-              {atividades.map((atividade) => (
-                <Checkbox key={atividade.id} value={String(atividade.id)}>
-                  {atividade.nome}
-                </Checkbox>
-              ))}
-            </Stack>
           </CheckboxGroup>
         </GridItem>
 
