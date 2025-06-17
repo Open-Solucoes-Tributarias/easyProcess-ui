@@ -25,10 +25,10 @@ export const getTipoAtvLabel = (tipo) => tipoAtvLabel[tipo] ?? "Tipo de atividad
 //  Atrasada = 3
 
 const statusAtvLabel = {
-  0: "pendente",
-  1: "em andamento",
-  2: "concluída",
-  3: "atrasada"
+  0: "Pendente",
+  1: "Em andamento",
+  2: "Concluída",
+  3: "Atrasada"
 };
 
 export const getStatusAtividade = (status) => statusAtvLabel[status] ?? null;

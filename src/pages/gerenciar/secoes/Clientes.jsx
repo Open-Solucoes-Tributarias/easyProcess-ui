@@ -144,7 +144,10 @@ export const Clientes = () => {
             <FormControl>
               <FormLabel>Data de Cadastro</FormLabel>
               <Input
+                disabled
+                type="datetime-local"
                 name="dataCadastro"
+                // value={contratoSelecionado?.dataInicio?.split('T')[0] || ''}
                 value={clienteSelecionado?.dataCadastro || ''}
                 onChange={handleChangeCliente}
               />

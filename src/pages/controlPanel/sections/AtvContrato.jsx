@@ -4,7 +4,6 @@ import {
   Avatar,
   AvatarBadge,
   Box,
-  Checkbox,
   Flex,
   Grid,
   GridItem,
@@ -20,6 +19,8 @@ import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { ModalEditarAtv } from "../components/ModalEditarAtv";
 import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
 import { Informativo } from "../../../components/Informativo";
+import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
+import { getStatusAtividade } from "../../../utils/labelUtils";
 
 export const AtvContrato = ({ contratoSelecionado }) => {
   const {
@@ -48,9 +49,9 @@ export const AtvContrato = ({ contratoSelecionado }) => {
         </GridItem>
         <List spacing={3} w="100%">
           {loadingAtividades ? (
-             <Informativo tipo="carregando" />
+            <Informativo tipo="carregando" />
           ) : atividadesContrato.length === 0 ? (
-            <Informativo titulo='Não existem atividades atribuidas'/>
+            <Informativo titulo='Não existem atividades atribuidas' />
           ) : (
             atividadesContrato
               .slice()
@@ -70,7 +71,22 @@ export const AtvContrato = ({ contratoSelecionado }) => {
                 >
                   <Flex align="center" gap={2}>
                     <Flex align="center">
-                      <Checkbox colorScheme="green" isChecked />
+                      <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
+                        <IconButton
+                          isReadOnly
+                          cursor="default"
+                          size='sm'
+                          variant='ghost'
+                          aria-label="Status da atividade"
+                          icon={
+                            atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
+                              atv.statusAtividade === 1 ? <FaHourglassHalf color="blue" /> :
+                                atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
+                                  atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
+                                    <FaRegClock color="gray" />
+                          }
+                        />
+                      </Tooltip>
                       <Box ml="3">
                         <Text fontWeight={600} color="gray.600" fontSize={14}>
                           {atv?.descricaoCustomizada}
