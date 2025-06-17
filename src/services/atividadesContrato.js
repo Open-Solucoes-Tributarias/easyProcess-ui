@@ -19,8 +19,8 @@ export const registrarAtividadesContrato = async (data) => {
 };
 
 //PUT
-export const editarAtividadesContrato = async (id) => {
-  const response = await httpClient.put(`/api/atividadescontrato'${id}`);
+export const editarAtividadesContrato = async (id, data) => {
+  const response = await httpClient.put(`/api/atividadescontrato/${id}`, data);
   return response.data;
 };
 

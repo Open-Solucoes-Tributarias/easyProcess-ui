@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import {
   FormControl,
   FormLabel,
@@ -8,7 +8,6 @@ import {
   Text,
   Grid,
   GridItem,
-  Avatar,
   Button,
   Flex,
   Textarea,
@@ -23,10 +22,11 @@ import {
   CardBody,
   StackDivider,
   Box,
-  Tag,
-  TagLabel,
   Divider,
-  Link
+  Link,
+  Select,
+  InputGroup,
+  InputLeftElement
 } from "@chakra-ui/react";
 import { DialogModal } from "../../../components/DialogModal";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
@@ -34,9 +34,9 @@ import { GenericAvatarIcon } from "@chakra-ui/icons";
 import { dateAndHrConverter } from "../../../utils/utils";
 import { useControleAtividades } from "../../../contexts/ControleAtividadesContext";
 import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
+import { useUsuarios } from "../../../contexts/UsuariosContext";
 
 export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
-  const [atividade, setAtividade] = useState({});
 
   const {
     controleAtv,
@@ -48,30 +48,40 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
     controleAtvInicial
   } = useControleAtividades();
 
-  const { excluirAtividadeContrato } = useAtividadesContrato();
+  const { atividadeSelecionada, setAtividadeSelecionada, excluirAtividadeContrato, handleChangeAtvContrato, salvarAtividadeContrato } = useAtividadesContrato();
+
+  const { usuarios, listarUsuarios } = useUsuarios();
+
+useEffect(() => {
+  if (open && atvSelecionada?.id) {
+    setAtividadeSelecionada(atvSelecionada);
+    setControleAtv({ ...controleAtvInicial, atividadeContratoId: atvSelecionada.id });
+    listarMovimentacoesAtividade(atvSelecionada.id);
+  }
+}, [open]);
 
   useEffect(() => {
-    if (atvSelecionada?.id) {
-      setAtividade(atvSelecionada);
-      setControleAtv({ ...controleAtvInicial, atividadeContratoId: atvSelecionada.id });
-      listarMovimentacoesAtividade(atvSelecionada.id);
-    }
-  }, [atvSelecionada]);
-
+    listarUsuarios();
+  }, []);
+  
+  console.log('usuarios', usuarios)
+  console.log('atividade editando', atvSelecionada);
+  console.log('atividade selecionada vinda do context', atividadeSelecionada)
   return (
     <DialogModal
       isOpen={open}
       size="5xl"
       onClose={() => setOpen(false)}
+      onSave={() => salvarAtividadeContrato()}
       title={"Detalhes da atividade"}
-      onDelete={() => excluirAtividadeContrato(atividade?.id, atividade?.contratoId )}
+      onDelete={() => excluirAtividadeContrato(atividadeSelecionada?.id, atividadeSelecionada?.contratoId)}
     >
       <Grid templateColumns="2fr 1fr" gap={2}>
         <GridItem>
           <Stack spacing={2}>
             <FormControl>
               <FormLabel>Descrição da atividade</FormLabel>
-              <Input readOnly value={atividade?.descricaoCustomizada || ""} />
+              <Input name="descricaoCustomizada" value={atividadeSelecionada?.descricaoCustomizada || ""} onChange={handleChangeAtvContrato} />
             </FormControl>
 
             {/* Formulário de movimentação */}
@@ -134,6 +144,7 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
                     <Box key={index}>
                       <Heading size="xs">{dateAndHrConverter(mov?.dataHora)}</Heading>
                       <Text fontSize="sm">{mov?.observacao}</Text>
+                      {/* <Text fontSize="sm">{mov?.usuarioId}</Text> */}
                       <Link href={mov?.anexo || null} isExternal fontSize={13} color='blue.700'>
                         {mov?.anexo || "Arquivo não atribuido"} <ExternalLinkIcon mx="2px" />
                       </Link>
@@ -147,27 +158,48 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
 
         <GridItem>
           <Flex direction="column" gap={2}>
-             <FormControl>
+            <FormControl>
+              <FormLabel>Responsável</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <GenericAvatarIcon color="gray.300" />
+                </InputLeftElement>
+                <Select
+                  placeholder="Selecione o responsável"
+                  name="usuarioDelegadoId"
+                  value={atividadeSelecionada?.usuarioDelegadoId || ""}
+                  onChange={handleChangeAtvContrato}
+                  pl="2.5rem"
+                >
+                  {usuarios.map((usuario) => (
+                    <option key={usuario.id} value={usuario.id}>
+                      {usuario.nome}
+                    </option>
+                  ))}
+                </Select>
+              </InputGroup>
+            </FormControl>
+            <FormControl>
               <FormLabel>Prazo limite</FormLabel>
               <Input
                 type="datetime-local"
                 name="dataLimite"
-                value={atvSelecionada?.dataLimite || ""}
-                readOnly
+                value={atividadeSelecionada?.dataLimite || ""}
+                onChange={handleChangeAtvContrato}
               />
             </FormControl>
-            <Stack direction="column">
-              <Tag size="lg" borderRadius="full">
-                <Avatar
-                  icon={<GenericAvatarIcon />}
-                  size="xs"
-                  name="responsável"
-                  ml={-1}
-                  mr={3}
-                />
-                <TagLabel>{atvSelecionada?.nomeUsuarioDelegado}</TagLabel>
-              </Tag>
-            </Stack>
+            <FormControl>
+              <FormLabel>Status</FormLabel>
+              <Select
+                name="status"
+                value={atividadeSelecionada?.status}
+              // onChange={handleChangeAtividade}
+              >
+                <option value={true}>Concluída</option>
+                <option value={false}>Em andamento</option>
+              </Select>
+            </FormControl>
+
           </Flex>
         </GridItem>
       </Grid>

@@ -38,24 +38,30 @@ export const AtividadesContratoProvider = ({ children }) => {
     }
   };
 
-  const salvarAtividadeContrato = async (atividade) => {
-    try {
-      const payload = {
-        ...atividade,
-        id: 0 // garante id 0 no POST
-      };
+const salvarAtividadeContrato = async (atividade = atividadeSelecionada) => {
+  try {
+    const isEdicao = atividade?.id && atividade.id !== 0;
 
-      if (atividade?.id && atividade.id !== 0) {
-        await editarAtividadesContrato(atividade.id, atividade);
-      } else {
-        await registrarAtividadesContrato(payload);
-      }
+    const payload = {
+      ...atividade,
+      usuarioDelegadoId: Number(atividade.usuarioDelegadoId),
+      nomeUsuarioDelegado: atividade.nomeUsuarioDelegado || '', // garantir compatibilidade
+    };
 
-      await listarAtividadesContrato(atividade.contratoId);
-    } catch (err) {
-      console.error("Erro ao salvar atividade do contrato", err);
+    if (isEdicao) {
+      await editarAtividadesContrato(payload.id, payload);
+    } else {
+      payload.id = 0; // garantir id 0 apenas no POST
+      await registrarAtividadesContrato(payload);
     }
-  };
+
+    await listarAtividadesContrato(payload.contratoId);
+    setModalEditarAberto(false);
+  } catch (err) {
+    console.error("Erro ao salvar atividade do contrato", err);
+  }
+};
+
 
   const excluirAtividadeContrato = async (id, contratoId) => {
     try {
@@ -65,6 +71,20 @@ export const AtividadesContratoProvider = ({ children }) => {
       console.error("Erro ao deletar atividade", err);
     }
   };
+
+const handleChangeAtvContrato = (e) => {
+  const { name, value } = e.target;
+
+  setAtividadeSelecionada((prev) => {
+    const updated = {
+      ...prev,
+      [name]: name === 'usuarioDelegadoId' ? Number(value) : value,
+    };
+
+    return updated;
+  });
+};
+
 
   return (
     <AtividadesContratoContext.Provider
@@ -78,7 +98,8 @@ export const AtividadesContratoProvider = ({ children }) => {
         listarAtividadesContrato,
         salvarAtividadeContrato,
         excluirAtividadeContrato,
-        atividadeInicial
+        atividadeInicial,
+        handleChangeAtvContrato
       }}
     >
       {children}

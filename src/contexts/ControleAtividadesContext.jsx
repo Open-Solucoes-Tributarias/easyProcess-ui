@@ -6,13 +6,20 @@ import {
   registrarControleAtv
 } from "../services/controleAtvService";
 
+// calcula string no formato "YYYY-MM-DDThh:mm" já no horário local
+const dataHoraLocal = new Date(Date.now() - new Date().getTimezoneOffset() * 60000)
+  .toISOString()
+  .slice(0, 16);
+
 const ControleAtividadesContext = createContext();
 
 export const controleAtvInicial = {
   atividadeContratoId: 0,
-  dataHora: "",
+  dataHora: dataHoraLocal,
   observacao: "",
-  anexo: ""
+  anexo: "",
+  usuarioId: 0,
+  // status: 0,
 };
 
 export const ControleAtividadesProvider = ({ children }) => {
