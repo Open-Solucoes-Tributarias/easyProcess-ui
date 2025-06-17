@@ -92,11 +92,11 @@ export const AtvContrato = ({ contratoSelecionado }) => {
                         setModalEditarAberto(true);
                       }}
                     />
-                    <Tooltip label={atividadeSelecionada?.nomeUsuarioDelegado} placement="top">
+                    <Tooltip label={atv?.nomeUsuarioDelegado} placement="top">
                       <IconButton
                         aria-label="Responsável"
                         icon={
-                          <Avatar size="xs" name={atividadeSelecionada?.nomeUsuarioDelegado}>
+                          <Avatar size="xs" name={atv?.nomeUsuarioDelegado}>
                             <AvatarBadge boxSize="1" bg="green.500" />
                           </Avatar>
                         }
