@@ -1,5 +1,5 @@
 'use client';
-import imageLogin from "/easyProcess-ui/src/assets/imgLogin.png";
+import imageLogin from "/easyProcess-ui/src/assets/background.png";
 import {
   Button,
   Flex,
@@ -98,10 +98,10 @@ export const LoginPage = () => {
           </Stack>
         </Stack>
       </Flex>
-      <Flex flex={1}>
+      <Flex flex={1} backgroundColor='#68da76'>
         <Image
           alt={'Login Image'}
-          objectFit={'fill'}
+          objectFit='contain'
           maxHeight={'100%'}
           maxWidth={'100%'}
           src={imageLogin}
