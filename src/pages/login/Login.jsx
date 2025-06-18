@@ -86,7 +86,7 @@ export const LoginPage = () => {
                   Esqueci a senha
                 </Text>
               </Tooltip>
-              <Link onClick={() => navigate('/cadastro')}>Primeiro acesso</Link>
+              {/* <Link onClick={() => navigate('/cadastro')}>Primeiro acesso</Link> */}
             </Stack>
             <Button
               colorScheme={'blue'}

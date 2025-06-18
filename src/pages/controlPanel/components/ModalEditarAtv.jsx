@@ -26,7 +26,9 @@ import {
   Link,
   Select,
   InputGroup,
-  InputLeftElement
+  InputLeftElement,
+  Avatar,
+  AvatarBadge
 } from "@chakra-ui/react";
 import { DialogModal } from "../../../components/DialogModal";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
@@ -159,7 +161,9 @@ useEffect(() => {
               <FormLabel>Responsável</FormLabel>
               <InputGroup>
                 <InputLeftElement pointerEvents="none">
-                  <GenericAvatarIcon color="gray.300" />
+                  <Avatar size="xs" name={atividadeSelecionada?.nomeUsuarioDelegado}>
+                    <AvatarBadge boxSize="1" bg="green.500" />
+                  </Avatar>
                 </InputLeftElement>
                 <Select
                   placeholder="Selecione o responsável"

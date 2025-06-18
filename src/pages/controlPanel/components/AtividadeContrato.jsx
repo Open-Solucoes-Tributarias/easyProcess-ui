@@ -8,6 +8,8 @@ import {
   InputGroup,
   InputLeftElement,
   Flex,
+  Avatar,
+  AvatarBadge,
 } from '@chakra-ui/react';
 import { DialogModal } from '../../../components/DialogModal';
 import { useAtividadesContrato } from '../../../contexts/AtividadesContratoContext';
@@ -112,7 +114,10 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
             <FormLabel>Responsável</FormLabel>
             <InputGroup>
               <InputLeftElement pointerEvents="none">
-                <GenericAvatarIcon color="gray.300" />
+                <Avatar size="xs" name={atividadeSelecionada?.nomeUsuarioDelegado}>
+                  <AvatarBadge boxSize="1" bg="green.500" />
+                </Avatar>
+                                        
               </InputLeftElement>
               <Select
                 name="usuarioDelegadoId"

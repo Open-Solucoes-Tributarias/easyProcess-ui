@@ -1,4 +1,5 @@
 'use client';
+import { useState } from 'react';
 import {
   Accordion,
   AccordionButton,
@@ -21,6 +22,8 @@ import { RiContractFill } from 'react-icons/ri';
 import { dateConverter } from '../../../utils/utils';
 
 export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
+  const [filtro, setFiltro] = useState('');
+
   const { clientes } = useCliente();
 
   const {
@@ -32,7 +35,10 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>
       <GridItem>
-        <SearchInput />
+        <SearchInput
+          value={filtro}
+          onChange={(e) => setFiltro(e.target.value)}
+        />
       </GridItem>
 
       <GridItem>
@@ -44,7 +50,12 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
           <Informativo />
         ) : (
           <Accordion allowToggle>
-            {clientes.map((cliente, index) => (
+           {clientes
+  .filter((cliente) =>
+    cliente?.razaoSocial?.toLowerCase().includes(filtro.toLowerCase()) ||
+    cliente?.cnpj?.toLowerCase().includes(filtro.toLowerCase())
+  )
+  .map((cliente, index) => (
               <AccordionItem key={index} border='none' paddingBlock={1}>
                 <h2>
                   <AccordionButton
@@ -66,7 +77,7 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
                 <AccordionPanel paddingRight={0} paddingLeft={5}>
                   {contratos.length > 0 ? (
                     <>
-                      {contratos.map((contrato, index) => (
+                     {contratos.map((contrato, index) => (
                         <Flex key={index} onClick={() => handleContratoSelecionado(contrato)} flex='1' gap='4' alignItems='center' border='1px solid' borderColor='#d0d0d0' borderRadius={10}
                           paddingInline={5} paddingBlock={2} marginBlock={2} _hover={{
                             background: 'gray.100',
