@@ -44,8 +44,6 @@ export const FrentesTrabalho = () => {
 
   const { atribuirMultiplasAtividades } = useFrenteDeTrabalhoAtv();
 
-  console.log('atividades listadas', atividades)
-
   const ListaFrentes = () => (
     <List spacing={3} w="100%">
       {frentes.map((frente, index) => (

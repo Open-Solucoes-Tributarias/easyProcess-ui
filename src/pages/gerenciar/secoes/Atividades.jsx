@@ -41,8 +41,6 @@ export const Atividades = () => {
     } = useAtividades();
 
     const { frentes } = useFrentes();
-    console.log('frentes em atividades', frentes)
-    console.log('atividades', atividades)
 
     const ListaAtividades = () => (
         <List spacing={3} w="100%">

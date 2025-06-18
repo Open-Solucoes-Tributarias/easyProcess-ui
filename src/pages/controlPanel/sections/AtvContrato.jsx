@@ -39,8 +39,6 @@ export const AtvContrato = ({ contratoSelecionado }) => {
     }
   }, [contratoSelecionado]);
 
-  console.log('atividades lista de sequencia', atividadesContrato)
-
   return (
     <>
       <Grid templateColumns="1fr" gap={6} p={4}>

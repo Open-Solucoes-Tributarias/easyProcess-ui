@@ -63,10 +63,7 @@ useEffect(() => {
   useEffect(() => {
     listarUsuarios();
   }, []);
-  
-  console.log('usuarios', usuarios)
-  console.log('atividade editando', atvSelecionada);
-  console.log('atividade selecionada vinda do context', atividadeSelecionada)
+
   return (
     <DialogModal
       isOpen={open}

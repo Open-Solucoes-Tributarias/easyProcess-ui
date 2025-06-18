@@ -10,7 +10,6 @@ const ClienteContext = createContext();
 
 const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
 
-console.log('id da empresa', empresaId)
 const clienteInicial = {
   id: 0,
   nomeFantasia: '',

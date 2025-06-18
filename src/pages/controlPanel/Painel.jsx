@@ -19,16 +19,12 @@ export const Painel = () => {
   //recebe cliente clicado no elemento filho
   const handleSelecionarCliente = (cliente) => {
     setClienteSelecionado(cliente);
-    console.log("Cliente selecionado:", cliente);
   };
 
   //recebe contrato selecionado vindo do filho Clientes
   const handleContratoSelecionado = (contrato) => {
     setContratoSelecionado(contrato)
-    console.log('contrato selecionado', contrato);
   }
-
-  console.log('contrato no pai state', contratoSelecionado)
 
   return (
     <>

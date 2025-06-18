@@ -26,7 +26,7 @@ export const DialogModal = ({ isOpen, onClose, title, size = 'xl', children, onS
                         onSave();           // executa a função de salvar
                     }}
                 >
-                    <ModalBody>
+                    <ModalBody overflow="auto" maxH="60vh">
                         {children}
                     </ModalBody>
 

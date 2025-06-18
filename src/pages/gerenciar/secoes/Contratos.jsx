@@ -41,7 +41,6 @@ export const Contratos = () => {
 
   const { clientes } = useCliente();
   const { usuarios } = useUsuarios();
-  console.log('cliente selecionado no contrato', contratoSelecionado)
 
   const ListaContratos = () => (
     <List spacing={3} w="100%">
