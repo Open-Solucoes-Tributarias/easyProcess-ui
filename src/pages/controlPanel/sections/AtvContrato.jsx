@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Avatar,
   AvatarBadge,
@@ -33,17 +33,29 @@ export const AtvContrato = ({ contratoSelecionado }) => {
     loadingAtividades,
   } = useAtividadesContrato();
 
+  const [filtro, setFiltro] = useState('');
+
   useEffect(() => {
     if (contratoSelecionado?.id) {
       listarAtividadesContrato(contratoSelecionado.id);
     }
   }, [contratoSelecionado]);
 
+    const atividadesFiltradas = atividadesContrato
+    .filter(atv =>
+      atv.descricaoCustomizada?.toLowerCase().includes(filtro.toLowerCase()) ||
+      atv.nomeUsuarioDelegado?.toLowerCase().includes(filtro.toLowerCase())
+    )
+    .sort((a, b) => a.sequencia - b.sequencia); // ordenação por n sequencia
+
   return (
     <>
       <Grid templateColumns="1fr" gap={6} p={4}>
         <GridItem>
-          <SearchInput />
+          <SearchInput
+            value={filtro}
+            onChange={(e) => setFiltro(e.target.value)}
+          />
         </GridItem>
         <List spacing={3} w="100%">
           {loadingAtividades ? (
@@ -51,10 +63,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
           ) : atividadesContrato.length === 0 ? (
             <Informativo titulo='Não existem atividades atribuidas' />
           ) : (
-            atividadesContrato
-              .slice()
-              .sort((a, b) => a.sequencia - b.sequencia) //ordena por n. da var sequencia
-              .map((atv) => (
+            atividadesFiltradas.map((atv) => (
                 <ListItem
                   key={atv.id}
                   w="100%"
@@ -78,7 +87,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
                           aria-label="Status da atividade"
                           icon={
                             atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
-                              atv.statusAtividade === 1 ? <FaHourglassHalf color="blue" /> :
+                              atv.statusAtividade === 1 ? <FaHourglassHalf color="gray" /> :
                                 atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
                                   atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
                                     <FaRegClock color="gray" />
