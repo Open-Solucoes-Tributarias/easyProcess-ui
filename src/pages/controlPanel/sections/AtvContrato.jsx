@@ -127,7 +127,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
                         size="sm"
                       />
                     </Tooltip>
-                    <Tooltip label={`Sequência da atividade: ${atv?.sequencia}`} placement="top">
+                    <Tooltip label={`Sequência da atividade: ${atv?.sequencia}`} placement='left-start'>
                       <IconButton
                         aria-label="Info"
                         icon={<InfoIcon size="xl" />}
