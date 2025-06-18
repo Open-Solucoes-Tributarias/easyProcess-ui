@@ -1,5 +1,6 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppRoutes } from "./routes/Routes";
+import { AppProviders } from "./contexts/AppProviders";
 
 const theme = extendTheme({
   fonts: {
@@ -27,6 +28,13 @@ const theme = extendTheme({
     Input: {
       defaultProps: {
         focusBorderColor: "#68D391",
+       fontSize: 10      
+      },
+    },
+    FormLabel: {
+      baseStyle: {
+        fontSize: 'sm',
+        marginBottom: 1
       },
     },
     Select: {
@@ -67,7 +75,9 @@ const theme = extendTheme({
 function App() {
   return (
     <ChakraProvider theme={theme}>
-      <AppRoutes />
+      <AppProviders>
+        <AppRoutes />
+      </AppProviders>
     </ChakraProvider>
   );
 }

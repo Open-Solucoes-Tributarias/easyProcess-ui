@@ -14,7 +14,7 @@ import {
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { register } from "../../services/registerService";
+import { register } from "../../services/authService";
 
 export const RegisterPage = () => {
   const [email, setEmail] = useState('');
@@ -36,8 +36,8 @@ export const RegisterPage = () => {
 
     try {
       setLoading(true);
-      const response = await register(payload);
-      localStorage.setItem('token', response.token);
+        await register(payload);
+        // localStorage.setItem('token', response.token);
       toast({
         title: 'Cadastro realizado com sucesso.',
         status: 'success',

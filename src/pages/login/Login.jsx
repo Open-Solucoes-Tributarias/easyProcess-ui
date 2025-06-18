@@ -33,6 +33,7 @@ export const LoginPage = () => {
       setLoading(true);
       const response = await login(payload);
       localStorage.setItem('token', response.token);
+      localStorage.setItem('user', JSON.stringify(response));
       toast({
         title: 'Login realizado com sucesso.',
         status: 'success',
