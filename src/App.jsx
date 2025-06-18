@@ -1,6 +1,7 @@
 import { ChakraProvider, extendTheme } from "@chakra-ui/react";
 import { AppRoutes } from "./routes/Routes";
 import { AppProviders } from "./contexts/AppProviders";
+import { FloatFormButton } from "./components/FloatFormButton";
 
 const theme = extendTheme({
   fonts: {
@@ -77,6 +78,7 @@ function App() {
     <ChakraProvider theme={theme}>
       <AppProviders>
         <AppRoutes />
+        <FloatFormButton formUrl='https://forms.office.com/r/uDYtkMZBxE?embed=true'/>
       </AppProviders>
     </ChakraProvider>
   );

@@ -140,14 +140,44 @@ export const Atividades = () => {
                         </Select>
                     </FormControl>
                     <FormControl>
-                        <FormLabel>Recorrência</FormLabel>
+                        <FormLabel>Período</FormLabel>
+                        <Select
+                            name="periodo"
+                            value={atividadeAtual?.periodo || ''}
+                            onChange={handleChangeAtividade}
+                        >
+                            <option value="">Selecione um período</option>
+                            <option value={1}>Diário</option>
+                            <option value={2}>Semanal</option>
+                            <option value={3}>Quinzenal</option>
+                            <option value={4}>Mensal</option>
+                            <option value={5}>Semestral</option>
+                            <option value={6}>Personalizado</option>
+                        </Select>
+                    </FormControl>
+
+                    {atividadeAtual?.periodo === 6 && (
+                        <FormControl>
+                            <FormLabel>Intervalo em dias</FormLabel>
+                            <Input
+                                type="number"
+                                name="intervaloEmDias"
+                                min={1}
+                                value={atividadeAtual?.intervaloEmDias || ''}
+                                onChange={handleChangeAtividade}
+                            />
+                        </FormControl>
+                    )}
+
+                    <FormControl>
+                        <FormLabel>Próxima execução</FormLabel>
                         <Input
-                            name="recorrencia"
-                            value={atividadeAtual?.recorrencia || ''}
+                            type="datetime-local"
+                            name="proximaExecucao"
+                            value={atividadeAtual?.proximaExecucao}
                             onChange={handleChangeAtividade}
                         />
                     </FormControl>
-
                     <FormControl>
                         <FormLabel>Instrução</FormLabel>
                         <Input

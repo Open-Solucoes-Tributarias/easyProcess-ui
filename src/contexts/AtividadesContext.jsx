@@ -17,7 +17,9 @@ const atividadeInicial = {
   id: 0,
   nome: "",
   tipo: 1,
-  recorrencia: "",
+  periodo: 1,
+  intervaloEmDias: 0,
+  proximaExecucao: new Date,
   empresaId: empresaId,
   instrucao: "",
   frenteDeTrabalhoIds: [],
@@ -53,6 +55,10 @@ const handleChangeAtividade = (e) => {
 
   if (name === 'frenteDeTrabalhoIds') {
     parsedValue = value.map(Number); // garantir array numérico
+  }
+
+  if (name == '') {
+
   }
 
   setAtividadeAtual((prev) => ({

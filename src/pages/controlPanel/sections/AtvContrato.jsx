@@ -127,7 +127,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
                         size="sm"
                       />
                     </Tooltip>
-                    <Tooltip label="Descrição da tarefa" placement="top">
+                    <Tooltip label={`Sequência da atividade: ${atv?.sequencia}`} placement="top">
                       <IconButton
                         aria-label="Info"
                         icon={<InfoIcon size="xl" />}

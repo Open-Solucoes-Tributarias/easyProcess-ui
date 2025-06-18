@@ -32,3 +32,23 @@ const statusAtvLabel = {
 };
 
 export const getStatusAtividade = (status) => statusAtvLabel[status] ?? null;
+
+// Períodos de uma Atividade
+// Diario = 1,
+// Semanal = 2,
+// Quinzenal = 3,
+// Mensal = 4,
+// Semestral = 5,
+// Personalizado = 6
+
+const periodoAtvLabel = {
+  1: "Diário",
+  2: "Semanal",
+  3: "Quinzenal",
+  4: "Mensal",
+  5: "Semestral",
+  6: "Personalizado"
+};
+
+export const getPeriodoAtividade = (periodo) => periodoAtvLabel[periodo] ?? null;
+
