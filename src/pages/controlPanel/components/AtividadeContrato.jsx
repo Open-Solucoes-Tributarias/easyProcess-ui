@@ -20,7 +20,7 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
     atividadeInicial,
   } = useAtividadesContrato();
 
-  const { contratos } = useContrato();
+  const { contratosGeral } = useContrato();
 
   useEffect(() => {
     if (isOpen) {
@@ -48,7 +48,7 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
             onChange={handleChangeAtvContrato}
           >
             <option value="">Selecione um contrato</option>
-            {contratos.map((contrato) => (
+            {contratosGeral.map((contrato) => (
               <option key={contrato.id} value={contrato.id}>
                 {contrato.descricao || `Contrato ${contrato.id}`}
               </option>

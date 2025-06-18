@@ -24,6 +24,7 @@ export const contratoInicial = {
 
 export const ContratoProvider = ({ children }) => {
   const [contratos, setContratos] = useState([]);
+  const [contratosGeral, setContratosGeral] = useState([]); //lista geral sem alteração dinamica
   const [contratoSelecionado, setContratoSelecionado] = useState(contratoInicial);
   const [contratoIsEditOpen, setContratoIsEditOpen] = useState(false);
   const [contratoModoEdicao, setContratoModoEdicao] = useState(false);
@@ -35,10 +36,11 @@ export const ContratoProvider = ({ children }) => {
       let dados;
       if (listarGeral || !clienteId) {
         dados = await buscarContratosGeral();
+        setContratosGeral(dados)
       } else {
         dados = await buscarContratos(clienteId);
+         setContratos(dados);
       }
-      setContratos(dados);
     } catch (err) {
       console.error("Erro ao listar contratos", err);
     }
@@ -105,6 +107,7 @@ export const ContratoProvider = ({ children }) => {
     <ContratoContext.Provider
       value={{
         contratos,
+        contratosGeral,
         contratoSelecionado,
         setContratoSelecionado,
         contratoIsEditOpen,
