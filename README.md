@@ -31,3 +31,5 @@ Editar
 - **`services/`**: camada de abstração para chamadas HTTP e utilitários de integração com APIs.
 
 Essa arquitetura é **flexível e escalável**, sendo adequada tanto para projetos pequenos quanto médio
+
+// No fornt-end, temporariamente foi adicionaodo o arquivo netlify.toml que funciona como proxy reverso para requsitar a API que estã em http.
