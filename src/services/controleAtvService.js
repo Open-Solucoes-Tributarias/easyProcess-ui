@@ -3,7 +3,7 @@ import httpClient from './httpClient';
 // GET
 
 export const buscarControleAtv = async () => {
-  const response = await httpClient.get('/api/controleatividades/empresa');
+  const response = await httpClient.get('/controleatividades/empresa');
   return response.data;
 };
 
@@ -17,7 +17,7 @@ export const buscarControleAtv = async () => {
 // }
 
 export const registrarControleAtv = async (data) => {
-  const response = await httpClient.post('/api/controleatividades/movimentar', data);
+  const response = await httpClient.post('/controleatividades/movimentar', data);
   return response.data;
 };
 
