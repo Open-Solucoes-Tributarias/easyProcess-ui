@@ -1,5 +1,5 @@
 'use client';
-import imageLogin from "/easyProcess-ui/src/assets/imgLogin.png";
+import imageLogin from "../../../src/assets/imgLogin.png";
 import {
   Button,
   Flex,
