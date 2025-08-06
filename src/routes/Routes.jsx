@@ -6,7 +6,6 @@ import { PrivateRoute } from "./PrivateRoute";
 import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { Gerenciar } from "../pages/gerenciar/Gerenciar";
-import { AppProviders } from "../contexts/AppProviders";
 
 
 export const AppRoutes = () => {
@@ -20,11 +19,8 @@ export const AppRoutes = () => {
         {/* rotas privadas, checagem de permissão */}
         <Route element={<PrivateRoute />}>
           {/* layout visual do dashboard para rotas privadas */}
-          <Route element={
-            <AppProviders>
-              <DashboardLayout />
-            </AppProviders>}>
-            <Route path="/dashboard" element={<Dashboard/>} />
+          <Route element={<DashboardLayout />}>
+            <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/painel" element={<Painel />} />
             <Route path="/gerenciar" element={<Gerenciar />} />
           </Route>

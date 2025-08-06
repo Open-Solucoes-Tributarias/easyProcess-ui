@@ -17,7 +17,7 @@ import { SearchInput } from "../../../components/InputSearch";
 import { dateConverter } from "../../../utils/utils";
 import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { ModalEditarAtv } from "../components/ModalEditarAtv";
-import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
+import { useAtividadesContrato } from "../../../hooks/useAtividadesContrato";
 import { Informativo } from "../../../components/Informativo";
 import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
 import { getStatusAtividade } from "../../../utils/labelUtils";

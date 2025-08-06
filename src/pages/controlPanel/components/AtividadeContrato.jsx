@@ -12,7 +12,7 @@ import {
   AvatarBadge,
 } from '@chakra-ui/react';
 import { DialogModal } from '../../../components/DialogModal';
-import { useAtividadesContrato } from '../../../contexts/AtividadesContratoContext';
+import { useAtividadesContrato } from '../../../hooks/useAtividadesContrato';
 import { useContrato } from '../../../hooks/useContratos';
 import { useEffect } from 'react';
 import { useAtividades } from '../../../hooks/useAtividades';

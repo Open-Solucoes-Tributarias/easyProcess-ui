@@ -32,10 +32,9 @@ import {
 } from "@chakra-ui/react";
 import { DialogModal } from "../../../components/DialogModal";
 import { ExternalLinkIcon } from "@chakra-ui/icons";
-import { GenericAvatarIcon } from "@chakra-ui/icons";
 import { dateAndHrConverter } from "../../../utils/utils";
-import { useControleAtividades } from "../../../contexts/ControleAtividadesContext";
-import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
+import { useControleAtividades } from "../../../hooks/useControleAtividades";
+import { useAtividadesContrato } from "../../../hooks/useAtividadesContrato";
 import { useUsuarios } from "../../../hooks/useUsuarios";
 
 export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {

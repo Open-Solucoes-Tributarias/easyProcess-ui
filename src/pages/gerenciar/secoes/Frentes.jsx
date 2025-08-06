@@ -24,7 +24,7 @@ import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
 import { useFrentes } from '../../../hooks/useFrentes';
 import { useAtividades } from '../../../hooks/useAtividades';
-import { useFrenteDeTrabalhoAtv } from '../../../contexts/FrentesAtividades';
+import { useFrenteDeTrabalhoAtv } from '../../../hooks/useFrentesAtividades';
 
 export const FrentesTrabalho = () => {
   const {
