@@ -23,7 +23,7 @@ import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
 import { useContrato } from '../../../contexts/ContratosContext';
 import { useCliente } from '../../../contexts/ClientesContext';
-import { useUsuarios } from '../../../contexts/UsuariosContext';
+import { useUsuarios } from '../../../hooks/useUsuarios';
 
 export const Contratos = () => {
   const {

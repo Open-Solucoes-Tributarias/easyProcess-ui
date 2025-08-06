@@ -36,7 +36,7 @@ import { GenericAvatarIcon } from "@chakra-ui/icons";
 import { dateAndHrConverter } from "../../../utils/utils";
 import { useControleAtividades } from "../../../contexts/ControleAtividadesContext";
 import { useAtividadesContrato } from "../../../contexts/AtividadesContratoContext";
-import { useUsuarios } from "../../../contexts/UsuariosContext";
+import { useUsuarios } from "../../../hooks/useUsuarios";
 
 export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
 

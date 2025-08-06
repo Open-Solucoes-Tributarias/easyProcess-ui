@@ -24,7 +24,7 @@ import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../../components/DialogModal';
 import { getPerfilLabel } from '../../../utils/labelUtils';
 import { Informativo } from '../../../components/Informativo';
-import { useUsuarios } from '../../../contexts/UsuariosContext';
+import { useUsuarios } from '../../../hooks/useUsuarios';
 
 export const Usuarios = () => {
   const {

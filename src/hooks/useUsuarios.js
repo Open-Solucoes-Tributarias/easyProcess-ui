@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   buscarUsuarios,
   registrarUsuario,
@@ -6,71 +6,62 @@ import {
   deletarUsuario,
 } from "../services/usuarioService";
 
-const UsuariosContext = createContext();
-
 const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
 
 export const usuarioInicial = {
   id: 0,
   nome: "",
   email: "",
-  senha: "", 
+  senha: "",
   empresaId: empresaId,
-  perfil: 2, // padrão: colaborador
+  perfil: 2,
 };
 
-export const UsuariosProvider = ({ children }) => {
+export const useUsuarios = () => {
   const [usuarios, setUsuarios] = useState([]);
   const [usuarioSelecionado, setUsuarioSelecionado] = useState(usuarioInicial);
   const [usuarioIsEditOpen, setUsuarioIsEditOpen] = useState(false);
   const [usuarioModoEdicao, setUsuarioModoEdicao] = useState(false);
   const [usuarioLoading, setUsuarioLoading] = useState(false);
 
-  // Listar todos os usuários
   const listarUsuarios = async () => {
     try {
       const dados = await buscarUsuarios();
-      setUsuarios(dados);
+      setUsuarios(dados);     
     } catch (err) {
       console.error("Erro ao listar usuários", err);
     }
   };
 
-  // Manipular campos do formulário
   const handleChangeUsuario = (e) => {
     const { name, value } = e.target;
     setUsuarioSelecionado((prev) => ({
       ...prev,
-      [name]:  name === 'perfil' ? Number(value) : value, //trata numeros que vem de um select
+      [name]: name === "perfil" ? Number(value) : value,
     }));
   };
 
-  // Abrir modal para cadastro
   const usuarioAbrirCadastro = () => {
     setUsuarioSelecionado(usuarioInicial);
     setUsuarioModoEdicao(false);
     setUsuarioIsEditOpen(true);
   };
 
-  // Abrir modal para edição
   const usuarioAbrirEdicao = (usuario) => {
     setUsuarioSelecionado(usuario);
     setUsuarioModoEdicao(true);
     setUsuarioIsEditOpen(true);
   };
 
-  // Salvar usuário (criação ou edição)
   const salvarUsuario = async () => {
     try {
       setUsuarioLoading(true);
-
       if (usuarioModoEdicao && usuarioSelecionado?.id && usuarioSelecionado.id !== 0) {
         await editarUsuario(usuarioSelecionado.id, usuarioSelecionado);
       } else {
         const novoUsuario = { ...usuarioSelecionado, id: 0 };
         await registrarUsuario(novoUsuario);
       }
-
       await listarUsuarios();
       setUsuarioIsEditOpen(false);
     } catch (err) {
@@ -80,13 +71,12 @@ export const UsuariosProvider = ({ children }) => {
     }
   };
 
-  // Excluir usuário
   const excluirUsuario = async (id) => {
     try {
       setUsuarioLoading(true);
       await deletarUsuario(id);
-      setUsuarioIsEditOpen(false);
       await listarUsuarios();
+      setUsuarioIsEditOpen(false);
     } catch (err) {
       console.error("Erro ao excluir usuário", err);
     } finally {
@@ -95,31 +85,25 @@ export const UsuariosProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    listarUsuarios();
+    if (usuarios.length === 0) {
+      listarUsuarios();
+    }
   }, []);
 
-  return (
-    <UsuariosContext.Provider
-      value={{
-        usuarios,
-        usuarioSelecionado,
-        setUsuarioSelecionado,
-        usuarioIsEditOpen,
-        setUsuarioIsEditOpen,
-        usuarioModoEdicao,
-        usuarioLoading,
-        listarUsuarios,
-        usuarioAbrirCadastro,
-        usuarioAbrirEdicao,
-        salvarUsuario,
-        excluirUsuario,
-        handleChangeUsuario,
-        usuarioInicial,
-      }}
-    >
-      {children}
-    </UsuariosContext.Provider>
-  );
+  return {
+    usuarios,
+    usuarioSelecionado,
+    setUsuarioSelecionado,
+    usuarioIsEditOpen,
+    setUsuarioIsEditOpen,
+    usuarioModoEdicao,
+    usuarioLoading,
+    listarUsuarios,
+    usuarioAbrirCadastro,
+    usuarioAbrirEdicao,
+    salvarUsuario,
+    excluirUsuario,
+    handleChangeUsuario,
+    usuarioInicial,
+  };
 };
-
-export const useUsuarios = () => useContext(UsuariosContext);

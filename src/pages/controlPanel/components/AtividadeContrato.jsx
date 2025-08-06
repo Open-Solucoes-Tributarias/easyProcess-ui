@@ -16,7 +16,7 @@ import { useAtividadesContrato } from '../../../contexts/AtividadesContratoConte
 import { useContrato } from '../../../contexts/ContratosContext';
 import { useEffect } from 'react';
 import { useAtividades } from '../../../contexts/AtividadesContext';
-import { useUsuarios } from '../../../contexts/UsuariosContext';
+import { useUsuarios } from '../../../hooks/useUsuarios';
 import { GenericAvatarIcon } from '@chakra-ui/icons';
 
 export const AtividadeContrato = ({ isOpen, onClose }) => {
