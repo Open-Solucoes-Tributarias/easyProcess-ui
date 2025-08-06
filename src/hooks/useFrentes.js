@@ -1,22 +1,20 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   buscarFrentes,
   registrarFrente,
   editarFrente,
-  removerFrente, 
+  removerFrente,
 } from "../services/frentesTrabalho";
 
-const FrentesContext = createContext();
+const empresaId = JSON.parse(localStorage.getItem("user"))?.empresaId;
 
-const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
-
-const frenteInicial = {
+export const frenteInicial = {
   id: 0,
   nome: "",
   empresaId: empresaId,
 };
 
-export const FrentesProvider = ({ children }) => {
+export const useFrentes = () => {
   const [frentes, setFrentes] = useState([]);
   const [frenteAtual, setFrenteAtual] = useState(frenteInicial);
   const [frenteIsEditOpen, setFrenteIsEditOpen] = useState(false);
@@ -90,29 +88,21 @@ export const FrentesProvider = ({ children }) => {
     listarFrentes();
   }, []);
 
-  return (
-    <FrentesContext.Provider
-      value={{
-        frentes,
-        frenteAtual,
-        frenteInicial,
-        frenteIsEditOpen,
-        frenteModoEdicao,
-        loadingFrentes,
-        setFrenteAtual,
-        setFrenteIsEditOpen,
-        setFrenteModoEdicao,
-        listarFrentes,
-        salvarFrente,
-        deletarFrente,
-        frenteAbrirCadastro,
-        frenteAbrirEdicao,
-        handleChangeFrente,
-      }}
-    >
-      {children}
-    </FrentesContext.Provider>
-  );
+  return {
+    frentes,
+    frenteAtual,
+    frenteInicial,
+    frenteIsEditOpen,
+    frenteModoEdicao,
+    loadingFrentes,
+    setFrenteAtual,
+    setFrenteIsEditOpen,
+    setFrenteModoEdicao,
+    listarFrentes,
+    salvarFrente,
+    deletarFrente,
+    frenteAbrirCadastro,
+    frenteAbrirEdicao,
+    handleChangeFrente,
+  };
 };
-
-export const useFrentes = () => useContext(FrentesContext);

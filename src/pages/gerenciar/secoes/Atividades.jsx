@@ -23,8 +23,8 @@ import { FaPlus } from 'react-icons/fa';
 import { getTipoAtvLabel } from '../../../utils/labelUtils';
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
-import { useAtividades } from '../../../contexts/AtividadesContext';
-import { useFrentes } from '../../../contexts/FrentesContext';
+import { useAtividades } from '../../../hooks/useAtividades';
+import { useFrentes } from '../../../hooks/useFrentes';
 
 export const Atividades = () => {
     const {

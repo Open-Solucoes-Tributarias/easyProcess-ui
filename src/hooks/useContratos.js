@@ -1,45 +1,42 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   buscarContratos,
   registrarContrato,
   editarContrato,
   removerContrato,
-  buscarContratosGeral
+  buscarContratosGeral,
 } from "../services/contratosService";
 
-const ContratoContext = createContext();
-
-const empresaId = JSON.parse(localStorage.getItem('user'))?.empresaId;
+const empresaId = JSON.parse(localStorage.getItem("user"))?.empresaId;
 
 export const contratoInicial = {
   id: 0,
   clienteId: 0,
   empresaId: empresaId,
   supervisorUsuarioId: 0,
-  descricao: '',
+  descricao: "",
   dataInicio: new Date().toISOString(),
   dataFim: new Date().toISOString(),
-  nomeSupervisor: ''
+  nomeSupervisor: "",
 };
 
-export const ContratoProvider = ({ children }) => {
+export const useContrato = () => {
   const [contratos, setContratos] = useState([]);
-  const [contratosGeral, setContratosGeral] = useState([]); //lista geral sem alteração dinamica
+  const [contratosGeral, setContratosGeral] = useState([]);
   const [contratoSelecionado, setContratoSelecionado] = useState(contratoInicial);
   const [contratoIsEditOpen, setContratoIsEditOpen] = useState(false);
   const [contratoModoEdicao, setContratoModoEdicao] = useState(false);
   const [contratoLoading, setContratoLoading] = useState(false);
 
-  // Listar todos os contratos ou filtrando por cliente
   const listarContratos = async (clienteId = null, listarGeral = false) => {
     try {
       let dados;
       if (listarGeral || !clienteId) {
         dados = await buscarContratosGeral();
-        setContratosGeral(dados)
+        setContratosGeral(dados);
       } else {
         dados = await buscarContratos(clienteId);
-         setContratos(dados);
+        setContratos(dados);
       }
     } catch (err) {
       console.error("Erro ao listar contratos", err);
@@ -50,7 +47,7 @@ export const ContratoProvider = ({ children }) => {
     const { name, value } = e.target;
     setContratoSelecionado((prev) => ({
       ...prev,
-      [name]: name === 'clienteId' || name === 'supervisorUsuarioId' ? Number(value) : value
+      [name]: name === "clienteId" || name === "supervisorUsuarioId" ? Number(value) : value,
     }));
   };
 
@@ -100,32 +97,24 @@ export const ContratoProvider = ({ children }) => {
   };
 
   useEffect(() => {
-    listarContratos(); // por padrão, traz todos
+    listarContratos();
   }, []);
 
-  return (
-    <ContratoContext.Provider
-      value={{
-        contratos,
-        contratosGeral,
-        contratoSelecionado,
-        setContratoSelecionado,
-        contratoIsEditOpen,
-        setContratoIsEditOpen,
-        contratoModoEdicao,
-        contratoLoading,
-        contratoAbrirCadastro,
-        contratoAbrirEdicao,
-        salvarContrato,
-        excluirContrato,
-        listarContratos,
-        handleChangeContrato,
-        contratoInicial
-      }}
-    >
-      {children}
-    </ContratoContext.Provider>
-  );
+  return {
+    contratos,
+    contratosGeral,
+    contratoSelecionado,
+    setContratoSelecionado,
+    contratoIsEditOpen,
+    setContratoIsEditOpen,
+    contratoModoEdicao,
+    contratoLoading,
+    contratoAbrirCadastro,
+    contratoAbrirEdicao,
+    salvarContrato,
+    excluirContrato,
+    listarContratos,
+    handleChangeContrato,
+    contratoInicial,
+  };
 };
-
-export const useContrato = () => useContext(ContratoContext);

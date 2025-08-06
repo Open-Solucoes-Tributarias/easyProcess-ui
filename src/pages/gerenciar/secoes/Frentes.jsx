@@ -22,8 +22,8 @@ import { FaPlus } from 'react-icons/fa';
 
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
-import { useFrentes } from '../../../contexts/FrentesContext';
-import { useAtividades } from '../../../contexts/AtividadesContext';
+import { useFrentes } from '../../../hooks/useFrentes';
+import { useAtividades } from '../../../hooks/useAtividades';
 import { useFrenteDeTrabalhoAtv } from '../../../contexts/FrentesAtividades';
 
 export const FrentesTrabalho = () => {

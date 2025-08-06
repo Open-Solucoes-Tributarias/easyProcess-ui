@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   buscarAtividades,
   registrarAtividade,
@@ -6,26 +6,21 @@ import {
   removerAtividade,
 } from "../services/atividadesService";
 
-const AtividadesContext = createContext();
-
 const empresaId = JSON.parse(localStorage.getItem("user"))?.empresaId;
 
-// Tipo da atividade
-// 1 = única, 2 = recorrente
-
-const atividadeInicial = {
+export const atividadeInicial = {
   id: 0,
   nome: "",
   tipo: 1,
   periodo: 1,
   intervaloEmDias: 0,
-  proximaExecucao: new Date,
+  proximaExecucao: new Date(),
   empresaId: empresaId,
   instrucao: "",
   frenteDeTrabalhoIds: [],
 };
 
-export const AtividadesProvider = ({ children }) => {
+export const useAtividades = () => {
   const [atividades, setAtividades] = useState([]);
   const [atividadeAtual, setAtividadeAtual] = useState(atividadeInicial);
   const [atividadeIsEditOpen, setAtividadeIsEditOpen] = useState(false);
@@ -44,29 +39,23 @@ export const AtividadesProvider = ({ children }) => {
     }
   };
 
-const handleChangeAtividade = (e) => {
-  const { name, value } = e.target;
+  const handleChangeAtividade = (e) => {
+    const { name, value } = e.target;
+    let parsedValue = value;
 
-  let parsedValue = value;
+    if (name === "tipo") {
+      parsedValue = Number(value);
+    }
 
-  if (name === 'tipo') {
-    parsedValue = Number(value);
-  }
+    if (name === "frenteDeTrabalhoIds") {
+      parsedValue = value.map(Number); // garantir array numérico
+    }
 
-  if (name === 'frenteDeTrabalhoIds') {
-    parsedValue = value.map(Number); // garantir array numérico
-  }
-
-  if (name == '') {
-
-  }
-
-  setAtividadeAtual((prev) => ({
-    ...prev,
-    [name]: parsedValue,
-  }));
-};
-
+    setAtividadeAtual((prev) => ({
+      ...prev,
+      [name]: parsedValue,
+    }));
+  };
 
   const abrirCadastroAtividade = () => {
     setAtividadeAtual(atividadeInicial);
@@ -115,29 +104,21 @@ const handleChangeAtividade = (e) => {
     listarAtividades();
   }, []);
 
-  return (
-    <AtividadesContext.Provider
-      value={{
-        atividades,
-        atividadeAtual,
-        atividadeInicial,
-        atividadeIsEditOpen,
-        atividadeModoEdicao,
-        loadingAtividades,
-        setAtividadeAtual,
-        setAtividadeIsEditOpen,
-        setAtividadeModoEdicao,
-        listarAtividades,
-        salvarAtividade,
-        deletarAtividade,
-        abrirCadastroAtividade,
-        abrirEdicaoAtividade,
-        handleChangeAtividade,
-      }}
-    >
-      {children}
-    </AtividadesContext.Provider>
-  );
+  return {
+    atividades,
+    atividadeAtual,
+    atividadeInicial,
+    atividadeIsEditOpen,
+    atividadeModoEdicao,
+    loadingAtividades,
+    setAtividadeAtual,
+    setAtividadeIsEditOpen,
+    setAtividadeModoEdicao,
+    listarAtividades,
+    salvarAtividade,
+    deletarAtividade,
+    abrirCadastroAtividade,
+    abrirEdicaoAtividade,
+    handleChangeAtividade,
+  };
 };
-
-export const useAtividades = () => useContext(AtividadesContext);

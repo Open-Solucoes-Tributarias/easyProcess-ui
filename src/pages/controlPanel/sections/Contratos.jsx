@@ -16,8 +16,8 @@ import {
 } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
-import { useCliente } from '../../../contexts/ClientesContext';
-import { useContrato } from '../../../contexts/ContratosContext';
+import { useCliente } from '../../../hooks/useClientes';
+import { useContrato } from '../../../hooks/useContratos';
 import { RiContractFill } from 'react-icons/ri';
 import { dateConverter } from '../../../utils/utils';
 

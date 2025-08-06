@@ -20,7 +20,7 @@ import { FaPlus } from 'react-icons/fa';
 
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
-import { useCliente } from '../../../contexts/ClientesContext';
+import { useCliente } from '../../../hooks/useClientes';
 
 export const Clientes = () => {
   const {

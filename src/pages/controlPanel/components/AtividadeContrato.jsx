@@ -13,11 +13,10 @@ import {
 } from '@chakra-ui/react';
 import { DialogModal } from '../../../components/DialogModal';
 import { useAtividadesContrato } from '../../../contexts/AtividadesContratoContext';
-import { useContrato } from '../../../contexts/ContratosContext';
+import { useContrato } from '../../../hooks/useContratos';
 import { useEffect } from 'react';
-import { useAtividades } from '../../../contexts/AtividadesContext';
+import { useAtividades } from '../../../hooks/useAtividades';
 import { useUsuarios } from '../../../hooks/useUsuarios';
-import { GenericAvatarIcon } from '@chakra-ui/icons';
 
 export const AtividadeContrato = ({ isOpen, onClose }) => {
   const {

@@ -21,8 +21,8 @@ import { FaPlus } from 'react-icons/fa';
 
 import { DialogModal } from '../../../components/DialogModal';
 import { Informativo } from '../../../components/Informativo';
-import { useContrato } from '../../../contexts/ContratosContext';
-import { useCliente } from '../../../contexts/ClientesContext';
+import { useContrato } from '../../../hooks/useContratos';
+import { useCliente } from '../../../hooks/useClientes';
 import { useUsuarios } from '../../../hooks/useUsuarios';
 
 export const Contratos = () => {
