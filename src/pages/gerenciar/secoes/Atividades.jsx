@@ -82,7 +82,7 @@ export const Atividades = () => {
 
     return (
         <>
-            <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={10}>
+            <Grid templateColumns={{ base: '1fr' }} gap={10}>
                 <GridItem>
                     <Text as="b" fontSize="xl">
                         Atividades
@@ -99,15 +99,7 @@ export const Atividades = () => {
                     <Flex style={styles.content}>
                         <ListaAtividades />
                     </Flex>
-                </GridItem>
-
-                <GridItem>
-                    <Informativo
-                        tipo="info"
-                        titulo="Gerenciamento de Atividades"
-                        mensagem="Atividades representam ações recorrentes ou pontuais vinculadas a frentes de trabalho. Você pode definir tipo, instrução da atividade e recorrência."
-                    />
-                </GridItem>
+                </GridItem>          
             </Grid>
 
             <DialogModal

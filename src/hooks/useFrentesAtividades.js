@@ -50,7 +50,7 @@ export const useFrenteDeTrabalhoAtv = () => {
 
   const frenteAtvAbrirEdicao = async (frente) => {
     const atividadesVinculadas = await listarFrentesAtv(frente.id);
-    const atividadeIds = atividadesVinculadas.map((item) => item.atividadeId);
+    const atividadeIds = atividadesVinculadas.map((item) => Number(item.atividadeId));
 
     frenteAbrirEdicao({
       ...frente,

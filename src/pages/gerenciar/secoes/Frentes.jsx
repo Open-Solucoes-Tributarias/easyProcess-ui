@@ -25,6 +25,7 @@ import { Informativo } from '../../../components/Informativo';
 import { useFrentes } from '../../../hooks/useFrentes';
 import { useAtividades } from '../../../hooks/useAtividades';
 import { useFrenteDeTrabalhoAtv } from '../../../hooks/useFrentesAtividades';
+import { Atividades } from './Atividades';
 
 export const FrentesTrabalho = () => {
   const {
@@ -116,11 +117,7 @@ export const FrentesTrabalho = () => {
         </GridItem>
 
         <GridItem>
-          <Informativo
-            tipo="info"
-            titulo="Frentes de Trabalho"
-            mensagem="Frentes de trabalho representam as áreas, categorias, ou qualquer outra divisão organizacional e podem ser atribuídas a contratos e clientes como um grupo de atividades pré-definidas..."
-          />
+          <Atividades />
         </GridItem>
       </Grid>
 
