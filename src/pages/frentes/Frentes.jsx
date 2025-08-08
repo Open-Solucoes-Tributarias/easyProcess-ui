@@ -1,17 +1,19 @@
 import { useEffect, useMemo, useState } from "react";
 import {
-  Box,
-  Button,
-  Checkbox,
-  Flex,
-  HStack,
-  Spinner,
-  Text,
-  Tooltip,
-  useToast,
-  Switch,
-  VStack,
-  IconButton,
+    Box,
+    Button,
+    Checkbox,
+    Flex,
+    HStack,
+    Spinner,
+    Text,
+    Tooltip,
+    useToast,
+    Switch,
+    VStack,
+    IconButton,
+    Avatar,
+    AvatarBadge,
 } from "@chakra-ui/react";
 
 import { useFrentes } from "../../hooks/useFrentes";
@@ -19,249 +21,310 @@ import { useAtividades } from "../../hooks/useAtividades";
 
 // importe o serviço diretamente (igual no hook useAtividades)
 import { editarAtividade } from "../../services/atividadesService";
-import { FaSync } from "react-icons/fa";
+import { FaPlus, FaSync } from "react-icons/fa";
+import { AtvEditModal } from "../../components/AtvEditModal";
+import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 
 export const Frentes = () => {
-  const toast = useToast();
+    const toast = useToast();
 
-  const { frentes, loadingFrentes, listarFrentes } = useFrentes();
-  const { atividades, loadingAtividades, listarAtividades } = useAtividades();
+    const { frentes, loadingFrentes, listarFrentes } = useFrentes();
+    const { atividades, loadingAtividades, listarAtividades } = useAtividades();
 
-  const [frenteSelecionadaId, setFrenteSelecionadaId] = useState(null);
+    const [frenteSelecionadaId, setFrenteSelecionadaId] = useState(null);
 
-  // state com seleções (atividadeId -> bool) para a frente selecionada
-  const [selecionadas, setSelecionadas] = useState({});
-  // snapshot para comparar o que mudou (evita update desnecessário)
-  const [snapshotSelecionadas, setSnapshotSelecionadas] = useState({});
+    // state com seleções (atividadeId -> bool) para a frente selecionada
+    const [selecionadas, setSelecionadas] = useState({});
+    // snapshot para comparar o que mudou (evita update desnecessário)
+    const [snapshotSelecionadas, setSnapshotSelecionadas] = useState({});
 
-  // mostrar apenas as atividades que já pertencem à frente ou todas
-  const [mostrarTodasAtividades, setMostrarTodasAtividades] = useState(false);
+    // mostrar apenas as atividades que já pertencem à frente ou todas
+    const [mostrarTodasAtividades, setMostrarTodasAtividades] = useState(false);
 
-  // quando carregar listas inicialmente, define frente padrão (primeira)
-  useEffect(() => {
-    if (!loadingFrentes && frentes?.length && frenteSelecionadaId == null) {
-      setFrenteSelecionadaId(frentes[0].id);
-    }
-  }, [loadingFrentes, frentes, frenteSelecionadaId]);
+    //state para modal atividades
+    const [isOpen, setIsOpen] = useState(false);
+    const [selecionada, setSelecionada] = useState(null);  // null => criar, objeto => editar
 
-  // sempre que trocar de frente OU recarregar atividades,
-  // recalcula o mapa de seleção baseado no campo frenteDeTrabalhoIds.
-  useEffect(() => {
-    if (!frenteSelecionadaId || !atividades?.length) {
-      setSelecionadas({});
-      setSnapshotSelecionadas({});
-      return;
-    }
+    // quando carregar listas inicialmente, define frente padrão (primeira)
+    useEffect(() => {
+        if (!loadingFrentes && frentes?.length && frenteSelecionadaId == null) {
+            setFrenteSelecionadaId(frentes[0].id);
+        }
+    }, [loadingFrentes, frentes, frenteSelecionadaId]);
 
-    const novoMapa = {};
-    atividades.forEach((atv) => {
-      const ids = Array.isArray(atv?.frenteDeTrabalhoIds) ? atv.frenteDeTrabalhoIds : [];
-      novoMapa[atv.id] = ids.includes(frenteSelecionadaId);
-    });
+    // sempre que trocar de frente OU recarregar atividades,
+    // recalcula o mapa de seleção baseado no campo frenteDeTrabalhoIds.
+    useEffect(() => {
+        if (!frenteSelecionadaId || !atividades?.length) {
+            setSelecionadas({});
+            setSnapshotSelecionadas({});
+            return;
+        }
 
-    setSelecionadas(novoMapa);
-    setSnapshotSelecionadas(novoMapa);
-  }, [frenteSelecionadaId, atividades]);
+        const novoMapa = {};
+        atividades.forEach((atv) => {
+            const ids = Array.isArray(atv?.frenteDeTrabalhoIds) ? atv.frenteDeTrabalhoIds : [];
+            novoMapa[atv.id] = ids.includes(frenteSelecionadaId);
+        });
 
-  const loading = loadingFrentes || loadingAtividades;
+        setSelecionadas(novoMapa);
+        setSnapshotSelecionadas(novoMapa);
+    }, [frenteSelecionadaId, atividades]);
 
-  // lista filtrada conforme o toggle "mostrar todas"
-  const atividadesFiltradas = useMemo(() => {
-    if (!atividades?.length || !frenteSelecionadaId) return [];
-    if (mostrarTodasAtividades) return atividades;
+    const loading = loadingFrentes || loadingAtividades;
 
-    // mostrar somente as que já possuem a frente
-    return atividades.filter((atv) =>
-      Array.isArray(atv?.frenteDeTrabalhoIds) &&
-      atv.frenteDeTrabalhoIds.includes(frenteSelecionadaId)
-    );
-  }, [atividades, frenteSelecionadaId, mostrarTodasAtividades]);
+    //handles modal atividade
+    const abrirNovo = () => { setSelecionada(null); setIsOpen(true); };
+    const abrirEdicao = (atv) => { setSelecionada(atv); setIsOpen(true); };
 
-  const handleToggleAtividade = (atividadeId) => {
-    setSelecionadas((prev) => ({
-      ...prev,
-      [atividadeId]: !prev[atividadeId],
-    }));
-  };
+    // lista filtrada conforme o toggle "mostrar todas"
+    const atividadesFiltradas = useMemo(() => {
+        if (!atividades?.length || !frenteSelecionadaId) return [];
+        if (mostrarTodasAtividades) return atividades;
 
-  const handleSalvar = async () => {
-    if (!frenteSelecionadaId) return;
+        // mostrar somente as que já possuem a frente
+        return atividades.filter((atv) =>
+            Array.isArray(atv?.frenteDeTrabalhoIds) &&
+            atv.frenteDeTrabalhoIds.includes(frenteSelecionadaId)
+        );
+    }, [atividades, frenteSelecionadaId, mostrarTodasAtividades]);
 
-    // descobrir o que mudou
-    const mudouIds = Object.keys(selecionadas).filter(
-      (id) => selecionadas[id] !== snapshotSelecionadas[id]
-    );
+    const handleToggleAtividade = (atividadeId) => {
+        setSelecionadas((prev) => ({
+            ...prev,
+            [atividadeId]: !prev[atividadeId],
+        }));
+    };
 
-    if (!mudouIds.length) {
-      toast({
-        title: "Nada para salvar",
-        status: "info",
-        duration: 2500,
-        isClosable: true,
-      });
-      return;
-    }
+    const handleSalvar = async () => {
+        if (!frenteSelecionadaId) return;
 
-    try {
-      // atualiza apenas as que mudaram
-      await Promise.all(
-        mudouIds.map(async (idStr) => {
-          const id = Number(idStr);
-          const atividadeOriginal = atividades.find((a) => a.id === id);
-          if (!atividadeOriginal) return;
+        // descobrir o que mudou
+        const mudouIds = Object.keys(selecionadas).filter(
+            (id) => selecionadas[id] !== snapshotSelecionadas[id]
+        );
 
-          const atualJaTem =
-            Array.isArray(atividadeOriginal.frenteDeTrabalhoIds) &&
-            atividadeOriginal.frenteDeTrabalhoIds.includes(frenteSelecionadaId);
+        if (!mudouIds.length) {
+            toast({
+                title: "Nada para salvar",
+                status: "info",
+                duration: 2500,
+                isClosable: true,
+            });
+            return;
+        }
 
-          let novoArray = Array.isArray(atividadeOriginal.frenteDeTrabalhoIds)
-            ? [...atividadeOriginal.frenteDeTrabalhoIds]
-            : [];
+        try {
+            // atualiza apenas as que mudaram
+            await Promise.all(
+                mudouIds.map(async (idStr) => {
+                    const id = Number(idStr);
+                    const atividadeOriginal = atividades.find((a) => a.id === id);
+                    if (!atividadeOriginal) return;
 
-          const deveTer = selecionadas[idStr] === true;
+                    const atualJaTem =
+                        Array.isArray(atividadeOriginal.frenteDeTrabalhoIds) &&
+                        atividadeOriginal.frenteDeTrabalhoIds.includes(frenteSelecionadaId);
 
-          if (deveTer && !atualJaTem) {
-            novoArray.push(frenteSelecionadaId);
-          } else if (!deveTer && atualJaTem) {
-            novoArray = novoArray.filter((fid) => fid !== frenteSelecionadaId);
-          }
+                    let novoArray = Array.isArray(atividadeOriginal.frenteDeTrabalhoIds)
+                        ? [...atividadeOriginal.frenteDeTrabalhoIds]
+                        : [];
 
-          // monta payload preservando o resto dos campos
-          const payload = {
-            ...atividadeOriginal,
-            frenteDeTrabalhoIds: novoArray,
-          };
+                    const deveTer = selecionadas[idStr] === true;
 
-          await editarAtividade(atividadeOriginal.id, payload);
-        })
-      );
+                    if (deveTer && !atualJaTem) {
+                        novoArray.push(frenteSelecionadaId);
+                    } else if (!deveTer && atualJaTem) {
+                        novoArray = novoArray.filter((fid) => fid !== frenteSelecionadaId);
+                    }
 
-      // recarrega listas e reseta snapshot
-      await listarAtividades();
-      toast({
-        title: "Atividades atualizadas",
-        status: "success",
-        duration: 2500,
-        isClosable: true,
-      });
-    } catch (err) {
-      console.error(err);
-      toast({
-        title: "Erro ao salvar",
-        description: "Tente novamente em alguns instantes.",
-        status: "error",
-        duration: 3000,
-        isClosable: true,
-      });
-    }
-  };
+                    // monta payload preservando o resto dos campos
+                    const payload = {
+                        ...atividadeOriginal,
+                        frenteDeTrabalhoIds: novoArray,
+                    };
 
-  return (
-    <Flex direction="row" gap={4} justifyContent="space-between" p={5}>
-      {/* Esquerda: Frentes */}
-      <Flex direction="column" w="35%" gap={3}>
-        <HStack justify="space-between">
-                  <Text fontWeight={800}>Frentes de trabalho</Text>
-                  <IconButton size='sm' variant='ghost' onClick={listarFrentes}>
-                      <FaSync />
-                  </IconButton>
-              </HStack>
+                    await editarAtividade(atividadeOriginal.id, payload);
+                })
+            );
 
-        {loading ? (
-          <Spinner />
-        ) : (
-          <VStack align="stretch" spacing={3}>
-            {frentes?.map((ft) => {
-              const isActive = frenteSelecionadaId === ft.id;
-              return (
-                <Box
-                  key={ft.id}
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  cursor="pointer"
-                  onClick={() => setFrenteSelecionadaId(ft.id)}
-                  bg={isActive ? "blue.50" : "white"}
-                  borderColor={isActive ? "blue.400" : "gray.200"}
-                  _hover={{ shadow: "md" }}
-                >
-                  <Text fontWeight={700}>{ft?.nome}</Text>                 
-                </Box>
-              );
-            })}
-            {!frentes?.length && (
-              <Text color="gray.500">Nenhuma frente cadastrada.</Text>
-            )}
-          </VStack>
-        )}
-      </Flex>
+            // recarrega listas e reseta snapshot
+            await listarAtividades();
+            toast({
+                title: "Atividades atualizadas",
+                status: "success",
+                duration: 2500,
+                isClosable: true,
+            });
+        } catch (err) {
+            console.error(err);
+            toast({
+                title: "Erro ao salvar",
+                description: "Tente novamente em alguns instantes.",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+        }
+    };
 
-      {/* Direita: Atividades */}
-      <Flex direction="column" w="60%" gap={3}>
-        <HStack justify="space-between" align="center">
-          <Text fontWeight={800}>
-            Atividades
-          </Text>
-          <HStack>
-            <Tooltip label="Exibe todas as atividades para permitir incluir/remover da frente selecionada">
-              <HStack>
-                <Text fontSize="sm">Mostrar todas</Text>
-                <Switch
-                  isChecked={mostrarTodasAtividades}
-                  onChange={(e) => setMostrarTodasAtividades(e.target.checked)}
-                />
-              </HStack>
-            </Tooltip>
-            <IconButton size='sm' variant='ghost' onClick={listarAtividades}>
-                <FaSync />
-            </IconButton>
-          </HStack>
-        </HStack>
+    return (
+        <Flex direction="row" gap={4} justifyContent="space-between" p={5}>
+            {/* Esquerda: Frentes */}
+            <Flex direction="column" w="35%" gap={3}>              
+                  <HStack spacing={1}>
+                        <Text as="b" fontSize="xl">
+                            Frentes de trabalho
+                        </Text>
+                        <Button
+                            variant="text"
+                            color="#68D391"
+                            leftIcon={<FaPlus />}
+                            // onClick={() => {
+                            //     abrirNovo()
+                            // }}
+                        >
+                            Adicionar
+                        </Button>
+                    </HStack>
 
-        {loading ? (
-          <Spinner />
-        ) : (
-          <VStack align="stretch" spacing={2} maxH="65vh" overflowY="auto" p={2} borderWidth="1px" borderRadius="lg">
-            {atividadesFiltradas?.map((atv) => {
-              const checked = !!selecionadas[atv.id]; // true se pertence à frente
-              return (
-                <HStack
-                  key={atv.id}
-                  p={3}
-                  borderWidth="1px"
-                  borderRadius="md"
-                  justify="space-between"
-                >
-                  <VStack align="start" spacing={0}>
-                    <Text fontWeight={600}>{atv?.nome}</Text>                    
-                  </VStack>
+                {loading ? (
+                    <Spinner />
+                ) : (
+                    <VStack align="stretch" spacing={3}>
+                        {frentes?.map((ft) => {
+                            const isActive = frenteSelecionadaId === ft.id;
+                            return (
+                                <Box
+                                    key={ft.id}
+                                    p={4}
+                                    borderWidth="1px"
+                                    borderRadius="lg"
+                                    cursor="pointer"
+                                    onClick={() => setFrenteSelecionadaId(ft.id)}
+                                    bg={isActive ? "#68d3912a" : "white"}
+                                    borderColor={isActive ? "#68D391" : "gray.200"}
+                                    _hover={{ shadow: "md" }}
+                                >
+                                    <Text fontWeight={700}>{ft?.nome}</Text>
+                                </Box>
+                            );
+                        })}
+                        {!frentes?.length && (
+                            <Text color="gray.500">Nenhuma frente cadastrada.</Text>
+                        )}
+                    </VStack>
+                )}
+            </Flex>
 
-                  <Checkbox
-                    isChecked={checked}
-                    onChange={() => handleToggleAtividade(atv.id)}
-                  >
-                    Vinculada à frente
-                  </Checkbox>
+            {/* Direita: Atividades */}
+            <Flex direction="column" w="60%" gap={3}>
+                <Flex justify="space-between" align="center">
+                    {/* ESQUERDA: título + botão */}
+                    <HStack spacing={1}>
+                        <Text as="b" fontSize="xl">
+                            Atividades
+                        </Text>
+                        <Button
+                            variant="text"
+                            color="#68D391"
+                            leftIcon={<FaPlus />}
+                            onClick={() => {
+                                abrirNovo()
+                            }}
+                        >
+                            Adicionar
+                        </Button>
+                    </HStack>
+
+                    {/* DIREITA: switch + sync */}
+                    <HStack>
+                        <Tooltip label="Exibe todas as atividades para permitir incluir/remover da frente selecionada">
+                            <HStack>
+                                <Text fontSize="sm">Mostrar todas</Text>
+                                <Switch
+                                    isChecked={mostrarTodasAtividades}
+                                    onChange={(e) => setMostrarTodasAtividades(e.target.checked)}
+                                />
+                            </HStack>
+                        </Tooltip>
+                        <IconButton
+                            size="sm"
+                            variant="ghost"
+                            icon={<FaSync />}
+                            aria-label="Recarregar atividades"
+                            onClick={listarAtividades}
+                        />
+                    </HStack>
+                </Flex>
+
+
+                {loading ? (
+                    <Spinner />
+                ) : (
+                    <VStack align="stretch" spacing={2} maxH="65vh" overflowY="auto" p={2} borderWidth="1px" borderRadius="lg">
+                        {atividadesFiltradas?.map((atv) => {
+                            const checked = !!selecionadas[atv.id]; // true se pertence à frente
+                            return (
+                                <Flex
+                                    key={atv.id}
+                                    direction="row"
+                                    align="center"
+                                    p={3}
+                                    borderWidth="1px"
+                                    borderRadius="md"
+                                    justify="space-between"
+                                >
+                                    {/* ESQUERDA: Checkbox com nome */}
+                                    <Checkbox
+                                        isChecked={checked}
+                                        onChange={() => handleToggleAtividade(atv.id)}
+                                    >
+                                        <Text fontWeight={600}>{atv?.nome}</Text>
+                                    </Checkbox>
+
+                                    {/* DIREITA: Botões de ação */}
+                                    <Flex gap={2}>
+                                        <IconButton
+                                            aria-label="Editar"
+                                            icon={<EditIcon />}
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => {
+                                                setSelecionada(atv);
+                                                setIsOpen(true);
+                                            }}
+                                        />
+                                    </Flex>
+                                </Flex>
+
+                            );
+                        })}
+
+                        {!atividadesFiltradas?.length && (
+                            <Text color="gray.500">
+                                {mostrarTodasAtividades
+                                    ? "Nenhuma atividade cadastrada."
+                                    : "Nenhuma atividade vinculada a esta frente."}
+                            </Text>
+                        )}
+                    </VStack>
+                )}
+
+                <HStack justify="flex-end">
+                    <Button colorScheme="blue" onClick={handleSalvar} isDisabled={!frenteSelecionadaId || loading}>
+                        Salvar alterações
+                    </Button>
                 </HStack>
-              );
-            })}
+            </Flex>
 
-            {!atividadesFiltradas?.length && (
-              <Text color="gray.500">
-                {mostrarTodasAtividades
-                  ? "Nenhuma atividade cadastrada."
-                  : "Nenhuma atividade vinculada a esta frente."}
-              </Text>
-            )}
-          </VStack>
-        )}
-
-        <HStack justify="flex-end">
-          <Button colorScheme="blue" onClick={handleSalvar} isDisabled={!frenteSelecionadaId || loading}>
-            Salvar alterações
-          </Button>
-        </HStack>
-      </Flex>
-    </Flex>
-  );
+            {/* modal de edição de atividades */}
+            <AtvEditModal
+                isOpen={isOpen}
+                onClose={() => setIsOpen(false)}
+                atividade={selecionada}         // null -> criar | objeto -> editar
+                onSaved={listarAtividades}      // recarrega após salvar/excluir
+            />
+        </Flex>
+    );
 };

@@ -69,6 +69,16 @@ const theme = extendTheme({
         },
       },
     },
+    Checkbox: {
+      defaultProps: {
+        colorScheme: 'green'
+      }
+    },
+    Switch: {
+      defaultProps: {
+        colorScheme: 'green'
+      }
+    }
   }
 });
 
