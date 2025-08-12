@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+// useContratos (ajustado)
+import { useEffect, useState, useCallback } from "react";
 import {
   buscarContratos,
   registrarContrato,
@@ -28,20 +29,25 @@ export const useContrato = () => {
   const [contratoModoEdicao, setContratoModoEdicao] = useState(false);
   const [contratoLoading, setContratoLoading] = useState(false);
 
-  const listarContratos = async (clienteId = null, listarGeral = false) => {
+  const listarContratos = useCallback(async (clienteId = null, listarGeral = false) => {
+    setContratoLoading(true);
     try {
       let dados;
       if (listarGeral || !clienteId) {
         dados = await buscarContratosGeral();
         setContratosGeral(dados);
+        // IMPORTANTE: também preencher "contratos"
+        setContratos(dados);
       } else {
         dados = await buscarContratos(clienteId);
         setContratos(dados);
       }
     } catch (err) {
       console.error("Erro ao listar contratos", err);
+    } finally {
+      setContratoLoading(false);
     }
-  };
+  }, []);
 
   const handleChangeContrato = (e) => {
     const { name, value } = e.target;
@@ -96,9 +102,10 @@ export const useContrato = () => {
     }
   };
 
+  // Carrega geral uma única vez
   useEffect(() => {
-    listarContratos();
-  }, []);
+    listarContratos(null, true);
+  }, [listarContratos]);
 
   return {
     contratos,

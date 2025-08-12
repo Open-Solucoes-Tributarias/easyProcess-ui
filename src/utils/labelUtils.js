@@ -1,7 +1,5 @@
 //filtro de labels de perfil do usuario
 
-import { Atividades } from "../pages/gerenciar/secoes/Atividades";
-
 const perfilLabels = {
   0: "Administrador do sistema",
   1: "Administrador",

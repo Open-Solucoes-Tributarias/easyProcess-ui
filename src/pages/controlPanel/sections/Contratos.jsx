@@ -1,18 +1,17 @@
 'use client';
-import { useState } from 'react';
+import React from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import {
-  Accordion,
-  AccordionButton,
-  AccordionIcon,
-  AccordionItem,
-  AccordionPanel,
   Avatar,
   Box,
   Flex,
   Grid,
   GridItem,
   Heading,
-  Text
+  Stack,
+  Tag,
+  TagLabel,
+  Text,
 } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
@@ -21,21 +20,56 @@ import { useContrato } from '../../../hooks/useContratos';
 import { RiContractFill } from 'react-icons/ri';
 import { dateConverter } from '../../../utils/utils';
 
-export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }) => {
+// Debounce simples sem libs
+function useDebouncedValue(value, delay = 300) {
+  const [v, setV] = useState(value);
+  React.useEffect(() => {
+    const id = setTimeout(() => setV(value), delay);
+    return () => clearTimeout(id);
+  }, [value, delay]);
+  return v;
+}
+
+export const Contratos = ({ onSelectContrato }) => {
   const [filtro, setFiltro] = useState('');
+  const debouncedFiltro = useDebouncedValue(filtro, 300);
 
   const { clientes } = useCliente();
+  const { contratos, contratoLoading } = useContrato();
 
-  const {
-    contratos,
-    listarContratos,
-    contratoLoading
-  } = useContrato();
+  // Mapa de clientes por id
+  const clientById = useMemo(() => {
+    const map = new Map();
+    for (const c of clientes || []) map.set(c.id, c);
+    return map;
+  }, [clientes]);
+
+  const norm = (s) => (s || '').toString().toLowerCase();
+
+  const contratosFiltrados = useMemo(() => {
+    const lista = contratos || [];
+    if (!debouncedFiltro) return lista;
+
+    const q = norm(debouncedFiltro);
+    return lista.filter((ctr) => {
+      const cli = clientById.get(ctr.clienteId);
+      const hitCliente =
+        cli &&
+        (norm(cli.razaoSocial).includes(q) || norm(cli.cnpj).includes(q));
+      const hitContrato = norm(ctr.descricao).includes(q);
+      return hitCliente || hitContrato;
+    });
+  }, [contratos, clientById, debouncedFiltro]);
+
+  const handleClickContrato = useCallback((ctr) => {
+    onSelectContrato?.(ctr);
+  }, [onSelectContrato]);
 
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>
       <GridItem>
         <SearchInput
+          placeholder="Filtrar por cliente (razão social, CNPJ) ou contrato"
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
@@ -46,64 +80,62 @@ export const Contratos = ({ handleSelecionarCliente, handleContratoSelecionado }
           <Text fontStyle="italic" color="gray.500">
             Carregando contratos...
           </Text>
-        ) : clientes.length === 0 ? (
+        ) : (contratos?.length || 0) === 0 ? (
           <Informativo />
+        ) : (contratosFiltrados?.length || 0) === 0 ? (
+          <Box px={4}>
+            <Informativo
+              titulo="Nada encontrado"
+              mensagem="Ajuste o filtro e tente novamente."
+            />
+          </Box>
         ) : (
-          <Accordion allowToggle>
-           {clientes
-  .filter((cliente) =>
-    cliente?.razaoSocial?.toLowerCase().includes(filtro.toLowerCase()) ||
-    cliente?.cnpj?.toLowerCase().includes(filtro.toLowerCase())
-  )
-  .map((cliente, index) => (
-              <AccordionItem key={index} border='none' paddingBlock={1}>
-                <h2>
-                  <AccordionButton
-                    onClick={() => {
-                      handleSelecionarCliente(cliente);
-                      listarContratos(cliente.id); // função do context
-                    }}
-                    border='1px solid' borderColor='#d0d0d0' borderRadius={10}
-                  >
-                    <AccordionIcon />
-                    <Box as='span' pl={4} textAlign='left'>
-                      <Heading size='sm'>
-                        {cliente?.razaoSocial}
-                      </Heading>
-                      <Text fontSize={13}>{cliente?.cnpj}</Text>
-                    </Box>
-                  </AccordionButton>
-                </h2>
-                <AccordionPanel paddingRight={0} paddingLeft={5}>
-                  {contratos.length > 0 ? (
-                    <>
-                     {contratos.map((contrato, index) => (
-                        <Flex key={index} onClick={() => handleContratoSelecionado(contrato)} flex='1' gap='4' alignItems='center' border='1px solid' borderColor='#d0d0d0' borderRadius={10}
-                          paddingInline={5} paddingBlock={2} marginBlock={2} _hover={{
-                            background: 'gray.100',
-                            cursor: 'pointer',
-                          }}>
-                            <Avatar size='xs' bg={'#48bb78'} icon={<RiContractFill size={15}/>} />
-                          <Box>
-                            <Heading size='sm'>{contrato?.descricao}</Heading>
-                            <Text fontSize={12}>Supervisor: {contrato?.nomeSupervisor}</Text>
-                            <Text fontSize={12}>Inicio {dateConverter(contrato?.dataInicio)} / Fim {dateConverter(contrato?.dataFim)}</Text>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </>
-                  ) : (
-                    <Box px={4}>
-                      <Informativo
-                        titulo={"Ops..."}
-                        mensagem={"Ainda não existem contratos atribuídos"}
-                      />
-                    </Box>
+          <Stack spacing={3} pr={1}>
+            {contratosFiltrados.map((contrato) => {
+              const cliente = clientById.get(contrato.clienteId);
+              return (
+                <Flex
+                  key={contrato.id}
+                  onClick={() => handleClickContrato(contrato)}
+                  gap="4"
+                  alignItems="center"
+                  border="1px solid"
+                  borderColor="#d0d0d0"
+                  borderRadius={10}
+                  px={5}
+                  py={2}
+                  _hover={{ background: 'gray.100', cursor: 'pointer' }}
+                >
+                  <Avatar size="sm" bg="#48bb78" icon={<RiContractFill size={15} />} />
+                  <Box flex="1" minW={0}>
+                    <Heading size="sm" noOfLines={1}>
+                      {contrato?.descricao}
+                    </Heading>
+                    <Text fontSize={12} noOfLines={1}>
+                      Supervisor: {contrato?.nomeSupervisor || '—'}
+                    </Text>
+                    <Text fontSize={12}>
+                      Início {dateConverter(contrato?.dataInicio)} / Fim {dateConverter(contrato?.dataFim)}
+                    </Text>
+                  </Box>
+
+                  {cliente && (
+                    <Tag
+                      size="sm"
+                      variant="subtle"
+                      colorScheme="blue"
+                      whiteSpace="nowrap"
+                      maxW="45%"
+                    >
+                      <TagLabel title={`${cliente.razaoSocial} • ${cliente.cnpj}`}>
+                        Cliente: {cliente.razaoSocial} ({cliente.cnpj})
+                      </TagLabel>
+                    </Tag>
                   )}
-                </AccordionPanel>
-              </AccordionItem>
-            ))}
-          </Accordion>
+                </Flex>
+              );
+            })}
+          </Stack>
         )}
       </GridItem>
     </Grid>

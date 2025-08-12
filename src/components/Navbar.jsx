@@ -20,7 +20,8 @@ const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
   { label: "Gerenciar", path: "/gerenciar" },
-  { label: "FT's e Atividades", path: "/frentes"}
+  { label: "FT's e Atividades", path: "/frentes"},
+  { label: "Gerenciar contratos", path: "/contratos"}
 ];
 
 export const Navbar = ({ children }) => {

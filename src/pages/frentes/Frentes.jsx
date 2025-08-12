@@ -312,7 +312,7 @@ export const Frentes = () => {
                 )}
 
                 <HStack justify="flex-end">
-                    <Button colorScheme="blue" onClick={handleSalvar} isDisabled={!frenteSelecionadaId || loading}>
+                    <Button onClick={handleSalvar} isDisabled={!frenteSelecionadaId || loading}>
                         Salvar alterações
                     </Button>
                 </HStack>

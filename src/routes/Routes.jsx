@@ -7,6 +7,7 @@ import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
 import { Gerenciar } from "../pages/gerenciar/Gerenciar";
 import { Frentes } from "../pages/frentes/Frentes";
+import { GerenciarContratos } from "../pages/contratos/GerenciarContratos";
 
 
 export const AppRoutes = () => {
@@ -25,6 +26,7 @@ export const AppRoutes = () => {
             <Route path="/painel" element={<Painel />} />
             <Route path="/gerenciar" element={<Gerenciar />} />
             <Route path="/frentes" element={<Frentes />} />
+            <Route path="/contratos" element={<GerenciarContratos />} />
           </Route>
         </Route>
         {/* Rota error */}
