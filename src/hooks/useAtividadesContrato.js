@@ -61,6 +61,44 @@ export const useAtividadesContrato = () => {
     }
   };
 
+  const salvarAtividadesContratoEmLote = async (lista) => {
+  const sucesso = [];
+  const falhas = [];
+
+  for (const raw of lista) {
+    try {
+      const payload = {
+        ...raw,
+        usuarioDelegadoId: Number(raw.usuarioDelegadoId || 0),
+        statusAtividade: Number(raw.statusAtividade || 0),
+        sequencia: Number(raw.sequencia || 0),
+        dataLimite: raw.dataLimite ? new Date(raw.dataLimite).toISOString() : null,
+        nomeUsuarioDelegado: raw.nomeUsuarioDelegado || ""
+      };
+
+      const isEdicao = payload?.id && payload.id !== 0;
+      if (isEdicao) {
+        await editarAtividadesContrato(payload.id, payload);
+      } else {
+        payload.id = 0;
+        await registrarAtividadesContrato(payload);
+      }
+
+      sucesso.push(payload.atividadeId);
+    } catch (err) {
+      falhas.push({ atividadeId: raw.atividadeId, error: String(err) });
+    }
+  }
+
+  // reconsulta só uma vez no final
+  const contratoId = lista[0]?.contratoId;
+  if (contratoId) {
+    await listarAtividadesContrato(contratoId);
+  }
+
+  return { sucesso, falhas };
+};
+
   const excluirAtividadeContrato = async (id, contratoId) => {
     try {
       await removerAtividadesContrato(id);
@@ -96,6 +134,7 @@ export const useAtividadesContrato = () => {
     salvarAtividadeContrato,
     excluirAtividadeContrato,
     atividadeInicial,
+    salvarAtividadesContratoEmLote,
     handleChangeAtvContrato,
   };
 };

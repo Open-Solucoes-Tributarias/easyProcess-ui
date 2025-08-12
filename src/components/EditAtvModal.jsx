@@ -43,7 +43,7 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
 
     useEffect(() => {
         listarUsuarios();
-    }, [listarUsuarios]);
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;

@@ -14,13 +14,15 @@ import { useFrentes } from "../../hooks/useFrentes";
 import { useAtividades } from "../../hooks/useAtividades";
 import { getStatusAtividade } from "../../utils/labelUtils";
 import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
-import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { EditAtvModal } from "../../components/EditAtvModal";
+import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
 
 export const GerenciarContratos = () => {
   const { contratos } = useContrato();
   const { frentes } = useFrentes();
   const { atividades } = useAtividades();
+  const { salvarAtividadesContratoEmLote } = useAtividadesContrato();
   //estado do modal
   const [openModal, setOpenModal] = useState(false);
   const [contratoSelecionado, setContratoSelecionado] = useState("");
@@ -71,7 +73,7 @@ export const GerenciarContratos = () => {
         usuarioDelegadoId: 0,
         sequencia: index,
         statusAtividade: 0,
-        descricaoCustomizada: `Atividade - ${atv?.nome}`,
+        descricaoCustomizada: `${atv?.nome}${atv?.instrucao?.trim() ? " | " + atv.instrucao : ""}`,
         dataLimite: new Date,
         nomeUsuarioDelegado: atv?.nomeUsuarioDelegado
       };
@@ -83,7 +85,7 @@ export const GerenciarContratos = () => {
 
   //atualizo a lista com o valor de atvcontrato
 
-
+  console.log('atividades listadas', atividadesListadas)
   ///abrir modal para editar
   const handleEditAtv = (atv) => {
     setAtividadeSelecionada(atv);
@@ -125,6 +127,9 @@ export const GerenciarContratos = () => {
       return reorder(prev, index, to);
     });
   };
+
+  //salvar atividadesContrato, sendo uma por uma
+  
 
 
   return (
@@ -247,8 +252,7 @@ export const GerenciarContratos = () => {
                     <Box ml="3">
                       <Text fontWeight={600} color="gray.600" fontSize={14}>
                         {atv?.descricaoCustomizada}
-                      </Text>
-                      <Text fontSize={12}>Observações: {atv?.instrucao}</Text>                   
+                      </Text>                                        
                     </Box>
                   </Flex>
                 </Flex>
@@ -287,7 +291,7 @@ export const GerenciarContratos = () => {
           </List>
           {atividadesListadas.length > 0 && (
             <HStack justify="flex-end" paddingBlock={3}>
-              <Button>
+              <Button onClick={() => salvarAtividadesContratoEmLote(atividadesListadas)}>
                 Salvar alterações
               </Button>
             </HStack>
