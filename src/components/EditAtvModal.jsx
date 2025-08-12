@@ -163,6 +163,7 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
                                 placeholder="Nº ordem da atividade"
                                 value={draftAtv.sequencia}
                                 onChange={handleChange}
+                                disabled
                             />
                         </FormControl>
                     </Flex>

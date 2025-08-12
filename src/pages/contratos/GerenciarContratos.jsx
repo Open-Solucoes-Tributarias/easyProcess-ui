@@ -14,7 +14,7 @@ import { useFrentes } from "../../hooks/useFrentes";
 import { useAtividades } from "../../hooks/useAtividades";
 import { getStatusAtividade } from "../../utils/labelUtils";
 import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
-import { CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { ArrowDownIcon, ArrowUpDownIcon, ArrowUpIcon, ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { EditAtvModal } from "../../components/EditAtvModal";
 
 export const GerenciarContratos = () => {
@@ -91,19 +91,42 @@ export const GerenciarContratos = () => {
   }
 
   // funcao para pegar atv editada no modal e ataulizar no array
- const handleSalvarAtv = (atvEditada) => {
-  setAtividadesListadas(prev =>
-    prev.map(atv =>
-      atv.atividadeId === atvEditada.atividadeId ? atvEditada : atv
-    )
-  );
-};
+  const handleSalvarAtv = (atvEditada) => {
+    setAtividadesListadas(prev =>
+      prev.map(atv =>
+        atv.atividadeId === atvEditada.atividadeId ? atvEditada : atv
+      )
+    );
+  };
   //remover uma atividade com base no seu id
   const handleRemoverAtv = (atividadeId) => {
     setAtividadesListadas(prev =>
       prev.filter(item => item.atividadeId !== atividadeId)
     );
   };
+
+  //movimentação de objetos no array atividadeslistadas
+  const reorder = (list, from, to) => {
+    const next = [...list];
+    const [moved] = next.splice(from, 1);
+    next.splice(to, 0, moved);
+    return next.map((item, i) => ({ ...item, sequencia: i }));
+  };
+
+  // direcao: "up" | "down"
+  const move = (index, direction) => {
+    setAtividadesListadas(prev => {
+      const delta = direction === "up" ? -1 : 1;
+      const to = index + delta;
+
+      // bordas
+      if (to < 0 || to >= prev.length) return prev;
+
+      return reorder(prev, index, to);
+    });
+  };
+
+
   return (
     <>
       <FormControl>
@@ -198,7 +221,13 @@ export const GerenciarContratos = () => {
                 borderRadius="md"
               >
                 <Flex align="center" gap={2}>
-                  <Flex align="center">
+                  <Flex align="center" gap={1}>
+                     <Flex direction='column' gap={1}>
+                      <Tooltip placement="Defina sequência das atividades">
+                        <IconButton variant='outline' size='xs' icon={<ChevronUpIcon />} onClick={() => move(index, "up")} />
+                        <IconButton variant='outline' size='xs' icon={<ChevronDownIcon />} onClick={() => move(index, "down")} />
+                      </Tooltip>
+                    </Flex>
                     <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
                       <IconButton
                         isReadOnly
@@ -214,15 +243,12 @@ export const GerenciarContratos = () => {
                                   <FaRegClock color="gray" />
                         }
                       />
-                    </Tooltip>
+                      </Tooltip>
                     <Box ml="3">
                       <Text fontWeight={600} color="gray.600" fontSize={14}>
                         {atv?.descricaoCustomizada}
                       </Text>
-                      <Text fontWeight={200} fontSize={12}>sequência: {atv?.sequencia}</Text>
-                      {/* <Text fontSize={12}>
-                    Data limite: {dateConverter(atv?.dataLimite)}
-                  </Text> */}
+                      <Text fontSize={12}>Observações: {atv?.instrucao}</Text>                   
                     </Box>
                   </Flex>
                 </Flex>
