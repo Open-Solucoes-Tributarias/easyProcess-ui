@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   buscarUsuarios,
   registrarUsuario,
@@ -24,14 +24,17 @@ export const useUsuarios = () => {
   const [usuarioModoEdicao, setUsuarioModoEdicao] = useState(false);
   const [usuarioLoading, setUsuarioLoading] = useState(false);
 
-  const listarUsuarios = async () => {
+  const listarUsuarios = useCallback(async () => {
     try {
+      setUsuarioLoading(true);
       const dados = await buscarUsuarios();
-      setUsuarios(dados);     
+      setUsuarios(dados);
     } catch (err) {
       console.error("Erro ao listar usuários", err);
+    } finally {
+      setUsuarioLoading(false);
     }
-  };
+  }, []);
 
   const handleChangeUsuario = (e) => {
     const { name, value } = e.target;
@@ -85,10 +88,9 @@ export const useUsuarios = () => {
   };
 
   useEffect(() => {
-    if (usuarios.length === 0) {
-      listarUsuarios();
-    }
-  }, []);
+    if (usuarios.length === 0) listarUsuarios();
+  }, [usuarios.length, listarUsuarios]);
+
 
   return {
     usuarios,

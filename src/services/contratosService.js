@@ -24,7 +24,7 @@ export const registrarContrato = async (data) => {
 };
 
 //PUT
-export const editarContrato = async (id) => {
+export const editarContrato = async (id, data) => {
   const response = await httpClient.put(`/contratos/${id}`, data);
   return response.data;
 };

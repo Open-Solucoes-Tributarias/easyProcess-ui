@@ -67,6 +67,10 @@ export const Navbar = ({ children }) => {
                 {/* <MenuItem onClick={() => navigate("/usuarios")}>Perfil</MenuItem> */}
                 {/* <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem> */}
                 <MenuDivider />
+                <MenuItem 
+                onClick={() => navigate('usuarios')}>
+                  Gerenciar usuários
+                </MenuItem>
                 <MenuItem
                   onClick={() => {
                     localStorage.removeItem("token");

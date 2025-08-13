@@ -9,25 +9,31 @@ import {
   Flex,
   List,
   FormErrorMessage,
-  FormHelperText
 } from "@chakra-ui/react";
 import { useContrato } from "../../hooks/useContratos";
 import { useFrentes } from "../../hooks/useFrentes";
 import { useAtividades } from "../../hooks/useAtividades";
 import { getStatusAtividade } from "../../utils/labelUtils";
-import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
+import { FaExclamationTriangle, FaHourglassHalf, FaPlus, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
 import { ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { EditAtvModal } from "../../components/EditAtvModal";
 import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
+import { ContratoEditModal } from "../../components/ContratoEditModal";
 
 export const GerenciarContratos = () => {
-  const { contratos } = useContrato();
+  const { contratos, listarContratos } = useContrato();
   const { frentes } = useFrentes();
   const { atividades } = useAtividades();
   const { salvarAtividadesContratoEmLote } = useAtividadesContrato();
+
+  // estado do modal de contrato
+  const [isContratoOpen, setIsContratoOpen] = useState(false);
+  const [contratoParaEdicao, setContratoParaEdicao] = useState(null);
+
   //estado do modal
   const [openModal, setOpenModal] = useState(false);
   const [contratoSelecionado, setContratoSelecionado] = useState("");
+
   // ⬇️ agora é um array de ids as frentes
   const [frentesSelecionadas, setFrentesSelecionadas] = useState([]);
   const [atividadeSelecionada, setAtividadeSelecionada] = useState({});
@@ -130,14 +136,37 @@ export const GerenciarContratos = () => {
     });
   };
 
-  //salvar atividadesContrato, sendo uma por uma
+  const abrirCriacaoContrato = () => {
+    setContratoParaEdicao(null);   // null => criação
+    setIsContratoOpen(true);
+  };
 
+  const abrirEdicaoContrato = () => {
+    const idSel = Number(contratoSelecionado) || 0;
+    if (!idSel) return;
+    const c = contratos.find(c => c.id === idSel);
+    if (!c) return;
+    setContratoParaEdicao(c);   
+    setIsContratoOpen(true);
+  };
 
 
   return (
-    <>
-      <FormControl isRequired isInvalid={!contratoSelecionado} isDisabled={frentesSelecionadas.length > 0}>
-        <FormLabel>Selecionar contrato</FormLabel>
+    <Flex direction='column' gap={5}>
+      <FormControl isInvalid={!contratoSelecionado} isDisabled={frentesSelecionadas.length > 0}>
+        <FormLabel>
+          <Text as="b" fontSize="xl">
+            Selecionar contrato
+          </Text>           
+              <Button
+                variant="text"
+                color="#68D391"
+                leftIcon={contratoSelecionado ? null : <FaPlus />}
+                onClick={() => {contratoSelecionado ?  abrirEdicaoContrato() : abrirCriacaoContrato() }}
+              >
+                {contratoSelecionado ? 'Editar' : 'Adicionar'}
+              </Button>
+        </FormLabel>
         <Select
           placeholder="Selecione um contrato"
           name="supervisorUsuarioId"
@@ -314,6 +343,15 @@ export const GerenciarContratos = () => {
         atvSelecionada={atividadeSelecionada}
         onConfirm={handleSalvarAtv}
       />
-    </>
+
+      {/* modal de edição add contratos */}
+      <ContratoEditModal
+        isOpen={isContratoOpen}
+        onClose={() => setIsContratoOpen(false)}
+        contrato={contratoParaEdicao}              // null => cria | objeto => edita
+        onSaved={() => listarContratos(null, true)}
+      />
+
+    </Flex>
   );
 };

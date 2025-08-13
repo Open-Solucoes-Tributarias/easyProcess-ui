@@ -12,8 +12,6 @@ import {
     Switch,
     VStack,
     IconButton,
-    Avatar,
-    AvatarBadge,
 } from "@chakra-ui/react";
 
 import { useFrentes } from "../../hooks/useFrentes";
@@ -23,12 +21,22 @@ import { useAtividades } from "../../hooks/useAtividades";
 import { editarAtividade } from "../../services/atividadesService";
 import { FaPlus, FaSync } from "react-icons/fa";
 import { AtvEditModal } from "../../components/AtvEditModal";
-import { EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { EditIcon } from "@chakra-ui/icons";
+import { FTEditModal } from "../../components/FTEditModal";
 
 export const Frentes = () => {
     const toast = useToast();
 
-    const { frentes, loadingFrentes, listarFrentes } = useFrentes();
+    const {
+        frentes,
+        frenteIsEditOpen,
+        setFrenteIsEditOpen,
+        frenteAtual,
+        frenteModoEdicao,
+        listarFrentes,
+        frenteAbrirCadastro,
+        loadingFrentes,
+        frenteAbrirEdicao } = useFrentes();
     const { atividades, loadingAtividades, listarAtividades } = useAtividades();
 
     const [frenteSelecionadaId, setFrenteSelecionadaId] = useState(null);
@@ -171,45 +179,55 @@ export const Frentes = () => {
     return (
         <Flex direction="row" gap={4} justifyContent="space-between" p={5}>
             {/* Esquerda: Frentes */}
-            <Flex direction="column" w="35%" gap={3}>              
-                  <HStack spacing={1}>
-                        <Text as="b" fontSize="xl">
-                            Frentes de trabalho
-                        </Text>
-                        <Button
-                            variant="text"
-                            color="#68D391"
-                            leftIcon={<FaPlus />}
-                            // onClick={() => {
-                            //     abrirNovo()
-                            // }}
-                        >
-                            Adicionar
-                        </Button>
-                    </HStack>
+            <Flex direction="column" w="35%" gap={3}>
+                <HStack spacing={1}>
+                    <Text as="b" fontSize="xl">
+                        Frentes de trabalho
+                    </Text>
+                    <Button
+                        variant="text"
+                        color="#68D391"
+                        leftIcon={<FaPlus />}
+                        onClick={() => frenteAbrirCadastro()}
+                    >
+                        Adicionar
+                    </Button>
+                </HStack>
 
                 {loading ? (
                     <Spinner />
                 ) : (
                     <VStack align="stretch" spacing={3}>
-                        {frentes?.map((ft) => {
-                            const isActive = frenteSelecionadaId === ft.id;
-                            return (
-                                <Box
-                                    key={ft.id}
-                                    p={4}
-                                    borderWidth="1px"
-                                    borderRadius="lg"
-                                    cursor="pointer"
-                                    onClick={() => setFrenteSelecionadaId(ft.id)}
-                                    bg={isActive ? "#68d3912a" : "white"}
-                                    borderColor={isActive ? "#68D391" : "gray.200"}
-                                    _hover={{ shadow: "md" }}
-                                >
-                                    <Text fontWeight={700}>{ft?.nome}</Text>
-                                </Box>
-                            );
-                        })}
+                            {frentes?.map((ft) => {
+                                const isActive = frenteSelecionadaId === ft.id;
+                                return (
+                                    <Box
+                                        key={ft.id}
+                                        p={4}
+                                        borderWidth="1px"
+                                        borderRadius="lg"
+                                        cursor="pointer"
+                                        onClick={() => setFrenteSelecionadaId(ft.id)} // apenas seleciona
+                                        bg={isActive ? "#68d3912a" : "white"}
+                                        borderColor={isActive ? "#68D391" : "gray.200"}
+                                        _hover={{ shadow: "md" }}
+                                    >
+                                        <HStack justify="space-between" align="center">
+                                            <Text fontWeight={700}>{ft?.nome}</Text>
+                                                <IconButton
+                                                    aria-label="Editar frente"
+                                                    icon={<EditIcon />}
+                                                    size="sm"
+                                                    variant="outline"
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();        // não muda a seleção ao clicar no ícone
+                                                        frenteAbrirEdicao(ft);      // <<< AQUI abre em modo edição
+                                                    }}
+                                                />
+                                        </HStack>
+                                    </Box>
+                                );
+                            })}
                         {!frentes?.length && (
                             <Text color="gray.500">Nenhuma frente cadastrada.</Text>
                         )}
@@ -239,7 +257,7 @@ export const Frentes = () => {
 
                     {/* DIREITA: switch + sync */}
                     <HStack>
-                        <Tooltip label="Exibe todas as atividades para permitir incluir/remover da frente selecionada">
+                        <Tooltip label="Exibe todas as atividades">
                             <HStack>
                                 <Text fontSize="sm">Mostrar todas</Text>
                                 <Switch
@@ -324,6 +342,14 @@ export const Frentes = () => {
                 onClose={() => setIsOpen(false)}
                 atividade={selecionada}         // null -> criar | objeto -> editar
                 onSaved={listarAtividades}      // recarrega após salvar/excluir
+            />
+
+            {/* modal de edição ou adição de FT's */}
+            <FTEditModal
+                isOpen={frenteIsEditOpen}
+                onClose={() => setFrenteIsEditOpen(false)}
+                frente={frenteModoEdicao ? frenteAtual : null}
+                onSaved={listarFrentes} // recarrega após salvar/excluir
             />
         </Flex>
     );
