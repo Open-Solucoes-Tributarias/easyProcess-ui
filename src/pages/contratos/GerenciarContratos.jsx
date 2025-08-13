@@ -7,7 +7,9 @@ import {
   AvatarBadge,
   ListItem,
   Flex,
-  List
+  List,
+  FormErrorMessage,
+  FormHelperText
 } from "@chakra-ui/react";
 import { useContrato } from "../../hooks/useContratos";
 import { useFrentes } from "../../hooks/useFrentes";
@@ -129,18 +131,19 @@ export const GerenciarContratos = () => {
   };
 
   //salvar atividadesContrato, sendo uma por uma
-  
+
 
 
   return (
     <>
-      <FormControl>
+      <FormControl isRequired isInvalid={!contratoSelecionado} isDisabled={frentesSelecionadas.length > 0}>
         <FormLabel>Selecionar contrato</FormLabel>
         <Select
           placeholder="Selecione um contrato"
           name="supervisorUsuarioId"
           value={contratoSelecionado}
           onChange={handleSelectContrato}
+
         >
           {contratos.map((c) => (
             <option key={c?.id} value={c?.id}>
@@ -148,156 +151,161 @@ export const GerenciarContratos = () => {
             </option>
           ))}
         </Select>
+        <FormErrorMessage color={'red'}>Contrato é obrigatório</FormErrorMessage>
       </FormControl>
+      {contratoSelecionado && (
+        <Grid templateColumns={{base: '1fr', sm: '1fr 1.4fr' }} gap={4} p={2}>
+          <GridItem>
+            <Flex direction={{ base: 'column', sm: 'row' }} justify="space-between" align="center">
+              <Text as="b" fontSize="xl">
+                Selecione frente de trabalho
+              </Text>
+              <HStack>
+                <Button size="sm" variant="outline" onClick={limparSelecao}>
+                  Limpar
+                </Button>
+                <Button size="sm" onClick={selecionarTodas} isDisabled={!frentes?.length}>
+                  Selecionar todas
+                </Button>
+              </HStack>
+            </Flex>
 
-      <Grid templateColumns="1fr 1fr" gap={4} p={2}>
-        <GridItem>
-          <HStack justify="space-between" align="center">
-            <Text as="b" fontSize="xl">
-              Selecione as FT&apos;s para herdar atividades
-            </Text>
-            <HStack>
-              <Button size="sm" variant="outline" onClick={limparSelecao}>
-                Limpar
-              </Button>
-              <Button size="sm" onClick={selecionarTodas} isDisabled={!frentes?.length}>
-                Selecionar todas
-              </Button>
-            </HStack>
-          </HStack>
+            {/* Lista de frentes da empresa (multi-seleção por clique) */}
+            <VStack align="stretch" spacing={3} paddingBlock={4}>
+              {frentes?.map((ft) => {
+                const isActive = frentesSelecionadas.includes(ft.id);
+                return (
+                  <Box
+                    key={ft.id}
+                    p={4}
+                    borderWidth="1px"
+                    borderRadius="lg"
+                    cursor="pointer"
+                    onClick={() => toggleFrente(ft.id)}
+                    bg={isActive ? "#68d3912a" : "white"}
+                    borderColor={isActive ? "#68D391" : "gray.200"}
+                    _hover={{ shadow: "md" }}
+                    role="button"
+                    aria-pressed={isActive}
+                  >
+                    <HStack justify="space-between">
+                      <Text fontWeight={700}>{ft?.nome}</Text>
+                      {/* <Text fontSize="sm" color="gray.600">
+                        {isActive ? "Selecionada" : "Clique para selecionar"}
+                      </Text> */}
+                    </HStack>
+                  </Box>
+                );
+              })}
+              {!frentes?.length && (
+                <Text color="gray.500">Nenhuma frente cadastrada.</Text>
+              )}
+            </VStack>
 
-          {/* Lista de frentes da empresa (multi-seleção por clique) */}
-          <VStack align="stretch" spacing={3} paddingBlock={4}>
-            {frentes?.map((ft) => {
-              const isActive = frentesSelecionadas.includes(ft.id);
-              return (
-                <Box
-                  key={ft.id}
-                  p={4}
-                  borderWidth="1px"
-                  borderRadius="lg"
-                  cursor="pointer"
-                  onClick={() => toggleFrente(ft.id)}
-                  bg={isActive ? "#68d3912a" : "white"}
-                  borderColor={isActive ? "#68D391" : "gray.200"}
-                  _hover={{ shadow: "md" }}
-                  role="button"
-                  aria-pressed={isActive}
-                >
-                  <HStack justify="space-between">
-                    <Text fontWeight={700}>{ft?.nome}</Text>
-                    <Text fontSize="sm" color="gray.600">
-                      {isActive ? "Selecionada" : "Clique para selecionar"}
-                    </Text>
-                  </HStack>
-                </Box>
-              );
-            })}
-            {!frentes?.length && (
-              <Text color="gray.500">Nenhuma frente cadastrada.</Text>
+            {/* Feedback rápido da seleção (opcional) */}
+            {!!frentesSelecionadas.length && (
+              <Text fontSize="sm" color="gray.600">
+                {frentesSelecionadas.length} frente(s) selecionada(s){" "}
+                {/* {frentesSelecionadas.join(", ")} */}
+              </Text>
             )}
-          </VStack>
+          </GridItem>
+          {/* lista das atividades criadas das frentes seleciondadas */}
 
-          {/* Feedback rápido da seleção (opcional) */}
-          {!!frentesSelecionadas.length && (
-            <Text fontSize="sm" color="gray.600">
-              {frentesSelecionadas.length} frente(s) selecionada(s):{" "}
-              {frentesSelecionadas.join(", ")}
-            </Text>
-          )}
-        </GridItem>
-        {/* lista das atividades criadas das frentes seleciondadas */}
+          <GridItem>
+            {/* lista de atividades filtradas */}
 
-        <GridItem>
-          {/* lista de atividades filtradas */}
-
-          <List spacing={3}>
-            {atividadesListadas.map((atv, index) => (
-              <ListItem
-                key={index}
-                w="100%"
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                border="1px solid"
-                borderColor="#d0d0d0"
-                px={3}
-                py={2}
-                borderRadius="md"
-              >
-                <Flex align="center" gap={2}>
-                  <Flex align="center" gap={1}>
-                     <Flex direction='column' gap={1}>
-                      <Tooltip placement="Defina sequência das atividades">
-                        <IconButton variant='outline' size='xs' icon={<ChevronUpIcon />} onClick={() => move(index, "up")} />
-                        <IconButton variant='outline' size='xs' icon={<ChevronDownIcon />} onClick={() => move(index, "down")} />
+            <List spacing={3}>
+               <Text as="b" fontSize="xl">
+                Atividades herdadas
+              </Text>
+              {atividadesListadas.map((atv, index) => (
+                <ListItem
+                  key={index}
+                  w="100%"
+                  display="flex"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  border="1px solid"
+                  borderColor="#d0d0d0"
+                  px={3}
+                  py={2}
+                  borderRadius="md"
+                >
+                  <Flex align="center" gap={2}>
+                    <Flex align="center" gap={1}>
+                      <Flex direction='column' gap={1}>
+                        <Tooltip placement="Defina sequência das atividades">
+                          <IconButton variant='outline' size='xs' icon={<ChevronUpIcon />} onClick={() => move(index, "up")} />
+                          <IconButton variant='outline' size='xs' icon={<ChevronDownIcon />} onClick={() => move(index, "down")} />
+                        </Tooltip>
+                      </Flex>
+                      <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
+                        <IconButton
+                          isReadOnly
+                          cursor="default"
+                          size='sm'
+                          variant='ghost'
+                          aria-label="Status da atividade"
+                          icon={
+                            atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
+                              atv.statusAtividade === 1 ? <FaHourglassHalf color="gray" /> :
+                                atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
+                                  atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
+                                    <FaRegClock color="gray" />
+                          }
+                        />
                       </Tooltip>
+                      <Box ml="3">
+                        <Text fontWeight={600} color="gray.600" fontSize={14}>
+                          {atv?.descricaoCustomizada}
+                        </Text>
+                      </Box>
                     </Flex>
-                    <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
-                      <IconButton
-                        isReadOnly
-                        cursor="default"
-                        size='sm'
-                        variant='ghost'
-                        aria-label="Status da atividade"
-                        icon={
-                          atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
-                            atv.statusAtividade === 1 ? <FaHourglassHalf color="gray" /> :
-                              atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
-                                atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
-                                  <FaRegClock color="gray" />
-                        }
-                      />
-                      </Tooltip>
-                    <Box ml="3">
-                      <Text fontWeight={600} color="gray.600" fontSize={14}>
-                        {atv?.descricaoCustomizada}
-                      </Text>                                        
-                    </Box>
                   </Flex>
-                </Flex>
-                <Flex gap={2}>
-                  <IconButton
-                    aria-label="Editar"
-                    icon={<EditIcon />}
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEditAtv(atv)}
-                  />
-                  <Tooltip label={atv?.nomeUsuarioDelegado} placement="top">
+                  <Flex gap={2}>
                     <IconButton
-                      aria-label="Responsável"
-                      icon={
-                        <Avatar size="xs" name={atv?.nomeUsuarioDelegado}>
-                          <AvatarBadge boxSize="1" bg="green.500" />
-                        </Avatar>
-                      }
+                      aria-label="Editar"
+                      icon={<EditIcon />}
                       variant="outline"
                       size="sm"
+                      onClick={() => handleEditAtv(atv)}
                     />
-                  </Tooltip>
-                  <Tooltip label={'Remover atividade'} placement="top">
-                    <IconButton
-                      aria-label="remover"
-                      icon={<CloseIcon />}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleRemoverAtv(atv?.atividadeId)}
-                    />
-                  </Tooltip>
-                </Flex>
-              </ListItem>
-            ))}
-          </List>
-          {atividadesListadas.length > 0 && (
-            <HStack justify="flex-end" paddingBlock={3}>
-              <Button onClick={() => salvarAtividadesContratoEmLote(atividadesListadas)}>
-                Salvar alterações
-              </Button>
-            </HStack>
-          )}
-        </GridItem>
-      </Grid>
+                    <Tooltip label={atv?.nomeUsuarioDelegado} placement="top">
+                      <IconButton
+                        aria-label="Responsável"
+                        icon={
+                          <Avatar size="xs" name={atv?.nomeUsuarioDelegado}>
+                            <AvatarBadge boxSize="1" bg="green.500" />
+                          </Avatar>
+                        }
+                        variant="outline"
+                        size="sm"
+                      />
+                    </Tooltip>
+                    <Tooltip label={'Remover atividade'} placement="top">
+                      <IconButton
+                        aria-label="remover"
+                        icon={<CloseIcon />}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleRemoverAtv(atv?.atividadeId)}
+                      />
+                    </Tooltip>
+                  </Flex>
+                </ListItem>
+              ))}
+            </List>
+            {atividadesListadas.length > 0 && (
+              <HStack justify="flex-end" paddingBlock={3}>
+                <Button onClick={() => salvarAtividadesContratoEmLote(atividadesListadas)}>
+                  Salvar alterações
+                </Button>
+              </HStack>
+            )}
+          </GridItem>
+        </Grid>
+      )}
 
       {/* modal de editar atividade de forma temporaria e retorna callback do valor editado */}
       <EditAtvModal

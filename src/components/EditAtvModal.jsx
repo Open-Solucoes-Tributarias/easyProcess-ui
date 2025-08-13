@@ -5,8 +5,6 @@ import {
     FormLabel,
     Input,
     Stack,
-    Grid,
-    GridItem,
     Flex,
     Select,
     InputGroup,
@@ -36,6 +34,7 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
     );
 
     const [draftAtv, setDraftAtv] = useState(initial);
+    console.log('atividade atualizada', draftAtv)
 
     useEffect(() => {
         if (open) setDraftAtv(initial);
@@ -85,90 +84,84 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
     return (
         <DialogModal
             isOpen={open}
-            size="5xl"
+            size="4xl"
             onClose={() => setOpen(false)}
             onSave={handleSave}
             title="Detalhes da atividade"
         >
-            <Grid templateColumns="2fr 1fr" gap={2}>
-                <GridItem>
-                    <Stack spacing={2}>
-                        <FormControl>
-                            <FormLabel>Descrição da atividade</FormLabel>
-                            <Input
-                                name="descricaoCustomizada"
-                                value={draftAtv.descricaoCustomizada}
-                                onChange={handleChange}
-                            />
-                        </FormControl>
-                    </Stack>
-                </GridItem>
-
-                <GridItem>
-                    <Flex direction="column" gap={2}>
-                        <FormControl>
-                            <FormLabel>Responsável</FormLabel>
-                            <InputGroup>
-                                <InputLeftElement pointerEvents="none">
-                                    <Avatar size="xs" name={draftAtv?.nomeUsuarioDelegado}>
-                                        <AvatarBadge boxSize="1" bg="green.500" />
-                                    </Avatar>
-                                </InputLeftElement>
-                                <Select
-                                    placeholder="Selecione o responsável"
-                                    name="usuarioDelegadoId"
-                                    value={draftAtv.usuarioDelegadoId === "" ? "" : Number(draftAtv.usuarioDelegadoId)}
-                                    onChange={handleChange}
-                                    pl="2.5rem"
-                                >
-                                    {usuarios.map((u) => (
-                                        <option key={u.id} value={u.id}>
-                                            {u.nome}
-                                        </option>
-                                    ))}
-                                </Select>
-                            </InputGroup>
-                        </FormControl>
-
-                        <FormControl>
-                            <FormLabel>Prazo limite</FormLabel>
-                            <Input
-                                type="datetime-local"
-                                name="dataLimite"
-                                value={dataLimiteLocal}
-                                onChange={handleChange}
-                            />
-                        </FormControl>
-
-                        <FormControl>
-                            <FormLabel>Status</FormLabel>
+            <Flex direction='column' gap={2}>
+                <Flex direction={{ base: 'column', sm: 'row' }} gap={2}>
+                    <FormControl>
+                        <FormLabel>Descrição da atividade</FormLabel>
+                        <Input
+                            name="descricaoCustomizada"
+                            value={draftAtv.descricaoCustomizada}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
+                    <FormControl w={{ sm: '40%' }}>
+                        <FormLabel>Responsável</FormLabel>
+                        <InputGroup>
+                            <InputLeftElement pointerEvents="none">
+                                <Avatar size="xs" name={draftAtv?.nomeUsuarioDelegado}>
+                                    <AvatarBadge boxSize="1" bg="green.500" />
+                                </Avatar>
+                            </InputLeftElement>
                             <Select
-                                placeholder="Status da atividade"
-                                name="statusAtividade"
-                                value={draftAtv.statusAtividade === "" ? "" : Number(draftAtv.statusAtividade)}
+                                placeholder="usuário responsável"
+                                name="usuarioDelegadoId"
+                                value={draftAtv.usuarioDelegadoId === "" ? "" : Number(draftAtv.usuarioDelegadoId)}
                                 onChange={handleChange}
+                                pl="2.5rem"
                             >
-                                <option value={0}>Pendente</option>
-                                <option value={1}>Em andamento</option>
-                                <option value={2}>Concluída</option>
-                                <option value={3}>Atrasada</option>
+                                {usuarios.map((u) => (
+                                    <option key={u.id} value={u.id}>
+                                        {u.nome}
+                                    </option>
+                                ))}
                             </Select>
-                        </FormControl>
+                        </InputGroup>
+                    </FormControl>
+                </Flex>
+                <Flex direction={{ base: 'column', sm: 'row' }} gap={2}>
+                    <FormControl>
+                        <FormLabel>Prazo limite</FormLabel>
+                        <Input
+                            type="datetime-local"
+                            name="dataLimite"
+                            value={dataLimiteLocal}
+                            onChange={handleChange}
+                        />
+                    </FormControl>
 
-                        <FormControl>
-                            <FormLabel>Sequência</FormLabel>
-                            <Input
-                                type="number"
-                                name="sequencia"
-                                placeholder="Nº ordem da atividade"
-                                value={draftAtv.sequencia}
-                                onChange={handleChange}
-                                disabled
-                            />
-                        </FormControl>
-                    </Flex>
-                </GridItem>
-            </Grid>
+                    <FormControl>
+                        <FormLabel>Status</FormLabel>
+                        <Select
+                            placeholder="Status da atividade"
+                            name="statusAtividade"
+                            value={draftAtv.statusAtividade === "" ? "" : Number(draftAtv.statusAtividade)}
+                            onChange={handleChange}
+                        >
+                            <option value={0}>Pendente</option>
+                            <option value={1}>Em andamento</option>
+                            <option value={2}>Concluída</option>
+                            <option value={3}>Atrasada</option>
+                        </Select>
+                    </FormControl>
+
+                    <FormControl display={'none'}>
+                        <FormLabel>Sequência</FormLabel>
+                        <Input
+                            type="number"
+                            name="sequencia"
+                            placeholder="Nº ordem da atividade"
+                            value={draftAtv.sequencia}
+                            onChange={handleChange}
+                            disabled
+                        />
+                    </FormControl>
+                </Flex>
+            </Flex>
         </DialogModal>
     );
 };
