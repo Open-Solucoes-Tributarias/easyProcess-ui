@@ -2,7 +2,6 @@
 import { useEffect, useState } from "react";
 import {
   Box,
-  chakra,
   Flex,
   SimpleGrid,
   Stat,
@@ -12,9 +11,12 @@ import {
   Heading,
   Badge,
   Stack,
+  Link,
+  IconButton,
 } from '@chakra-ui/react';
 import { CheckIcon } from "@chakra-ui/icons";
 import { getResumo } from "../../services/resumeService";
+import { FaUserGroup, FaUserTie, FaRegFolderOpen, FaChartGantt, FaCheckDouble } from "react-icons/fa6";
 
 function StatsCard({ title, stat, icon }) {
   return (
@@ -39,6 +41,18 @@ function StatsCard({ title, stat, icon }) {
     </Stat>
   );
 }
+
+function CardActions({ text, url, icon }) {
+  return (
+     <Link href={url} target="_self" _hover={{ textDecoration: 'none' }} w={'100%'}>
+      <Flex p={5} borderWidth="1px" align='center' borderColor="gray.200" borderRadius="md" bg="white" _hover={{ bg: 'gray.50', borderColor: '#68D391' }} w='100%'>
+        <IconButton variant='ghost'>
+          {icon}
+        </IconButton><Text>{text}</Text>
+      </Flex>
+    </Link>
+  );
+};
 
 export const Dashboard = () => {
   const [estatisticas, setEstatisticas] = useState(null);
@@ -68,11 +82,17 @@ export const Dashboard = () => {
   }, {});
 
   return (
-      <Box maxW="7xl" mx="auto" py={8} px={6}>
-        <chakra.h1 textAlign="center" fontSize="4xl" fontWeight="bold" mb={10}>
-          Suas estatísticas atuais
-        </chakra.h1>
-
+    <Flex direction='column' gap={2} py={3} px={3}>
+      <Flex direction='column' gap={3} pb={5}>
+        <Heading size='md'>Ações rápidas</Heading>
+        <Flex direction='row' gap={2} w='100%'>
+          <CardActions text={"Painel de controle"} url={"/painel"} icon={<FaChartGantt />} />
+          <CardActions text={"Frentes e atividades"} url={"/frentes"} icon={<FaCheckDouble />} />
+          <CardActions text={"Contratos"} url={"/contratos"} icon={<FaRegFolderOpen />} />
+          <CardActions text={"Meus clientes"} url={"/clientes"} icon={<FaUserTie />} />
+          <CardActions text={"Meus usuários"} url={"/usuarios"} icon={<FaUserGroup />} />
+        </Flex>
+      </Flex> 
         <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={10}>
           <StatsCard title="Atividades concluídas" stat={`${status?.totalConcluidas ?? 0}`} icon={<CheckIcon color={"green"} />} />
           <StatsCard title="Atividade pendentes" stat={`${status?.totalPendentes ?? 0}`} icon={<CheckIcon />} />
@@ -120,6 +140,6 @@ export const Dashboard = () => {
             </Stack>
           </Box>
         </SimpleGrid>
-      </Box>
+      </Flex>
   );
 };

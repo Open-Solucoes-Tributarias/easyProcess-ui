@@ -22,14 +22,16 @@ export const Painel = () => {
 
         <GridItem>
           <Text as="b" fontSize="xl">Atividades | Frentes de Trabalho</Text>
-          <Button
-            variant="text"
-            color="#68D391"
-            leftIcon={<FaPlus />}
-            onClick={() => setModalAtividadeAberto(true)}
-          >
-            Adicionar
-          </Button>
+          {contratoSelecionado && (
+            <Button
+              variant="text"
+              color="#68D391"
+              leftIcon={<FaPlus />}
+              onClick={() => setModalAtividadeAberto(true)}
+            >
+              Adicionar
+            </Button>
+          )}
           <Box style={styles.content}>
             <AtvContrato contratoSelecionado={contratoSelecionado} />
           </Box>
@@ -39,6 +41,7 @@ export const Painel = () => {
       <AtividadeContrato
         isOpen={modalAtividadeAberto}
         onClose={() => setModalAtividadeAberto(false)}
+        contratoSelecionado={contratoSelecionado}
       />
     </>
   );

@@ -76,18 +76,7 @@ export const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormControl>
-          <Stack spacing={6}>
-            <Stack
-              direction={{ base: 'row', sm: 'row' }}
-              align={'start'}
-              justify={'space-between'}>
-              <Tooltip label="Função em desenvolvimento">
-                <Text color={'blue.500'} cursor={'not-allowed'} fontStyle={'italic'}>
-                  Esqueci a senha
-                </Text>
-              </Tooltip>
-              {/* <Link onClick={() => navigate('/cadastro')}>Primeiro acesso</Link> */}
-            </Stack>
+          <Stack spacing={6}>         
             <Button
               colorScheme={'blue'}
               variant={'solid'}

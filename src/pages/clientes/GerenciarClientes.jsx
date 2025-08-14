@@ -21,6 +21,7 @@ import { FaPlus } from 'react-icons/fa';
 import { DialogModal } from '../../components/DialogModal';
 import { Informativo } from '../../components/Informativo';
 import { useCliente } from '../../hooks/useClientes';
+import { FaUserTie } from 'react-icons/fa6';
 
 export const GerenciarClientes = () => {
   const {
@@ -53,7 +54,7 @@ export const GerenciarClientes = () => {
         >
           <Flex align="center" gap={2} onClick={() => clienteAbrirEdicao(cliente)}>
             <Flex align="center">
-              <RxReader />
+              <FaUserTie />
               <Box ml="3">
                 <Text fontWeight={500} color="gray.600" fontSize={14}>
                   {cliente?.razaoSocial}

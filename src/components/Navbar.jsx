@@ -15,6 +15,7 @@ import {
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
+import { FaArrowRightFromBracket, FaUserGroup, FaUserTie } from "react-icons/fa6";
 
 const user = JSON.parse(localStorage.getItem('user'));
 const userName = user?.usuario;
@@ -68,20 +69,23 @@ export const Navbar = ({ children }) => {
                 </Avatar>
               </MenuButton>
               <MenuList>
-                <MenuDivider />
-                <MenuItem onClick={() => navigate('/clientes')}>
-                  Gerenciar clientes
+                <MenuItem onClick={() => navigate('/clientes')} icon={<FaUserTie />}>
+                  Meus clientes
                 </MenuItem>
                 <MenuItem
-                  onClick={() => navigate('usuarios')}>
-                  Gerenciar usuários
+                  onClick={() => navigate('usuarios')}
+                  icon={<FaUserGroup />}>
+                  Meus usuários
                 </MenuItem>
+                 <MenuDivider />
                 <MenuItem
                   onClick={() => {
                     localStorage.removeItem("token");
                     localStorage.removeItem("user");
                     navigate("/login");
                   }}
+                  icon={<FaArrowRightFromBracket />}
+                  
                 >
                   Sair
                 </MenuItem>

@@ -18,7 +18,7 @@ import { useEffect } from 'react';
 import { useAtividades } from '../../../hooks/useAtividades';
 import { useUsuarios } from '../../../hooks/useUsuarios';
 
-export const AtividadeContrato = ({ isOpen, onClose }) => {
+export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
   const {
     atividadeSelecionada,
     setAtividadeSelecionada,
@@ -33,11 +33,15 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
 
   useEffect(() => {
     if (isOpen) {
-      setAtividadeSelecionada(atividadeInicial);
+      setAtividadeSelecionada({...atividadeInicial,
+        contratoId: contratoSelecionado?.id ?? 0,
+      });
       listarContratos(null, true); // força carregar todos os contratos
       listarUsuarios(); // carrega responsáveis
     }
   }, [isOpen]);
+
+  console.log('contrato selecionado', contratoSelecionado)
 
   return (
     <DialogModal
@@ -53,19 +57,13 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
       <Stack spacing={4}>
         {/* Contrato */}
         <FormControl>
-          <FormLabel>Contrato</FormLabel>
-          <Select
-            name="contratoId"
-            value={atividadeSelecionada?.contratoId || ''}
-            onChange={handleChangeAtvContrato}
-          >
-            <option value="">Selecione um contrato</option>
-            {contratosGeral.map((contrato) => (
-              <option key={contrato.id} value={contrato.id}>
-                {contrato.descricao || `Contrato ${contrato.id}`}
-              </option>
-            ))}
-          </Select>
+          <FormLabel>Contrato</FormLabel>          
+          <Input
+            name='contratoId'
+            type='text'
+            value={contratoSelecionado?.descricao}
+            disabled
+          />
         </FormControl>
 
         {/* Atividade */}
@@ -153,7 +151,7 @@ export const AtividadeContrato = ({ isOpen, onClose }) => {
           </FormControl>
 
           {/* Sequência */}
-          <FormControl>
+          <FormControl display={'none'}>
             <FormLabel>Sequência</FormLabel>
             <Input
               type="number"

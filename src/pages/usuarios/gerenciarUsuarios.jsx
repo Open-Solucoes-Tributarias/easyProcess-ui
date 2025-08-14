@@ -16,15 +16,15 @@ import {
   Box,
   Badge,
   Avatar,
+  AvatarBadge,
 } from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { RxAvatar } from 'react-icons/rx';
 import { FaPlus } from 'react-icons/fa';
 
 import { DialogModal } from '../../components/DialogModal';
 import { getPerfilLabel } from '../../utils/labelUtils';
 import { Informativo } from '../../components/Informativo';
 import { useUsuarios } from '../../hooks/useUsuarios';
+import { EditIcon } from '@chakra-ui/icons';
 
 export const GerenciarUsuarios = () => {
   const {
@@ -68,7 +68,9 @@ export const GerenciarUsuarios = () => {
         >
           <Flex align="center" gap={2} onClick={() => usuarioAbrirEdicao(usuario)}>
             <Flex align="center">
-              <Avatar src={RxAvatar} size="sm" />
+              <Avatar size="xs" name={usuario?.nome}>
+                <AvatarBadge boxSize="1" bg="green.500" />
+              </Avatar>
               <Box ml="3">
                 <Text fontWeight={500} color="gray.600" fontSize={14}>
                   {usuario?.nome}
@@ -86,7 +88,7 @@ export const GerenciarUsuarios = () => {
           </Flex>
           <IconButton
             aria-label="Editar"
-            icon={<BsThreeDotsVertical />}
+            icon={<EditIcon/>}
             variant="outline"
             size="sm"
             onClick={() => usuarioAbrirEdicao(usuario)}

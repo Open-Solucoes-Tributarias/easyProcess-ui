@@ -205,7 +205,7 @@ useEffect(() => {
                 <option value={3}>Atrasada</option>
               </Select>
             </FormControl>
-             <FormControl>
+             <FormControl display={'none'}>
               <FormLabel>Sequência</FormLabel>
               <Input
                 type='number'
