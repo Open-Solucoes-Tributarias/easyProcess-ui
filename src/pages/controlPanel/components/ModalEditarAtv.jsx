@@ -75,7 +75,10 @@ useEffect(() => {
         setOpen(false);
       }}
       title={"Detalhes da atividade"}
-      onDelete={() => excluirAtividadeContrato(atividadeSelecionada?.id, atividadeSelecionada?.contratoId)}
+      onDelete={() => {
+        excluirAtividadeContrato(atividadeSelecionada?.id, atividadeSelecionada?.contratoId);
+        setOpen(false)
+      }}
     >
       <Grid templateColumns="2fr 1fr" gap={2}>
         <GridItem>
