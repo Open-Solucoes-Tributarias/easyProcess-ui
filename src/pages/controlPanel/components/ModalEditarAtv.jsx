@@ -70,7 +70,10 @@ useEffect(() => {
       isOpen={open}
       size="5xl"
       onClose={() => setOpen(false)}
-      onSave={() => {salvarAtividadeContrato(); setOpen(false)}}
+      onSave={() => {
+        salvarAtividadeContrato(); 
+        setOpen(false);
+      }}
       title={"Detalhes da atividade"}
       onDelete={() => excluirAtividadeContrato(atividadeSelecionada?.id, atividadeSelecionada?.contratoId)}
     >

@@ -11,15 +11,17 @@ import {
   MenuList,
   MenuItem,
   MenuDivider,
-  GenericAvatarIcon,
+  AvatarBadge,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
 import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
 
+const user = JSON.parse(localStorage.getItem('user'));
+const userName = user?.usuario;
+
 const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
-  { label: "Gerenciar", path: "/gerenciar" },
   { label: "FT's e Atividades", path: "/frentes" },
   { label: "Gerenciar contratos", path: "/contratos" }
 ];
@@ -61,11 +63,11 @@ export const Navbar = ({ children }) => {
                 cursor={"pointer"}
                 minW={0}
               >
-                <Avatar size={"sm"} icon={<GenericAvatarIcon />} />
+                <Avatar size="sm" name={userName || null}>
+                  <AvatarBadge boxSize="1" bg="green.500" />
+                </Avatar>
               </MenuButton>
               <MenuList>
-                {/* <MenuItem onClick={() => navigate("/usuarios")}>Perfil</MenuItem> */}
-                {/* <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem> */}
                 <MenuDivider />
                 <MenuItem onClick={() => navigate('/clientes')}>
                   Gerenciar clientes

@@ -5,7 +5,6 @@ import { LoginPage } from "../pages/login/Login";
 import { PrivateRoute } from "./PrivateRoute";
 import { RegisterPage } from "../pages/login/Registro";
 import { DashboardLayout } from "../layouts/DashboardLayout";
-import { Gerenciar } from "../pages/gerenciar/Gerenciar";
 import { Frentes } from "../pages/frentes/Frentes";
 import { GerenciarContratos } from "../pages/contratos/GerenciarContratos";
 import { GerenciarUsuarios } from "../pages/usuarios/gerenciarUsuarios";
@@ -26,7 +25,6 @@ export const AppRoutes = () => {
           <Route element={<DashboardLayout />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/painel" element={<Painel />} />
-            <Route path="/gerenciar" element={<Gerenciar />} />
             <Route path="/frentes" element={<Frentes />} />
             <Route path="/contratos" element={<GerenciarContratos />} />
             <Route path="/usuarios" element={<GerenciarUsuarios />} />
