@@ -28,15 +28,15 @@ export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
   } = useAtividadesContrato();
 
   const { atividades } = useAtividades();
-  const { contratosGeral, listarContratos } = useContrato();
   const { usuarios, listarUsuarios } = useUsuarios();
 
   useEffect(() => {
     if (isOpen) {
       setAtividadeSelecionada({...atividadeInicial,
         contratoId: contratoSelecionado?.id ?? 0,
+        usuarioDelegadoId: contratoSelecionado?.supervisorUsuarioId || null,
+
       });
-      listarContratos(null, true); // força carregar todos os contratos
       listarUsuarios(); // carrega responsáveis
     }
   }, [isOpen]);
@@ -108,19 +108,12 @@ export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
 
           {/* Delegado */}
           <FormControl>
-            <FormLabel>Responsável</FormLabel>
-            <InputGroup>
-              <InputLeftElement pointerEvents="none">
-                <Avatar size="xs" name={atividadeSelecionada?.nomeUsuarioDelegado}>
-                  <AvatarBadge boxSize="1" bg="green.500" />
-                </Avatar>
-                                        
-              </InputLeftElement>
+            <FormLabel>Responsável</FormLabel>          
+            
               <Select
                 name="usuarioDelegadoId"
                 value={atividadeSelecionada?.usuarioDelegadoId || ''}
-                onChange={handleChangeAtvContrato}
-                pl="2.5rem"
+                onChange={handleChangeAtvContrato}               
               >
                 <option value="">Selecione o responsável</option>
                 {usuarios.map((usuario) => (
@@ -129,7 +122,6 @@ export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
                   </option>
                 ))}
               </Select>
-            </InputGroup>
           </FormControl>
         </Flex>
 

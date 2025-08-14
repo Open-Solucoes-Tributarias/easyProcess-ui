@@ -32,7 +32,7 @@ export const GerenciarContratos = () => {
 
   //estado do modal
   const [openModal, setOpenModal] = useState(false);
-  const [contratoSelecionado, setContratoSelecionado] = useState("");
+  const [contratoSelecionado, setContratoSelecionado] = useState(null);
 
   // ⬇️ agora é um array de ids as frentes
   const [frentesSelecionadas, setFrentesSelecionadas] = useState([]);
@@ -42,8 +42,12 @@ export const GerenciarContratos = () => {
 
   // selecionar contrato
   const handleSelectContrato = (e) => {
-    setContratoSelecionado(e.target.value); // se precisar número: Number(e.target.value)
+    const id = Number(e.target.value);
+    const obj = contratos.find(c => c.id === id) || null;
+    setContratoSelecionado(obj);
   };
+
+  console.log('contrato selecionado no state', contratoSelecionado)
 
   // toggle de seleção da frente
   const toggleFrente = (id) => {
@@ -76,14 +80,14 @@ export const GerenciarContratos = () => {
     const atvContrato = atividadesFiltradas.map((atv, index) => { //novo array com os valores de atividadecontrato que se espera
       return {
         id: 0,
-        contratoId: Number(contratoSelecionado),
+        contratoId: Number(contratoSelecionado?.id),
         atividadeId: atv?.id,
-        usuarioDelegadoId: 0,
+        usuarioDelegadoId: Number(contratoSelecionado?.supervisorUsuarioId),
         sequencia: index,
         statusAtividade: 0,
         descricaoCustomizada: `${atv?.nome}${atv?.instrucao?.trim() ? " | " + atv.instrucao : ""}`,
         dataLimite: new Date,
-        nomeUsuarioDelegado: atv?.nomeUsuarioDelegado
+        nomeUsuarioDelegado: contratoSelecionado?.nomeSupervisor,
       };
     });
 
@@ -142,7 +146,7 @@ export const GerenciarContratos = () => {
   };
 
   const abrirEdicaoContrato = () => {
-    const idSel = Number(contratoSelecionado) || 0;
+    const idSel = Number(contratoSelecionado?.id) || 0;
     if (!idSel) return;
     const c = contratos.find(c => c.id === idSel);
     if (!c) return;
@@ -169,8 +173,8 @@ export const GerenciarContratos = () => {
         </FormLabel>
         <Select
           placeholder="Selecione um contrato"
-          name="supervisorUsuarioId"
-          value={contratoSelecionado}
+          name="contratoId"
+          value={contratoSelecionado?.id}
           onChange={handleSelectContrato}
 
         >

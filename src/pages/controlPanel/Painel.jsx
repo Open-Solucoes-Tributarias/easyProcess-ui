@@ -21,7 +21,7 @@ export const Painel = () => {
         </GridItem>
 
         <GridItem>
-          <Text as="b" fontSize="xl">Atividades | Frentes de Trabalho</Text>
+          <Text as="b" fontSize="xl">Atividades atribuídas</Text>
           {contratoSelecionado && (
             <Button
               variant="text"
