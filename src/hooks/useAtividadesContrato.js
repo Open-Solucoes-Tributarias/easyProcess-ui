@@ -86,7 +86,7 @@ export const useAtividadesContrato = () => {
 
       sucesso.push(payload.atividadeId);
     } catch (err) {
-      falhas.push({ atividadeId: raw.atividadeId, error: String(err) });
+      falhas.push({ descricaoCustomizada: raw.descricaoCustomizada, error: String(err) });
     }
   }
 
@@ -96,7 +96,7 @@ export const useAtividadesContrato = () => {
     await listarAtividadesContrato(contratoId);
   }
 
-  return { sucesso, falhas };
+  return { sucesso, falhas, total: lista.length }; //retorno de sucesso para feedback da UI
 };
 
   const excluirAtividadeContrato = async (id, contratoId) => {

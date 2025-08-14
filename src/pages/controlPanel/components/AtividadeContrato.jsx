@@ -41,8 +41,6 @@ export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
     }
   }, [isOpen]);
 
-  console.log('contrato selecionado', contratoSelecionado)
-
   return (
     <DialogModal
       isOpen={isOpen}

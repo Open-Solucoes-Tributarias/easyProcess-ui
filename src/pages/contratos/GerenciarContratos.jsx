@@ -1,4 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
+import { useToast } from "@chakra-ui/react";
 import {
   Box, FormControl, FormLabel, Grid, GridItem, Select, Text, VStack, HStack, Button,
   IconButton,
@@ -21,6 +22,10 @@ import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
 import { ContratoEditModal } from "../../components/ContratoEditModal";
 
 export const GerenciarContratos = () => {
+  //states de notificação de salvamento
+  const toast = useToast({ position: 'bottom-left', isClosable: true });
+  const [save, setSave] = useState(false);
+
   const { contratos, listarContratos } = useContrato();
   const { frentes } = useFrentes();
   const { atividades } = useAtividades();
@@ -47,8 +52,6 @@ export const GerenciarContratos = () => {
     setContratoSelecionado(obj);
   };
 
-  console.log('contrato selecionado no state', contratoSelecionado)
-
   // toggle de seleção da frente
   const toggleFrente = (id) => {
     setFrentesSelecionadas((prev) =>
@@ -73,7 +76,6 @@ export const GerenciarContratos = () => {
       return ids.some((fid) => selecionadasSet.has(fid));
     });
   }, [atividades, frentesSelecionadas]);
-  console.log('atividades das frentes selecionadas', atividadesFiltradas);
 
   //funcao para criar atividadesContrato com base em atv filtradas
   useEffect(() => {
@@ -92,12 +94,8 @@ export const GerenciarContratos = () => {
     });
 
     setAtividadesListadas(atvContrato);
-    console.log('novo array de atvcontrato', atvContrato);
   }, [frentesSelecionadas]);
 
-  //atualizo a lista com o valor de atvcontrato
-
-  console.log('atividades listadas', atividadesListadas)
   ///abrir modal para editar
   const handleEditAtv = (atv) => {
     setAtividadeSelecionada(atv);
@@ -150,7 +148,7 @@ export const GerenciarContratos = () => {
     if (!idSel) return;
     const c = contratos.find(c => c.id === idSel);
     if (!c) return;
-    setContratoParaEdicao(c);   
+    setContratoParaEdicao(c);
     setIsContratoOpen(true);
   };
 
@@ -161,15 +159,15 @@ export const GerenciarContratos = () => {
         <FormLabel>
           <Text as="b" fontSize="xl">
             Selecionar contrato
-          </Text>           
-              <Button
-                variant="text"
-                color="#68D391"
-                leftIcon={contratoSelecionado ? null : <FaPlus />}
-                onClick={() => {contratoSelecionado ?  abrirEdicaoContrato() : abrirCriacaoContrato() }}
-              >
-                {contratoSelecionado ? 'Editar' : 'Adicionar'}
-              </Button>
+          </Text>
+          <Button
+            variant="text"
+            color="#68D391"
+            leftIcon={contratoSelecionado ? null : <FaPlus />}
+            onClick={() => { contratoSelecionado ? abrirEdicaoContrato() : abrirCriacaoContrato() }}
+          >
+            {contratoSelecionado ? 'Editar' : 'Adicionar'}
+          </Button>
         </FormLabel>
         <Select
           placeholder="Selecione um contrato"
@@ -187,7 +185,7 @@ export const GerenciarContratos = () => {
         <FormErrorMessage color={'red'}>Contrato é obrigatório</FormErrorMessage>
       </FormControl>
       {contratoSelecionado && (
-        <Grid templateColumns={{base: '1fr', sm: '1fr 1.4fr' }} gap={4} p={2}>
+        <Grid templateColumns={{ base: '1fr', sm: '1fr 1.4fr' }} gap={4} p={2}>
           <GridItem>
             <Flex direction={{ base: 'column', sm: 'row' }} justify="space-between" align="center">
               <Text as="b" fontSize="xl">
@@ -249,7 +247,7 @@ export const GerenciarContratos = () => {
             {/* lista de atividades filtradas */}
 
             <List spacing={3}>
-               <Text as="b" fontSize="xl">
+              <Text as="b" fontSize="xl">
                 Atividades herdadas
               </Text>
               {atividadesListadas.map((atv, index) => (
@@ -331,7 +329,27 @@ export const GerenciarContratos = () => {
             </List>
             {atividadesListadas.length > 0 && (
               <HStack justify="flex-end" paddingBlock={3}>
-                <Button onClick={() => salvarAtividadesContratoEmLote(atividadesListadas)}>
+                <Button
+                  isLoading={save}
+                  loadingText='Vinculando atividades...'
+                  onClick={async () => {
+                    setSave(true);
+                    try {
+                      const { sucesso = [], falhas = [] } =
+                        await salvarAtividadesContratoEmLote(atividadesListadas);
+                      toast({
+                        status: falhas.length ? (sucesso.length ? 'warning' : 'error') : 'success',
+                        title: falhas.length ? (sucesso.length ? `Parcialmente concluído, existem dados incompletos em ${falhas.length} atividade(s), nome: ${falhas[0]?.descricaoCustomizada}` : 'Nenhuma atividade salva')
+                          : 'Todas as atividades vinculadas com sucesso',
+                      });
+                    } catch {
+                      toast({ status: 'error', title: 'Erro ao salvar' });
+                    } finally {
+                      setSave(false);
+                    }
+                  }}
+
+                >
                   Salvar alterações
                 </Button>
               </HStack>

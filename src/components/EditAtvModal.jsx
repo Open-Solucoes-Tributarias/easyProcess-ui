@@ -34,7 +34,6 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
     );
 
     const [draftAtv, setDraftAtv] = useState(initial);
-    console.log('atividade atualizada', draftAtv)
 
     useEffect(() => {
         if (open) setDraftAtv(initial);

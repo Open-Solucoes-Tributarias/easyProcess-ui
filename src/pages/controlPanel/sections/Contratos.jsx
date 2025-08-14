@@ -67,8 +67,6 @@ export const Contratos = ({ onSelectContrato }) => {
     onSelectContrato?.(ctr);
   }, [onSelectContrato]);
 
-  console.log('contratos filtrados', contratosFiltrados)
-
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>
       <GridItem>
