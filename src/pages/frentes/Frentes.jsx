@@ -24,9 +24,8 @@ import { AtvEditModal } from "../../components/AtvEditModal";
 import { EditIcon } from "@chakra-ui/icons";
 import { FTEditModal } from "../../components/FTEditModal";
 
-export const Frentes = () => {
-    const toast = useToast();
-
+export const Frentes = () => {    
+    const toast = useToast({ position: 'bottom-left', isClosable: true });
     const {
         frentes,
         frenteIsEditOpen,
@@ -83,7 +82,7 @@ export const Frentes = () => {
 
     //handles modal atividade
     const abrirNovo = () => { setSelecionada(null); setIsOpen(true); };
-    const abrirEdicao = (atv) => { setSelecionada(atv); setIsOpen(true); };
+    // const abrirEdicao = (atv) => { setSelecionada(atv); setIsOpen(true); };
 
     // lista filtrada conforme o toggle "mostrar todas"
     const atividadesFiltradas = useMemo(() => {
@@ -114,16 +113,16 @@ export const Frentes = () => {
 
         if (!mudouIds.length) {
             toast({
-                title: "Nada para salvar",
+                title: "Nehuma modificação para salvar",
                 status: "info",
                 duration: 2500,
                 isClosable: true,
             });
             return;
         }
-
         try {
             // atualiza apenas as que mudaram
+            
             await Promise.all(
                 mudouIds.map(async (idStr) => {
                     const id = Number(idStr);
