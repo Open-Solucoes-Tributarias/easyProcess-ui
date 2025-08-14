@@ -5,3 +5,4 @@ export const dateConverter = (date) => {
 export const dateAndHrConverter = (date) => {
     return new Date(date).toLocaleString('pt-BR');
 }
+

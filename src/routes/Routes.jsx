@@ -9,6 +9,7 @@ import { Gerenciar } from "../pages/gerenciar/Gerenciar";
 import { Frentes } from "../pages/frentes/Frentes";
 import { GerenciarContratos } from "../pages/contratos/GerenciarContratos";
 import { GerenciarUsuarios } from "../pages/usuarios/gerenciarUsuarios";
+import { GerenciarClientes } from "../pages/clientes/GerenciarClientes";
 
 
 export const AppRoutes = () => {
@@ -29,6 +30,7 @@ export const AppRoutes = () => {
             <Route path="/frentes" element={<Frentes />} />
             <Route path="/contratos" element={<GerenciarContratos />} />
             <Route path="/usuarios" element={<GerenciarUsuarios />} />
+            <Route path="/clientes" element={<GerenciarClientes />} />
           </Route>
         </Route>
         {/* Rota error */}

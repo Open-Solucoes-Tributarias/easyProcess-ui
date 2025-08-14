@@ -33,6 +33,7 @@ function useDebouncedValue(value, delay = 300) {
 export const Contratos = ({ onSelectContrato }) => {
   const [filtro, setFiltro] = useState('');
   const debouncedFiltro = useDebouncedValue(filtro, 300);
+  const [ selectedContratoId, setSelectContratoId ] = useState(null);
 
   const { clientes } = useCliente();
   const { contratos, contratoLoading } = useContrato();
@@ -62,8 +63,11 @@ export const Contratos = ({ onSelectContrato }) => {
   }, [contratos, clientById, debouncedFiltro]);
 
   const handleClickContrato = useCallback((ctr) => {
+    setSelectContratoId(ctr?.id);
     onSelectContrato?.(ctr);
   }, [onSelectContrato]);
+
+  console.log('contratos filtrados', contratosFiltrados)
 
   return (
     <Grid templateColumns="1fr" gap={6} p={3}>
@@ -91,8 +95,11 @@ export const Contratos = ({ onSelectContrato }) => {
           </Box>
         ) : (
           <Stack spacing={3} pr={1}>
+            
             {contratosFiltrados.map((contrato) => {
               const cliente = clientById.get(contrato.clienteId);
+              const isActive = selectedContratoId === contrato?.id;
+              
               return (
                 <Flex
                   key={contrato.id}
@@ -100,38 +107,23 @@ export const Contratos = ({ onSelectContrato }) => {
                   gap="4"
                   alignItems="center"
                   border="1px solid"
-                  borderColor="#d0d0d0"
                   borderRadius={10}
+                  bg={isActive ? "#68d39131" : "#fff"}
+                  borderColor={isActive ? "#68D391" : "gray.200"}
                   px={5}
                   py={2}
-                  _hover={{ background: 'gray.100', cursor: 'pointer' }}
+                  cursor='pointer'
                 >
-                  <Avatar size="sm" bg="#48bb78" icon={<RiContractFill size={15} />} />
-                  <Box flex="1" minW={0}>
+                 
+                  <Flex direction='column' gap={0}>
                     <Heading size="sm" noOfLines={1}>
                       {contrato?.descricao}
                     </Heading>
                     <Text fontSize={12} noOfLines={1}>
-                      Supervisor: {contrato?.nomeSupervisor || '—'}
+                      Supervisor: {contrato?.nomeSupervisor || '—'} | Período {dateConverter(contrato?.dataInicio)} à {dateConverter(contrato?.dataFim)}
                     </Text>
-                    <Text fontSize={12}>
-                      Início {dateConverter(contrato?.dataInicio)} / Fim {dateConverter(contrato?.dataFim)}
-                    </Text>
-                  </Box>
-
-                  {cliente && (
-                    <Tag
-                      size="sm"
-                      variant="subtle"
-                      colorScheme="blue"
-                      whiteSpace="nowrap"
-                      maxW="45%"
-                    >
-                      <TagLabel title={`${cliente.razaoSocial} • ${cliente.cnpj}`}>
-                        Cliente: {cliente.razaoSocial} ({cliente.cnpj})
-                      </TagLabel>
-                    </Tag>
-                  )}
+                    <Text fontSize={12}>Cliente: {cliente.razaoSocial} <br />{cliente.cnpj}</Text>
+                  </Flex>                  
                 </Flex>
               );
             })}

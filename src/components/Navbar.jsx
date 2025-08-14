@@ -20,8 +20,8 @@ const Links = [
   { label: "Dashboard", path: "/dashboard" },
   { label: "Painel de controle", path: "/painel" },
   { label: "Gerenciar", path: "/gerenciar" },
-  { label: "FT's e Atividades", path: "/frentes"},
-  { label: "Gerenciar contratos", path: "/contratos"}
+  { label: "FT's e Atividades", path: "/frentes" },
+  { label: "Gerenciar contratos", path: "/contratos" }
 ];
 
 export const Navbar = ({ children }) => {
@@ -67,8 +67,11 @@ export const Navbar = ({ children }) => {
                 {/* <MenuItem onClick={() => navigate("/usuarios")}>Perfil</MenuItem> */}
                 {/* <MenuItem onClick={() => navigate("/")}>Configurações</MenuItem> */}
                 <MenuDivider />
-                <MenuItem 
-                onClick={() => navigate('usuarios')}>
+                <MenuItem onClick={() => navigate('/clientes')}>
+                  Gerenciar clientes
+                </MenuItem>
+                <MenuItem
+                  onClick={() => navigate('usuarios')}>
                   Gerenciar usuários
                 </MenuItem>
                 <MenuItem

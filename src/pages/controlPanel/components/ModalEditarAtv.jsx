@@ -70,7 +70,7 @@ useEffect(() => {
       isOpen={open}
       size="5xl"
       onClose={() => setOpen(false)}
-      onSave={() => salvarAtividadeContrato()}
+      onSave={() => {salvarAtividadeContrato(); setOpen(false)}}
       title={"Detalhes da atividade"}
       onDelete={() => excluirAtividadeContrato(atividadeSelecionada?.id, atividadeSelecionada?.contratoId)}
     >
@@ -136,7 +136,7 @@ useEffect(() => {
                 </Heading>
               </CardHeader>
               <Divider />
-              <CardBody maxHeight={200} overflowY="auto">
+              <CardBody maxHeight={200} overflowY="auto" maxW={650}>
                 <Stack divider={<StackDivider />} spacing={4}>
                   {movimentacoesAtv.map((mov, index) => (
                     <Box key={index}>
