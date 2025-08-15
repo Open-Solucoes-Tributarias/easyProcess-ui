@@ -113,7 +113,6 @@ export const AtvEditModal = ({
             onChange={handleChange}
           />
         </FormControl>
-
         <FormControl>
           <FormLabel>Tipo</FormLabel>
           <Select
@@ -125,47 +124,49 @@ export const AtvEditModal = ({
             <option value={2}>Recorrente</option>
           </Select>
         </FormControl>
+        {form?.tipo === 2 && ( //só visivel quando atividade for recorrente
+          <>
+            <FormControl>
+              <FormLabel>Período</FormLabel>
+              <Select
+                name="periodo"
+                value={form?.periodo ?? ''}
+                onChange={handleChange}
+              >
+                <option value="">Selecione um período</option>
+                <option value={1}>Diário</option>
+                <option value={2}>Semanal</option>
+                <option value={3}>Quinzenal</option>
+                <option value={4}>Mensal</option>
+                <option value={5}>Semestral</option>
+                <option value={6}>Personalizado</option>
+              </Select>
+            </FormControl>
 
-        <FormControl>
-          <FormLabel>Período</FormLabel>
-          <Select
-            name="periodo"
-            value={form?.periodo ?? ''}
-            onChange={handleChange}
-          >
-            <option value="">Selecione um período</option>
-            <option value={1}>Diário</option>
-            <option value={2}>Semanal</option>
-            <option value={3}>Quinzenal</option>
-            <option value={4}>Mensal</option>
-            <option value={5}>Semestral</option>
-            <option value={6}>Personalizado</option>
-          </Select>
-        </FormControl>
+            {form?.periodo === 6 && (
+              <FormControl>
+                <FormLabel>Intervalo em dias</FormLabel>
+                <Input
+                  type="number"
+                  name="intervaloEmDias"
+                  min={1}
+                  value={form?.intervaloEmDias ?? ''}
+                  onChange={handleChange}
+                />
+              </FormControl>
+            )}
 
-        {form?.periodo === 6 && (
-          <FormControl>
-            <FormLabel>Intervalo em dias</FormLabel>
-            <Input
-              type="number"
-              name="intervaloEmDias"
-              min={1}
-              value={form?.intervaloEmDias ?? ''}
-              onChange={handleChange}
-            />
-          </FormControl>
+            <FormControl>
+              <FormLabel>Inicio da recorrência</FormLabel>
+              <Input
+                type="datetime-local"
+                name="proximaExecucao"
+                value={form?.proximaExecucao || ''}
+                onChange={handleChange}
+              />
+            </FormControl>
+          </>
         )}
-
-        <FormControl>
-          <FormLabel>Próxima execução</FormLabel>
-          <Input
-            type="datetime-local"
-            name="proximaExecucao"
-            value={form?.proximaExecucao || ''}
-            onChange={handleChange}
-          />
-        </FormControl>
-
         <FormControl>
           <FormLabel>Instrução</FormLabel>
           <Input

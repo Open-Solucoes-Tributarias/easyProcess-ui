@@ -186,7 +186,7 @@ useEffect(() => {
               </InputGroup>
             </FormControl>
             <FormControl>
-              <FormLabel>Prazo limite</FormLabel>
+              <FormLabel>Prazo</FormLabel>
               <Input
                 type="datetime-local"
                 name="dataLimite"

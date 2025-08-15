@@ -91,10 +91,10 @@ export const AtividadeContrato = ({ isOpen, onClose, contratoSelecionado }) => {
           />
         </FormControl>
 
-        {/* Data limite */}
+        {/* Data limite / prazo */}
         <Flex direction='row' gap={3}>
           <FormControl>
-            <FormLabel>Data limite</FormLabel>
+            <FormLabel>Prazo</FormLabel>
             <Input
               name="dataLimite"
               type='datetime-local'

@@ -124,7 +124,7 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
                 </Flex>
                 <Flex direction={{ base: 'column', sm: 'row' }} gap={2}>
                     <FormControl>
-                        <FormLabel>Prazo limite</FormLabel>
+                        <FormLabel>Prazo</FormLabel>
                         <Input
                             type="datetime-local"
                             name="dataLimite"
