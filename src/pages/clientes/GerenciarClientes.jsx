@@ -13,15 +13,20 @@ import {
   IconButton,
   Stack,
   Box,
+  Select,
 } from '@chakra-ui/react';
-import { BsThreeDotsVertical } from 'react-icons/bs';
-import { RxReader } from 'react-icons/rx';
 import { FaPlus } from 'react-icons/fa';
-
 import { DialogModal } from '../../components/DialogModal';
 import { Informativo } from '../../components/Informativo';
 import { useCliente } from '../../hooks/useClientes';
 import { FaUserTie } from 'react-icons/fa6';
+
+import {
+  formatCliente,
+  inferTipoDocumento,
+  remaskDocumento,
+} from '../../utils/formatCliente';
+import { EditIcon } from '@chakra-ui/icons';
 
 export const GerenciarClientes = () => {
   const {
@@ -37,6 +42,37 @@ export const GerenciarClientes = () => {
     setClienteIsEditOpen,
   } = useCliente();
 
+  // Tipo atual:
+  // 1) usa o tipo salvo (se houver)
+  // 2) senão, infere pelo conteúdo do campo 'cnpj' (11 dígitos = CPF, 14 = CNPJ)
+  const tipoDocumentoAtual =
+    clienteSelecionado?.tipoDocumento ??
+    inferTipoDocumento(clienteSelecionado?.cnpj || "");
+
+  // Valor do input vem SEMPRE de 'cnpj' (API única)
+  const documentoValue = clienteSelecionado?.cnpj || "";
+
+  // Mudar o tipo → re-mascar o valor atual e manter em 'cnpj'
+  const onChangeTipoDocumento = (e) => {
+    const novoTipo = e.target.value;
+    const reformatado = remaskDocumento(documentoValue, novoTipo);
+
+    // atualiza tipoDocumento (para UI) e cnpj (valor que vai pra API)
+    handleChangeCliente({ target: { name: 'tipoDocumento', value: novoTipo } });
+    handleChangeCliente({ target: { name: 'cnpj', value: reformatado } });
+  };
+
+  // Digitação no documento → formata conforme tipo atual e salva em 'cnpj'
+  const onChangeDocumento = (e) => {
+    const raw = e.target.value;
+    const formatted = formatCliente(raw, {
+      isCnpj: tipoDocumentoAtual === 'CNPJ',
+      isCpf: tipoDocumentoAtual === 'CPF',
+    });
+    handleChangeCliente({ target: { name: 'cnpj', value: formatted } });
+  };
+
+  // Lista mostra o campo 'cnpj' (pode conter CPF/CNPJ/outra string)
   const ListaClientes = () => (
     <List spacing={3} w="100%">
       {clientes.map((cliente, index) => (
@@ -65,7 +101,7 @@ export const GerenciarClientes = () => {
           </Flex>
           <IconButton
             aria-label="Editar"
-            icon={<BsThreeDotsVertical />}
+            icon={<EditIcon />}
             variant="outline"
             size="sm"
             onClick={() => clienteAbrirEdicao(cliente)}
@@ -79,9 +115,7 @@ export const GerenciarClientes = () => {
     <>
       <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={10}>
         <GridItem>
-          <Text as="b" fontSize="xl">
-            Clientes
-          </Text>
+          <Text as="b" fontSize="xl">Clientes</Text>
           <Button
             variant="text"
             color="#68D391"
@@ -109,7 +143,7 @@ export const GerenciarClientes = () => {
         isOpen={clienteIsEditOpen}
         onClose={() => setClienteIsEditOpen(false)}
         title={clienteModoEdicao ? 'Editar Cliente' : 'Adicionar Cliente'}
-        onSave={salvarCliente}
+        onSave={salvarCliente}  // já estará em clienteSelecionado.cnpj, formatado
         onDelete={clienteModoEdicao ? () => excluirCliente(clienteSelecionado?.id) : null}
         showDelete={clienteModoEdicao}
       >
@@ -122,24 +156,48 @@ export const GerenciarClientes = () => {
               onChange={handleChangeCliente}
             />
           </FormControl>
+            <FormControl>
+              <FormLabel>Razão Social</FormLabel>
+              <Input
+                name="razaoSocial"
+                value={clienteSelecionado?.razaoSocial || ''}
+                onChange={handleChangeCliente}
+              />
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>Razão Social</FormLabel>
-            <Input
-              name="razaoSocial"
-              value={clienteSelecionado?.razaoSocial || ''}
-              onChange={handleChangeCliente}
-            />
-          </FormControl>
+            {/* Tipo de Documento (apenas para máscara/UI) */}
+          <Flex direction='row' gap={1}>
+            <FormControl width='30%'>
+              <FormLabel>Tipo</FormLabel>
+              <Select
+                name="tipoDocumento"
+                value={tipoDocumentoAtual}
+                onChange={onChangeTipoDocumento}
+              >
+                <option value="CNPJ">CNPJ</option>
+                <option value="CPF">CPF</option>
+                <option value="OUTRO">Outro</option>
+              </Select>
+            </FormControl>
 
-          <FormControl>
-            <FormLabel>CNPJ</FormLabel>
-            <Input
-              name="cnpj"
-              value={clienteSelecionado?.cnpj || ''}
-              onChange={handleChangeCliente}
-            />
-          </FormControl>
+            {/* Documento (sempre salva em 'cnpj') */}
+            <FormControl>
+              <FormLabel>Documento</FormLabel>
+              <Input
+                name="cnpj"  // <-- mantém compat c/ backend
+                value={documentoValue}
+                onChange={onChangeDocumento}
+                placeholder={
+                  tipoDocumentoAtual === 'CNPJ'
+                    ? '00.000.000/0000-00'
+                    : tipoDocumentoAtual === 'CPF'
+                      ? '000.000.000-00'
+                      : 'Digite o documento'
+                }
+                inputMode={tipoDocumentoAtual === 'OUTRO' ? 'text' : 'numeric'}
+              />
+            </FormControl>
+          </Flex>
 
           {clienteModoEdicao && (
             <FormControl>
@@ -148,7 +206,6 @@ export const GerenciarClientes = () => {
                 disabled
                 type="datetime-local"
                 name="dataCadastro"
-                // value={contratoSelecionado?.dataInicio?.split('T')[0] || ''}
                 value={clienteSelecionado?.dataCadastro || ''}
                 onChange={handleChangeCliente}
               />
