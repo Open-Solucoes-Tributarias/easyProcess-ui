@@ -117,14 +117,14 @@ export const AtvEditModal = ({
           <FormLabel>Tipo</FormLabel>
           <Select
             name="tipo"
-            value={form?.tipo ?? 1}
+            value={form?.tipo ?? 0}
             onChange={handleChange}
           >
-            <option value={1}>Única</option>
-            <option value={2}>Recorrente</option>
+            <option value={0}>Única</option>
+            <option value={1}>Recorrente</option>
           </Select>
         </FormControl>
-        {form?.tipo === 2 && ( //só visivel quando atividade for recorrente
+        {form?.tipo === 1 && ( //só visivel quando atividade for recorrente
           <>
             <FormControl>
               <FormLabel>Período</FormLabel>

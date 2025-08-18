@@ -15,7 +15,7 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 import { SearchInput } from "../../../components/InputSearch";
-import { dateConverter } from "../../../utils/utils";
+import { dateConverter, filterDateMonth, getCurrentMonth } from "../../../utils/utils";
 import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { ModalEditarAtv } from "../components/ModalEditarAtv";
 import { useAtividadesContrato } from "../../../hooks/useAtividadesContrato";
@@ -34,12 +34,6 @@ export const AtvContrato = ({ contratoSelecionado }) => {
     loadingAtividades,
   } = useAtividadesContrato();
 
-  //mes atual para valor incial do estado de data
-  const getCurrentMonth = () => {
-    const hoje = new Date();
-    return `${hoje.getFullYear()}-${String(hoje.getMonth() + 1).padStart(2, "0")}`;
-  };
-
   const [filtro, setFiltro] = useState('');
   // state do filtro de data, sendo mes e ano
   const [dateRef, setDateRef] = useState(getCurrentMonth());
@@ -48,24 +42,7 @@ export const AtvContrato = ({ contratoSelecionado }) => {
     if (contratoSelecionado?.id) {
       listarAtividadesContrato(contratoSelecionado.id);
     }
-  }, [contratoSelecionado]);
-
-    //funcao de filtro por data
-  const filterDateMonth = (atividades, dateRef) => {
-    if (!dateRef) return atividades; // se não há filtro, retorna tudo
-
-    return atividades.filter((atv) => {
-      if (!atv.dataLimite) return false;
-
-      const d = new Date(atv.dataLimite);
-      if (isNaN(d)) return false;
-
-      // monta "YYYY-MM" com ano e mês da dataLimite das atividades
-      const ym = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-
-      return ym === dateRef;
-    });
-  };
+  }, [contratoSelecionado]); 
 
   const atividadesFiltradas = filterDateMonth(atividadesContrato, dateRef)
     .filter(atv =>
@@ -92,7 +69,9 @@ export const AtvContrato = ({ contratoSelecionado }) => {
           {loadingAtividades ? (
             <Informativo tipo="carregando" />
           ) : atividadesContrato.length === 0 ? (
-            <Informativo titulo='Não existem atividades atribuidas' />
+            <Informativo titulo="Não existem atividades atribuídas" />
+          ) : atividadesFiltradas.length === 0 ? (
+            <Informativo titulo="Nenhuma atividade encontrada" mensagem='Tente ajustar o mês/ano selecionado ou o termo da pesquisa' />
           ) : (
             atividadesFiltradas.map((atv) => (
               <ListItem

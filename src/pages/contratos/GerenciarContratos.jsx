@@ -1,5 +1,5 @@
 import { useState, useMemo, useEffect } from "react";
-import { useToast } from "@chakra-ui/react";
+import { Input, useToast } from "@chakra-ui/react";
 import {
   Box, FormControl, FormLabel, Grid, GridItem, Select, Text, VStack, HStack, Button,
   IconButton,
@@ -20,6 +20,8 @@ import { ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@
 import { EditAtvModal } from "../../components/EditAtvModal";
 import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
 import { ContratoEditModal } from "../../components/ContratoEditModal";
+import { criarAtvRecorrentes, filterDateMonth, getCurrentMonth } from "../../utils/utils";
+import { Informativo } from "../../components/Informativo";
 
 export const GerenciarContratos = () => {
   //states de notificação de salvamento
@@ -30,6 +32,9 @@ export const GerenciarContratos = () => {
   const { frentes } = useFrentes();
   const { atividades } = useAtividades();
   const { salvarAtividadesContratoEmLote } = useAtividadesContrato();
+
+  //Data para filtro por mês
+  const [dateRef, setDateRef] = useState(getCurrentMonth());
 
   // estado do modal de contrato
   const [isContratoOpen, setIsContratoOpen] = useState(false);
@@ -77,24 +82,13 @@ export const GerenciarContratos = () => {
     });
   }, [atividades, frentesSelecionadas]);
 
+
   //funcao para criar atividadesContrato com base em atv filtradas
   useEffect(() => {
-    const atvContrato = atividadesFiltradas.map((atv, index) => { //novo array com os valores de atividadecontrato que se espera
-      return {
-        id: 0,
-        contratoId: Number(contratoSelecionado?.id),
-        atividadeId: atv?.id,
-        usuarioDelegadoId: Number(contratoSelecionado?.supervisorUsuarioId),
-        sequencia: index,
-        statusAtividade: 0,
-        descricaoCustomizada: `${atv?.nome}${atv?.instrucao?.trim() ? " | " + atv.instrucao : ""}`,
-        dataLimite: new Date,
-        nomeUsuarioDelegado: contratoSelecionado?.nomeSupervisor,
-      };
-    });
-
+    if (!contratoSelecionado) return;
+    const atvContrato = criarAtvRecorrentes(atividadesFiltradas, contratoSelecionado); //utilo funcao hook para criar as atividades
     setAtividadesListadas(atvContrato);
-  }, [frentesSelecionadas]);
+  }, [frentesSelecionadas, atividadesFiltradas, contratoSelecionado]);
 
   ///abrir modal para editar
   const handleEditAtv = (atv) => {
@@ -151,6 +145,9 @@ export const GerenciarContratos = () => {
     setContratoParaEdicao(c);
     setIsContratoOpen(true);
   };
+
+  //filtro de data para o array das atividades criadas
+  const listaFiltradaAtividades = filterDateMonth(atividadesListadas, dateRef);
 
 
   return (
@@ -247,85 +244,96 @@ export const GerenciarContratos = () => {
             {/* lista de atividades filtradas */}
 
             <List spacing={3}>
-              <Text as="b" fontSize="xl">
-                Atividades herdadas
-              </Text>
-              {atividadesListadas.map((atv, index) => (
-                <ListItem
-                  key={index}
-                  w="100%"
-                  display="flex"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  border="1px solid"
-                  borderColor="#d0d0d0"
-                  px={3}
-                  py={2}
-                  borderRadius="md"
-                >
-                  <Flex align="center" gap={2}>
-                    <Flex align="center" gap={1}>
-                      <Flex direction='column' gap={1}>
-                        <Tooltip placement="Defina sequência das atividades">
-                          <IconButton variant='outline' size='xs' icon={<ChevronUpIcon />} onClick={() => move(index, "up")} />
-                          <IconButton variant='outline' size='xs' icon={<ChevronDownIcon />} onClick={() => move(index, "down")} />
+              <Flex direction='row' justify='space-between' gap={1}>
+                <Text as="b" fontSize="xl">
+                  Atividades herdadas
+                </Text>
+                <Input width='30%' type='month' value={dateRef} onChange={(e) => setDateRef(e.target.value)} />
+                {/* YYYY/-MM */}
+              </Flex>
+              {listaFiltradaAtividades?.length ? (
+                listaFiltradaAtividades.map((atv, index) => (
+                  <ListItem
+                    key={index}
+                    w="100%"
+                    display="flex"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    border="1px solid"
+                    borderColor="#d0d0d0"
+                    px={3}
+                    py={2}
+                    borderRadius="md"
+                  >
+                    <Flex align="center" gap={2}>
+                      <Flex align="center" gap={1}>
+                        <Flex direction='column' gap={1}>
+                          <Tooltip placement="Defina sequência das atividades">
+                            <IconButton variant='outline' size='xs' icon={<ChevronUpIcon />} onClick={() => move(index, "up")} />
+                            <IconButton variant='outline' size='xs' icon={<ChevronDownIcon />} onClick={() => move(index, "down")} />
+                          </Tooltip>
+                        </Flex>
+                        <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
+                          <IconButton
+                            isReadOnly
+                            cursor="default"
+                            size='sm'
+                            variant='ghost'
+                            aria-label="Status da atividade"
+                            icon={
+                              atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
+                                atv.statusAtividade === 1 ? <FaHourglassHalf color="gray" /> :
+                                  atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
+                                    atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
+                                      <FaRegClock color="gray" />
+                            }
+                          />
                         </Tooltip>
+                        <Box ml="3">
+                          <Text fontWeight={600} color="gray.600" fontSize={14}>
+                            {atv?.descricaoCustomizada}
+                          </Text>
+                        </Box>
                       </Flex>
-                      <Tooltip label={getStatusAtividade(atv?.statusAtividade)} placement="top">
+                    </Flex>
+                    <Flex gap={2}>
+                      <IconButton
+                        aria-label="Editar"
+                        icon={<EditIcon />}
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditAtv(atv)}
+                      />
+                      <Tooltip label={atv?.nomeUsuarioDelegado} placement="top">
                         <IconButton
-                          isReadOnly
-                          cursor="default"
-                          size='sm'
-                          variant='ghost'
-                          aria-label="Status da atividade"
+                          aria-label="Responsável"
                           icon={
-                            atv.statusAtividade === 0 ? <FaRegClock color="gray" /> :
-                              atv.statusAtividade === 1 ? <FaHourglassHalf color="gray" /> :
-                                atv.statusAtividade === 2 ? <FaRegCheckCircle color="green" /> :
-                                  atv.statusAtividade === 3 ? <FaExclamationTriangle color="red" /> :
-                                    <FaRegClock color="gray" />
+                            <Avatar size="xs" name={atv?.nomeUsuarioDelegado}>
+                              <AvatarBadge boxSize="1" bg="green.500" />
+                            </Avatar>
                           }
+                          variant="outline"
+                          size="sm"
                         />
                       </Tooltip>
-                      <Box ml="3">
-                        <Text fontWeight={600} color="gray.600" fontSize={14}>
-                          {atv?.descricaoCustomizada}
-                        </Text>
-                      </Box>
+                      <Tooltip label={'Remover atividade'} placement="top">
+                        <IconButton
+                          aria-label="remover"
+                          icon={<CloseIcon />}
+                          variant="outline"
+                          size="sm"
+                          onClick={() => handleRemoverAtv(atv?.atividadeId)}
+                        />
+                      </Tooltip>
                     </Flex>
-                  </Flex>
-                  <Flex gap={2}>
-                    <IconButton
-                      aria-label="Editar"
-                      icon={<EditIcon />}
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEditAtv(atv)}
-                    />
-                    <Tooltip label={atv?.nomeUsuarioDelegado} placement="top">
-                      <IconButton
-                        aria-label="Responsável"
-                        icon={
-                          <Avatar size="xs" name={atv?.nomeUsuarioDelegado}>
-                            <AvatarBadge boxSize="1" bg="green.500" />
-                          </Avatar>
-                        }
-                        variant="outline"
-                        size="sm"
-                      />
-                    </Tooltip>
-                    <Tooltip label={'Remover atividade'} placement="top">
-                      <IconButton
-                        aria-label="remover"
-                        icon={<CloseIcon />}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => handleRemoverAtv(atv?.atividadeId)}
-                      />
-                    </Tooltip>
-                  </Flex>
-                </ListItem>
-              ))}
+                  </ListItem>
+                ))
+              ) : (
+                <Informativo
+                  titulo="Nenhuma atividade encontrada"
+                  mensagem="Tente ajustar o mês/ano selecionado ou o termo da pesquisa"
+                />
+              )}
             </List>
             {atividadesListadas.length > 0 && (
               <HStack justify="flex-end" paddingBlock={3}>
