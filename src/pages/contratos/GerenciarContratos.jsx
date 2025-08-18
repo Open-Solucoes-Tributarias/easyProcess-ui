@@ -1,7 +1,7 @@
 import { useState, useMemo, useEffect } from "react";
 import { Input, useToast } from "@chakra-ui/react";
 import {
-  Box, FormControl, FormLabel, Grid, GridItem, Select, Text, VStack, HStack, Button,
+  Box, FormControl, FormLabel, Grid, GridItem, Text, VStack, HStack, Button,
   IconButton,
   Tooltip,
   Avatar,
@@ -16,12 +16,13 @@ import { useFrentes } from "../../hooks/useFrentes";
 import { useAtividades } from "../../hooks/useAtividades";
 import { getStatusAtividade } from "../../utils/labelUtils";
 import { FaExclamationTriangle, FaHourglassHalf, FaPlus, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
-import { ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon, InfoIcon } from "@chakra-ui/icons";
+import { ChevronDownIcon, ChevronUpIcon, CloseIcon, EditIcon } from "@chakra-ui/icons";
 import { EditAtvModal } from "../../components/EditAtvModal";
 import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
 import { ContratoEditModal } from "../../components/ContratoEditModal";
 import { criarAtvRecorrentes, filterDateMonth, getCurrentMonth } from "../../utils/utils";
 import { Informativo } from "../../components/Informativo";
+import ContratoSelect from "../../components/ContratoSelect";
 
 export const GerenciarContratos = () => {
   //states de notificação de salvamento
@@ -97,6 +98,9 @@ export const GerenciarContratos = () => {
   }
 
   // funcao para pegar atv editada no modal e ataulizar no array
+
+  //***existe uma limitação na edição de atividades recorrentes, quando são editadas, não existe um identificador unico alem da data para para identificar quais delas são salvar
+  // atual ao salvar uma recorrente, todas terão a mesma informações neste momento, se indica então fazer o controle pelo painel de controle******
   const handleSalvarAtv = (atvEditada) => {
     setAtividadesListadas(prev =>
       prev.map(atv =>
@@ -166,19 +170,11 @@ export const GerenciarContratos = () => {
             {contratoSelecionado ? 'Editar' : 'Adicionar'}
           </Button>
         </FormLabel>
-        <Select
-          placeholder="Selecione um contrato"
-          name="contratoId"
-          value={contratoSelecionado?.id}
-          onChange={handleSelectContrato}
-
-        >
-          {contratos.map((c) => (
-            <option key={c?.id} value={c?.id}>
-              {c?.descricao}
-            </option>
-          ))}
-        </Select>
+        <ContratoSelect
+          contratos={contratos}
+          contratoSelecionado={contratoSelecionado}
+          setContratoSelecionado={setContratoSelecionado}
+        />
         <FormErrorMessage color={'red'}>Contrato é obrigatório</FormErrorMessage>
       </FormControl>
       {contratoSelecionado && (
