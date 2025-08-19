@@ -77,10 +77,15 @@ export const useCliente = () => {
       setClienteLoading(true);
       await removerCliente(id);
       await listarClientes();
-    } catch (err) {
+    } catch (err) {  
+      if (err.status === 500) {
+        alert('Cliente não pode ser excluído, pois está vinculado a processos ou fluxos de trabalho existentes.');
+        return;
+      }
       console.error("Erro ao deletar cliente", err);
     } finally {
       setClienteLoading(false);
+      setClienteIsEditOpen(false);
     }
   };
 
