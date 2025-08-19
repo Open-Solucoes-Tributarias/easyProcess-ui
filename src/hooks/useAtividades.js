@@ -14,7 +14,7 @@ export const atividadeInicial = {
   tipo: 1,
   periodo: 1,
   intervaloEmDias: 0,
-  proximaExecucao: new Date(),
+  proximaExecucao: null,
   empresaId: empresaId,
   instrucao: "",
   frenteDeTrabalhoIds: [],

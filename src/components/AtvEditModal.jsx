@@ -19,7 +19,7 @@ const atividadeInicial = {
   tipo: 1,
   periodo: 1,
   intervaloEmDias: 0,
-  proximaExecucao: '',
+  proximaExecucao: null,
   empresaId: JSON.parse(localStorage.getItem('user'))?.empresaId,
   instrucao: '',
   frenteDeTrabalhoIds: [],
@@ -161,7 +161,7 @@ export const AtvEditModal = ({
               <Input
                 type="datetime-local"
                 name="proximaExecucao"
-                value={form?.proximaExecucao || ''}
+                value={form?.proximaExecucao || null}
                 onChange={handleChange}
               />
             </FormControl>
