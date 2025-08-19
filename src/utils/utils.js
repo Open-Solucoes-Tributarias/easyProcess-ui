@@ -80,12 +80,12 @@ export const criarAtvRecorrentes = (atvs = [], contrato = {}) => {
       nomeUsuarioDelegado: nomeResp,
     };
 
-    const tipo = Number(atv?.tipo ?? 0);     // 0 = única, 1 = recorrente
+    const tipo = Number(atv?.tipo ?? 1);     // 1 = única, 2 = recorrente
     const periodo = Number(atv?.periodo ?? 0);
     let atual = new Date(atv?.proximaExecucao || Date.now());
 
-    // ÚNICA (tipo 0) OU se dataFim inválida → cria só uma
-    if (tipo !== 1 || !(fim instanceof Date) || isNaN(fim)) {
+    // ÚNICA (tipo 1) OU se dataFim inválida → cria só uma
+    if (tipo !== 2 || !(fim instanceof Date) || isNaN(fim)) {
       saida.push({
         ...baseObj,
         sequencia: saida.length,
@@ -95,7 +95,7 @@ export const criarAtvRecorrentes = (atvs = [], contrato = {}) => {
       return;
     }
 
-    // RECORRENTE (tipo 1), usa PERIODO para frequência
+    // RECORRENTE (tipo 2), usa PERIODO para frequência
     let i = 0;
     while (atual <= fim) {
       saida.push({
