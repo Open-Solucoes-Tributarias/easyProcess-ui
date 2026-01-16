@@ -138,8 +138,9 @@ export const AtvEditModal = ({
                 <option value={2}>Semanal</option>
                 <option value={3}>Quinzenal</option>
                 <option value={4}>Mensal</option>
-                <option value={5}>Semestral</option>
+                <option value={5}>Trimestral</option>
                 <option value={6}>Personalizado</option>
+                <option value={7}>Semestral</option>
               </Select>
             </FormControl>
 

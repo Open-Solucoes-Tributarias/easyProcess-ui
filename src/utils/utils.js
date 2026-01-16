@@ -53,6 +53,7 @@ const proximaData = (periodo, base, intervaloEmDias = 0) => {
     case 4: return addMonths(base, 1);
     case 5: return addMonths(base, 3);
     case 6: return addYears(base, 1);
+    case 7: return addMonths(base, 6);
     default: return null;
   }
 };
