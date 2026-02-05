@@ -3,7 +3,6 @@ import imageLogin from "../../../src/assets/background.png";
 import {
   Button,
   Flex,
-  Text,
   FormControl,
   FormLabel,
   Heading,
@@ -11,8 +10,6 @@ import {
   Stack,
   Image,
   useToast,
-  Tooltip,
-  Link,
 } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -26,7 +23,8 @@ export const LoginPage = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = { email, senha: password };
 
     try {
@@ -57,7 +55,7 @@ export const LoginPage = () => {
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
-        <Stack spacing={4} w={'full'} maxW={'md'}>
+        <Stack spacing={4} w={'full'} maxW={'md'} as="form" onSubmit={handleSubmit}>
           <Image width={60} src="/logoEp.svg" alt="Logo" />
           <Heading fontSize={'2xl'}></Heading>
           <FormControl id="email">
@@ -76,12 +74,12 @@ export const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
             />
           </FormControl>
-          <Stack spacing={6}>         
+          <Stack spacing={6}>
             <Button
+              type="submit"
               colorScheme={'blue'}
               variant={'solid'}
-              isLoading={loading}
-              onClick={handleSubmit}>
+              isLoading={loading}>
               Acessar
             </Button>
           </Stack>

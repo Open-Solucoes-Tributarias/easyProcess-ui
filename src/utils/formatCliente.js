@@ -48,7 +48,7 @@ export function inferTipoDocumento(value) {
   return "OUTRO";
 }
 
-// Remeasca o valor atual para um novo tipo
+// Remarque o valor atual para um novo tipo
 export function remaskDocumento(value, novoTipo) {
   const d = onlyDigits(value);
   if (novoTipo === "CNPJ") return formatCNPJ(d);
