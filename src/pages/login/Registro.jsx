@@ -25,7 +25,8 @@ export const RegisterPage = () => {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     const payload = {
       nome,
       email,
@@ -36,8 +37,8 @@ export const RegisterPage = () => {
 
     try {
       setLoading(true);
-        await register(payload);
-        // localStorage.setItem('token', response.token);
+      await register(payload);
+      // localStorage.setItem('token', response.token);
       toast({
         title: 'Cadastro realizado com sucesso.',
         status: 'success',
@@ -61,7 +62,7 @@ export const RegisterPage = () => {
   return (
     <Stack minH={'100vh'} direction={{ base: 'column', md: 'row' }}>
       <Flex p={8} flex={1} align={'center'} justify={'center'}>
-        <Stack spacing={4} w={'full'} maxW={'md'}>
+        <Stack spacing={4} w={'full'} maxW={'md'} as="form" onSubmit={handleSubmit}>
           <Image width={60} src="/logoEp.svg" alt="Logo" />
           <Heading fontSize={'2xl'}>Crie sua conta</Heading>
           <FormControl id="nome" isRequired>
@@ -96,10 +97,10 @@ export const RegisterPage = () => {
               <Link onClick={() => navigate('/')}>Já tenho uma conta</Link>
             </Stack>
             <Button
+              type="submit"
               colorScheme={'blue'}
               variant={'solid'}
-              isLoading={loading}
-              onClick={handleSubmit}>
+              isLoading={loading}>
               Cadastrar
             </Button>
           </Stack>
