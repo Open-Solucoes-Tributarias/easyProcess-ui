@@ -313,6 +313,11 @@ export const GerenciarContratos = () => {
 
   return (
     <Box w="100%" px={4} py={6}>
+      {activeStep > 0 && contratoSelecionado && (
+        <Heading size="md" color="gray.700" mb={6} textAlign="center">
+          {contratoSelecionado.descricao}
+        </Heading>
+      )}
       <Stepper index={activeStep} mb={8} colorScheme="green">
         {steps.map((step, index) => (
           <Step key={index}>
