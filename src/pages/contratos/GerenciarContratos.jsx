@@ -174,20 +174,64 @@ export const GerenciarContratos = () => {
   //***existe uma limitação na edição de atividades recorrentes, quando são editadas, não existe um identificador unico alem da data para para identificar quais delas são salvar
   // atual ao salvar uma recorrente, todas terão a mesma informações neste momento, se indica então fazer o controle pelo painel de controle******
   const handleSalvarAtv = (atvEditada) => {
-    setAtividadesListadas(prev =>
-      prev.map(atv => {
-        // Prioridade 1: ID do Banco
-        if (atvEditada.id > 0 && atv.id === atvEditada.id) {
-          return atvEditada;
+    setAtividadesListadas(prev => {
+      const exists = prev.some(atv =>
+        (atvEditada.id > 0 && atv.id === atvEditada.id) ||
+        (atvEditada.tempId && atv.tempId === atvEditada.tempId)
+      );
+
+      if (exists) {
+        return prev.map(atv => {
+          if (atvEditada.id > 0 && atv.id === atvEditada.id) return atvEditada;
+          if (atvEditada.tempId && atv.tempId === atvEditada.tempId) return atvEditada;
+          return atv;
+        });
+      } else {
+        // Inserção: Avulsa
+        if (atvEditada.tipo === 2) {
+          // Recorrente: Gera múltiplas instâncias
+          const template = {
+            ...atvEditada,
+            nome: atvEditada.descricaoCustomizada,
+            proximaExecucao: atvEditada.dataLimite
+          };
+          const novas = criarAtvRecorrentes([template], contratoSelecionado);
+
+          const startSeq = prev.length;
+          const novasComSeq = novas.map((n, i) => ({
+            ...n,
+            sequencia: startSeq + i,
+            atividadeId: 0,
+            descricaoCustomizada: atvEditada.descricaoCustomizada,
+            statusAtividade: 0
+          }));
+
+          return [...prev, ...novasComSeq];
+        } else {
+          // Única
+          return [...prev, { ...atvEditada, sequencia: prev.length }];
         }
-        // Prioridade 2: ID Temporário (para itens novos ou recorrentes gerados em memória)
-        if (atvEditada.tempId && atv.tempId === atvEditada.tempId) {
-          return atvEditada;
-        }
-        // Não atualiza outros itens por 'atividadeId' para evitar colisão em recorrentes
-        return atv;
-      })
-    );
+      }
+    });
+  };
+
+  const handleCriarAvulsa = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const nova = {
+      id: 0,
+      contratoId: contratoSelecionado?.id || 0,
+      atividadeId: 0,
+      tempId: Date.now(),
+      descricaoCustomizada: '',
+      tipo: 1, // Avulsa
+      frenteDeTrabalhoIds: [],
+      dataLimite: new Date().toISOString(),
+      statusAtividade: 0,
+      sequencia: atividadesListadas.length,
+      nomeUsuarioDelegado: '',
+      avatarUsuarioDelegado: ''
+    };
+    handleEditAtv(nova);
   };
   //remover uma atividade com base no seu id
   const handleRemoverAtv = (atvParaRemover) => {
@@ -391,6 +435,14 @@ export const GerenciarContratos = () => {
               onChange={(e) => setDateRef(e.target.value)}
               bg="white"
             />
+            <Button
+              type="button"
+              leftIcon={<Icon as={FaPlus} />}
+              colorScheme="blue"
+              onClick={handleCriarAvulsa}
+            >
+              Nova Atividade
+            </Button>
           </Flex>
 
           <Box>

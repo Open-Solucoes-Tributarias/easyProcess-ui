@@ -35,7 +35,8 @@ export const AtvContrato = ({
   setAtividadeSelecionada,
   atividadeSelecionada,
   modalEditarAberto,
-  setModalEditarAberto
+  setModalEditarAberto,
+  listarAtividadesContrato
 }) => {
   const [filtro, setFiltro] = useState('');
   const [dateRef, setDateRef] = useState(getCurrentMonth());
@@ -271,6 +272,7 @@ export const AtvContrato = ({
         open={modalEditarAberto}
         setOpen={setModalEditarAberto}
         atvSelecionada={atividadeSelecionada}
+        onSuccess={() => listarAtividadesContrato && listarAtividadesContrato(contratoSelecionado?.id)}
       />
     </>
   );
