@@ -18,33 +18,28 @@ import { SearchInput } from "../../../components/InputSearch";
 import { dateConverter, filterDateMonth, getCurrentMonth } from "../../../utils/utils";
 import { EditIcon, InfoIcon } from "@chakra-ui/icons";
 import { ModalEditarAtv } from "../components/ModalEditarAtv";
-import { useAtividadesContrato } from "../../../hooks/useAtividadesContrato";
 import { Informativo } from "../../../components/Informativo";
 import { FaExclamationTriangle, FaHourglassHalf, FaRegCheckCircle, FaRegClock } from "react-icons/fa";
 import { getStatusAtividade } from "../../../utils/labelUtils";
 
-export const AtvContrato = ({ contratoSelecionado }) => {
-  const {
-    atividadesContrato,
-    listarAtividadesContrato,
-    setAtividadeSelecionada,
-    atividadeSelecionada,
-    modalEditarAberto,
-    setModalEditarAberto,
-    loadingAtividades,
-  } = useAtividadesContrato();
+export const AtvContrato = ({
+  contratoSelecionado,
+  atividadesContrato,
+  loadingAtividades,
+  setAtividadeSelecionada,
+  atividadeSelecionada,
+  modalEditarAberto,
+  setModalEditarAberto
+}) => {
+  // Removed internal hook usage to use props from parent
 
   const [filtro, setFiltro] = useState('');
   // state do filtro de data, sendo mes e ano
   const [dateRef, setDateRef] = useState(getCurrentMonth());
 
-  useEffect(() => {
-    if (contratoSelecionado?.id) {
-      listarAtividadesContrato(contratoSelecionado.id);
-    }
-  }, [contratoSelecionado]); 
+  // Effect to fetch was lifted to parent (Painel.jsx)
 
-  const atividadesFiltradas = filterDateMonth(atividadesContrato, dateRef)
+  const atividadesFiltradas = filterDateMonth(atividadesContrato || [], dateRef)
     .filter(atv =>
       atv.descricaoCustomizada?.toLowerCase().includes(filtro.toLowerCase()) ||
       atv.nomeUsuarioDelegado?.toLowerCase().includes(filtro.toLowerCase())
@@ -60,15 +55,15 @@ export const AtvContrato = ({ contratoSelecionado }) => {
               value={filtro}
               onChange={(e) => setFiltro(e.target.value)}
               placeholder="Filtrar por atividade ou nome do responsável"
-            />           
-             <Input width='30%' type='month' value={dateRef} onChange={(e) => setDateRef(e.target.value)} />          
+            />
+            <Input width='30%' type='month' value={dateRef} onChange={(e) => setDateRef(e.target.value)} />
             {/* YYYY/-MM */}
           </Flex>
         </GridItem>
         <List spacing={3} w="100%">
           {loadingAtividades ? (
             <Informativo tipo="carregando" />
-          ) : atividadesContrato.length === 0 ? (
+          ) : (atividadesContrato || []).length === 0 ? (
             <Informativo titulo="Não existem atividades atribuídas" />
           ) : atividadesFiltradas.length === 0 ? (
             <Informativo titulo="Nenhuma atividade encontrada" mensagem='Tente ajustar o mês/ano selecionado ou o termo da pesquisa' />

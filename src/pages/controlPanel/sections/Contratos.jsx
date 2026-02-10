@@ -1,23 +1,17 @@
-'use client';
+"use client";
 import React from 'react';
 import { useCallback, useMemo, useState } from 'react';
 import {
-  Avatar,
   Box,
   Flex,
-  Grid,
-  GridItem,
   Heading,
   Stack,
-  Tag,
-  TagLabel,
   Text,
 } from '@chakra-ui/react';
 import { SearchInput } from '../../../components/InputSearch';
 import { Informativo } from '../../../components/Informativo';
 import { useCliente } from '../../../hooks/useClientes';
 import { useContrato } from '../../../hooks/useContratos';
-import { RiContractFill } from 'react-icons/ri';
 import { dateConverter } from '../../../utils/utils';
 
 // Debounce simples sem libs
@@ -33,7 +27,7 @@ function useDebouncedValue(value, delay = 300) {
 export const Contratos = ({ onSelectContrato }) => {
   const [filtro, setFiltro] = useState('');
   const debouncedFiltro = useDebouncedValue(filtro, 300);
-  const [ selectedContratoId, setSelectContratoId ] = useState(null);
+  const [selectedContratoId, setSelectContratoId] = useState(null);
 
   const { clientes } = useCliente();
   const { contratos, contratoLoading } = useContrato();
@@ -63,21 +57,22 @@ export const Contratos = ({ onSelectContrato }) => {
   }, [contratos, clientById, debouncedFiltro]);
 
   const handleClickContrato = useCallback((ctr) => {
+    const cliente = clientById.get(ctr.clienteId);
     setSelectContratoId(ctr?.id);
-    onSelectContrato?.(ctr);
-  }, [onSelectContrato]);
+    onSelectContrato?.({ ...ctr, cliente });
+  }, [onSelectContrato, clientById]);
 
   return (
-    <Grid templateColumns="1fr" gap={6} p={3}>
-      <GridItem>
+    <Box>
+      <Box mb={4}>
         <SearchInput
-          placeholder="Filtrar por cliente (razão social, CNPJ) ou contrato"
+          placeholder="Filtrar por cliente ou contrato..."
           value={filtro}
           onChange={(e) => setFiltro(e.target.value)}
         />
-      </GridItem>
+      </Box>
 
-      <GridItem>
+      <Box>
         {contratoLoading ? (
           <Text fontStyle="italic" color="gray.500">
             Carregando contratos...
@@ -93,11 +88,11 @@ export const Contratos = ({ onSelectContrato }) => {
           </Box>
         ) : (
           <Stack spacing={3} pr={1}>
-            
+
             {contratosFiltrados.map((contrato) => {
               const cliente = clientById.get(contrato.clienteId);
               const isActive = selectedContratoId === contrato?.id;
-              
+
               return (
                 <Flex
                   key={contrato.id}
@@ -108,26 +103,30 @@ export const Contratos = ({ onSelectContrato }) => {
                   borderRadius={10}
                   bg={isActive ? "#68d39131" : "#fff"}
                   borderColor={isActive ? "#68D391" : "gray.200"}
-                  px={5}
-                  py={2}
+                  px={4}
+                  py={3}
                   cursor='pointer'
+                  _hover={{ borderColor: "teal.400", bg: "gray.50" }}
+                  transition="all 0.2s"
                 >
-                 
-                  <Flex direction='column' gap={0}>
-                    <Heading size="sm" noOfLines={1}>
+
+                  <Flex direction='column' gap={1} width="100%">
+                    <Heading size="sm" noOfLines={1} color="teal.600">
                       {contrato?.descricao}
                     </Heading>
-                    <Text fontSize={12} noOfLines={1}>
-                      Supervisor: {contrato?.nomeSupervisor || '—'} | Período {dateConverter(contrato?.dataInicio)} à {dateConverter(contrato?.dataFim)}
+                    <Text fontSize="xs" color="gray.500" noOfLines={1}>
+                      {dateConverter(contrato?.dataInicio)} à {dateConverter(contrato?.dataFim)}
                     </Text>
-                    <Text fontSize={12}>Cliente: {cliente.razaoSocial} <br />{cliente.cnpj}</Text>
-                  </Flex>                  
+                    <Text fontSize="xs" fontWeight="bold">
+                      {cliente.razaoSocial}
+                    </Text>
+                  </Flex>
                 </Flex>
               );
             })}
           </Stack>
         )}
-      </GridItem>
-    </Grid>
+      </Box>
+    </Box>
   );
 };
