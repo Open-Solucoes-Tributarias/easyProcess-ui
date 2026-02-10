@@ -206,7 +206,6 @@ export const AtvContrato = ({
                             <Flex align="center" gap={3} w="100%">
                               <Tooltip label={getStatusAtividade(item?.statusAtividade)} placement="top">
                                 <IconButton
-                                  isReadOnly
                                   cursor="default"
                                   size='sm'
                                   variant='ghost'

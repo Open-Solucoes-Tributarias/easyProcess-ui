@@ -23,14 +23,14 @@ import {
 import { Contratos } from "./sections/Contratos";
 import { AtvContrato } from "./sections/AtvContrato";
 import { FaBars, FaCalendarAlt, FaPlus, FaUserTie } from "react-icons/fa";
-import { AtividadeContrato } from "./components/AtividadeContrato";
+
 import { useAtividadesContrato } from "../../hooks/useAtividadesContrato";
 import { SummaryStats } from "./components/SummaryStats";
 import { dateConverter } from "../../utils/utils";
 
 export const Painel = () => {
   const [contratoSelecionado, setContratoSelecionado] = useState(null);
-  const [modalAtividadeAberto, setModalAtividadeAberto] = useState(false);
+
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   // Lifted state to share between SummaryStats and AtvContrato
@@ -81,14 +81,14 @@ export const Painel = () => {
                 )}
 
                 <HStack spacing={1}>
-                  <Icon as={FaUserTie} size="sm" color="gray.500" />
+                  <Icon as={FaUserTie} boxSize={4} color="gray.500" />
                   <Text fontSize="sm" color="gray.600">
                     {contratoSelecionado.nomeSupervisor || "Sem supervisor"}
                   </Text>
                 </HStack>
 
                 <HStack spacing={1}>
-                  <Icon as={FaCalendarAlt} size="sm" color="gray.500" />
+                  <Icon as={FaCalendarAlt} boxSize={4} color="gray.500" />
                   <Text fontSize="sm" color="gray.600">
                     {dateConverter(contratoSelecionado.dataInicio)} - {dateConverter(contratoSelecionado.dataFim)}
                   </Text>
@@ -98,16 +98,7 @@ export const Painel = () => {
           )}
         </Flex>
 
-        {contratoSelecionado && (
-          <Button
-            colorScheme="green"
-            leftIcon={<FaPlus />}
-            onClick={() => setModalAtividadeAberto(true)}
-            size="sm"
-          >
-            Nova Atividade
-          </Button>
-        )}
+
       </Flex>
 
       {/* Drawer for Contract Selection */}
@@ -178,12 +169,6 @@ export const Painel = () => {
         </Flex>
       )}
 
-      <AtividadeContrato
-        isOpen={modalAtividadeAberto}
-        onClose={() => setModalAtividadeAberto(false)}
-        contratoSelecionado={contratoSelecionado}
-        onSuccess={() => listarAtividadesContrato(contratoSelecionado?.id)}
-      />
     </Box>
   );
 };
