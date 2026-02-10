@@ -384,7 +384,7 @@ export const GerenciarContratos = () => {
           <Flex justify="space-between" align="center" mb={4}>
             <Text fontSize="lg" fontWeight="bold" color="gray.700">Selecione as Frentes de Trabalho</Text>
             <HStack>
-              <Button size="sm" variant="ghost" onClick={limparSelecao}>Limpar</Button>
+              <Button size="sm" variant="outline" onClick={limparSelecao}>Limpar</Button>
               <Button size="sm" variant="outline" onClick={selecionarTodas}>Selecionar Todas</Button>
             </HStack>
           </Flex>
@@ -610,24 +610,35 @@ export const GerenciarContratos = () => {
 
                                 <HStack>
                                   <Tooltip label="Responsável" placement="top">
-                                    <Avatar size="xs" name={atv.nomeUsuarioDelegado} src={atv.avatarUsuarioDelegado}>
-                                      <AvatarBadge boxSize="1.25em" bg="green.500" />
-                                    </Avatar>
+                                    <IconButton
+                                      variant="outline"
+                                      colorScheme="gray"
+                                      size="sm"
+                                      aria-label="Responsável"
+                                      icon={<Avatar size="xs" name={atv.nomeUsuarioDelegado} src={atv.avatarUsuarioDelegado} />}
+                                    />
                                   </Tooltip>
-
-                                  <IconButton
-                                    icon={<EditIcon />}
-                                    size="sm"
-                                    variant="ghost"
-                                    colorScheme="blue"
-                                    onClick={() => handleEditAtv(atv)}
-                                    aria-label="Editar"
-                                  />
-
+                                  <Tooltip
+                                    label="Não é possível editar atividades já cadastradas no contrato"
+                                    placement="top"
+                                    isDisabled={!(atv.atividadeId > 0 && atv.id > 0)}
+                                  >
+                                    <Box display="inline-block">
+                                      <IconButton
+                                        icon={<EditIcon />}
+                                        size="sm"
+                                        variant="outline"
+                                        colorScheme="blue"
+                                        onClick={() => handleEditAtv(atv)}
+                                        aria-label="Editar"
+                                        isDisabled={atv.atividadeId > 0 && atv.id > 0}
+                                      />
+                                    </Box>
+                                  </Tooltip>
                                   <IconButton
                                     icon={<CloseIcon />}
                                     size="sm"
-                                    variant="ghost"
+                                    variant="outline"
                                     colorScheme="red"
                                     onClick={() => handleRemoverAtv(atv)}
                                     aria-label="Remover"
@@ -657,7 +668,7 @@ export const GerenciarContratos = () => {
         <Button
           isDisabled={activeStep === 0}
           onClick={handleBack}
-          variant="ghost"
+          variant="outline"
         >
           Voltar
         </Button>
