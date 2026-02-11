@@ -1,145 +1,135 @@
-"use client";
-import { useEffect, useState } from "react";
-import {
-  Box,
-  Flex,
-  SimpleGrid,
-  Stat,
-  StatLabel,
-  StatNumber,
-  Text,
-  Heading,
-  Badge,
-  Stack,
-  Link,
-  IconButton,
-} from '@chakra-ui/react';
-import { CheckIcon } from "@chakra-ui/icons";
-import { getResumo } from "../../services/resumeService";
-import { FaUserGroup, FaUserTie, FaRegFolderOpen, FaChartGantt, FaCheckDouble } from "react-icons/fa6";
+import { Box, Grid, GridItem, Heading, SimpleGrid, Container, Spinner, Flex, Text, Alert, AlertIcon } from '@chakra-ui/react';
+import { motion } from 'framer-motion';
+import { useEffect, useState } from 'react';
+import { getResumo } from '../../services/resumeService';
+import StatCard from '../../components/Dashboard/StatCard';
+import ActivitiesChart from '../../components/Dashboard/ActivitiesChart';
+import FrontsOverview from '../../components/Dashboard/FrontsOverview';
+import UserPerformance from '../../components/Dashboard/UserPerformance';
 
-function StatsCard({ title, stat, icon }) {
-  return (
-    <Stat
-      px={4}
-      py={5}
-      shadow={'md'}
-      border={'1px solid'}
-      borderColor={'gray.200'}
-      rounded={'lg'}
-      bg="white"
-    >
-      <Flex justifyContent={'space-between'}>
-        <Box>
-          <StatLabel fontWeight="medium" color="gray.600">{title}</StatLabel>
-          <StatNumber fontSize={'2xl'} fontWeight="bold">{stat}</StatNumber>
-        </Box>
-        <Box my={'auto'} color={'blue.500'}>
-          {icon}
-        </Box>
-      </Flex>
-    </Stat>
-  );
-}
-
-function CardActions({ text, url, icon }) {
-  return (
-     <Link href={url} target="_self" _hover={{ textDecoration: 'none' }} w={'100%'}>
-      <Flex p={5} borderWidth="1px" align='center' borderColor="gray.200" borderRadius="md" bg="white" _hover={{ bg: 'gray.50', borderColor: '#68D391' }} w='100%'>
-        <IconButton variant='ghost'>
-          {icon}
-        </IconButton><Text>{text}</Text>
-      </Flex>
-    </Link>
-  );
-};
-
-export const Dashboard = () => {
-  const [estatisticas, setEstatisticas] = useState(null);
+const Dashboard = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchResumo = async () => {
+    const fetchData = async () => {
       try {
-        const dados = await getResumo();
-        setEstatisticas(dados);
+        setLoading(true);
+        const responseCallback = await getResumo();
+
+        // Transform API data to match component expectations if necessary
+        // Assuming response structure matches the mock data provided by user
+        // We might need to map 'atividadesPorFrente' for the chart if the API returns raw data
+        const formattedChartData = responseCallback.atividadesPorFrente?.map(item => ({
+          name: item.frenteDeTrabalho, // Mapping 'frenteDeTrabalho' to 'name' for Recharts
+          value: item.totalAtividades // 'totalAtividades' is already correct
+        })) || [];
+
+        setData({
+          ...responseCallback,
+          atividadesPorFrente: formattedChartData
+        });
       } catch (err) {
-        console.error('Erro ao buscar resumo:', err);
+        console.error("Erro ao buscar dados do dashboard:", err);
+        setError("Não foi possível carregar os dados do dashboard.");
+      } finally {
+        setLoading(false);
       }
     };
 
-    fetchResumo();
+    fetchData();
   }, []);
 
-  const status = estatisticas?.statusResumo;
-  const frentesPorCliente = estatisticas?.frentesPorCliente || [];
-  const atividadesPorFrente = estatisticas?.atividadesPorFrente || [];
-  const atividadesPorUsuario = estatisticas?.atividadesPorUsuario || [];
+  if (loading) {
+    return (
+      <Flex justify="center" align="center" minH="100vh" bg="gray.50">
+        <Spinner size="xl" color="blue.500" thickness="4px" />
+      </Flex>
+    );
+  }
 
-  const frentesAgrupadas = frentesPorCliente.reduce((acc, item) => {
-    if (!acc[item.cliente]) acc[item.cliente] = [];
-    acc[item.cliente].push(item.frenteDeTrabalhoNome);
-    return acc;
-  }, {});
+  if (error) {
+    return (
+      <Flex justify="center" align="center" minH="100vh" bg="gray.50" p={4}>
+        <Alert status="error" variant="subtle" flexDirection="column" alignItems="center" justifyItems="center" textAlign="center" borderRadius="md" maxW="md">
+          <AlertIcon boxSize="40px" mr={0} />
+          <Text mt={4} mb={1} fontSize="lg" fontWeight="bold">
+            Erro ao carregar
+          </Text>
+          <Text maxWidth="sm">{error}</Text>
+        </Alert>
+      </Flex>
+    );
+  }
 
   return (
-    <Flex direction='column' gap={2} py={3} px={3}>
-      <Flex direction='column' gap={3} pb={5}>
-        <Heading size='md'>Ações rápidas</Heading>
-        <Flex direction='row' gap={2} w='100%'>
-          <CardActions text={"Painel de controle"} url={"/painel"} icon={<FaChartGantt />} />
-          <CardActions text={"Frentes e atividades"} url={"/frentes"} icon={<FaCheckDouble />} />
-          <CardActions text={"Contratos"} url={"/contratos"} icon={<FaRegFolderOpen />} />
-          <CardActions text={"Meus clientes"} url={"/clientes"} icon={<FaUserTie />} />
-          <CardActions text={"Meus usuários"} url={"/usuarios"} icon={<FaUserGroup />} />
-        </Flex>
-      </Flex> 
-        <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={10}>
-          <StatsCard title="Atividades concluídas" stat={`${status?.totalConcluidas ?? 0}`} icon={<CheckIcon color={"green"} />} />
-          <StatsCard title="Atividade pendentes" stat={`${status?.totalPendentes ?? 0}`} icon={<CheckIcon />} />
-          <StatsCard title="Atividade atrasadas" stat={`${status?.totalAtrasadas ?? 0}`} icon={<CheckIcon color={"red"} />} />
-        </SimpleGrid>
+    <Box minH="100vh" py={4}>
+      <Container maxW="full">
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
+        >
+          <Heading mb={6} color="gray.800" fontSize="2xl" fontWeight="bold">
+            Dashboard de Controle
+          </Heading>
+        </motion.div>
 
-        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8}>
-          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
-            <Heading size="md" mb={4}>Frentes por Cliente</Heading>
-            <Stack spacing={4}>
-              {Object.entries(frentesAgrupadas).map(([cliente, frentes]) => (
-                <Box key={cliente}>
-                  <Text fontWeight="semibold" color="gray.700" mb={1}>{cliente}</Text>
-                  <Flex wrap="wrap" gap={2}>
-                    {frentes.map((f, i) => (
-                      <Badge key={i} colorScheme="blue">{f}</Badge>
-                    ))}
-                  </Flex>
-                </Box>
-              ))}
-            </Stack>
-          </Box>
+        {/* Stats Row */}
+        {data?.statusResumo && (
+          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={8}>
+            <StatCard
+              label="Concluídas"
+              value={data.statusResumo.totalConcluidas}
+              type="completed"
+              delay={0.1}
+            />
+            <StatCard
+              label="Pendentes"
+              value={data.statusResumo.totalPendentes}
+              type="pending"
+              delay={0.2}
+            />
+            <StatCard
+              label="Atrasadas"
+              value={data.statusResumo.totalAtrasadas}
+              type="delayed"
+              delay={0.3}
+            />
+          </SimpleGrid>
+        )}
 
-          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
-            <Heading size="md" mb={4}>Atividades por Frente</Heading>
-            <Stack spacing={3}>
-              {atividadesPorFrente.map((item, i) => (
-                <Flex key={i} justify="space-between">
-                  <Text color="gray.700">{item.frenteDeTrabalho}</Text>
-                  <Text fontWeight="bold">{item.totalAtividades}</Text>
-                </Flex>
-              ))}
-            </Stack>
-          </Box>
+        {/* Main Content Grid */}
+        <Grid
+          templateColumns={{ base: "1fr", lg: "2fr 1fr" }}
+          gap={6}
+          mb={8}
+        >
+          <GridItem>
+            {data?.atividadesPorFrente && (
+              <ActivitiesChart data={data.atividadesPorFrente} delay={0.4} />
+            )}
+          </GridItem>
+          <GridItem>
+            {data?.atividadesPorUsuario && (
+              <UserPerformance data={data.atividadesPorUsuario} delay={0.5} />
+            )}
+          </GridItem>
+        </Grid>
 
-          <Box p={5} border="1px solid" borderColor="gray.200" borderRadius="md" bg="white">
-            <Heading size="md" mb={4}>Atividades por Usuário</Heading>
-            <Stack spacing={3}>
-              {atividadesPorUsuario.map((item, i) => (
-                <Flex key={i} justify="space-between">
-                  <Text color="gray.700">{item.usuarioNome}</Text>
-                  <Text fontWeight="bold">{item.totalAtividades}</Text>
-                </Flex>
-              ))}
-            </Stack>
-          </Box>
-        </SimpleGrid>
-      </Flex>
+        {/* Secondary Content */}
+        <Grid templateColumns={{ base: "1fr" }} gap={6}>
+          <GridItem>
+            {data?.frentesPorEmpresa && (
+              <FrontsOverview data={data.frentesPorEmpresa} />
+            )}
+          </GridItem>
+        </Grid>
+
+      </Container>
+    </Box>
   );
 };
+
+export default Dashboard;
