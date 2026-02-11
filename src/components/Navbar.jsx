@@ -12,10 +12,12 @@ import {
   MenuItem,
   MenuDivider,
   AvatarBadge,
+  Tooltip,
 } from "@chakra-ui/react";
 import { useNavigate } from "react-router-dom";
-import { HamburgerIcon, ChatIcon } from "@chakra-ui/icons";
+import { HamburgerIcon, ChatIcon, QuestionIcon } from "@chakra-ui/icons";
 import { FaArrowRightFromBracket, FaUserGroup, FaUserTie } from "react-icons/fa6";
+import { useTour } from "./AppTour";
 
 const user = JSON.parse(localStorage.getItem('user'));
 const userName = user?.usuario;
@@ -29,6 +31,7 @@ const Links = [
 
 export const Navbar = ({ children }) => {
   const navigate = useNavigate();
+  const { startTour } = useTour();
 
   return (
     <>
@@ -55,6 +58,15 @@ export const Navbar = ({ children }) => {
           </HStack>
 
           <Flex alignItems={"center"}>
+            <Tooltip label="Clique para visualizar instruções" hasArrow>
+              <IconButton
+                icon={<QuestionIcon />}
+                aria-label="Iniciar Tour"
+                variant="ghost"
+                mr={4}
+                onClick={startTour}
+              />
+            </Tooltip>
             <ChatIcon mr={4} />
             <Menu>
               <MenuButton
@@ -77,7 +89,7 @@ export const Navbar = ({ children }) => {
                   icon={<FaUserGroup />}>
                   Meus usuários
                 </MenuItem>
-                 <MenuDivider />
+                <MenuDivider />
                 <MenuItem
                   onClick={() => {
                     localStorage.removeItem("token");
@@ -85,7 +97,7 @@ export const Navbar = ({ children }) => {
                     navigate("/login");
                   }}
                   icon={<FaArrowRightFromBracket />}
-                  
+
                 >
                   Sair
                 </MenuItem>

@@ -60,6 +60,7 @@ export const Painel = () => {
       <Flex justifyContent="space-between" alignItems="start" mb={6} flexWrap="wrap" gap={4}>
         <Flex gap={4} alignItems="start">
           <Button
+            id="painel-select-contract"
             leftIcon={<FaBars />}
             onClick={onOpen}
             variant="solid"
@@ -119,6 +120,7 @@ export const Painel = () => {
           <SummaryStats atividades={atividadesContrato} />
 
           <Box
+            id="painel-content"
             bg="white"
             p={0} // Removed padding to maximize space
             borderRadius="xl"

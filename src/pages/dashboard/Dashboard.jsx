@@ -71,14 +71,14 @@ const Dashboard = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
         >
-          <Heading mb={6} color="gray.800" fontSize="2xl" fontWeight="bold">
+          <Heading id="dashboard-title" mb={6} color="gray.800" fontSize="2xl" fontWeight="bold">
             Dashboard de Controle
           </Heading>
         </motion.div>
 
         {/* Stats Row */}
         {data?.statusResumo && (
-          <SimpleGrid columns={{ base: 1, md: 3 }} spacing={6} mb={8}>
+          <SimpleGrid id="dashboard-stats" columns={{ base: 1, md: 3 }} spacing={6} mb={8}>
             <StatCard
               label="Concluídas"
               value={data.statusResumo.totalConcluidas}
@@ -102,6 +102,7 @@ const Dashboard = () => {
 
         {/* Main Content Grid */}
         <Grid
+          id="dashboard-charts"
           templateColumns={{ base: "1fr", lg: "2fr 1fr" }}
           gap={6}
           mb={8}
