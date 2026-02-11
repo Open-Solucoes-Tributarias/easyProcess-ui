@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "descricao": "Contrato A",
+        "clienteId": 1,
+        "dataInicio": "2024-01-01",
+        "dataFim": "2024-12-31"
+    }
+]

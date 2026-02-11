@@ -37,7 +37,7 @@ import { useControleAtividades } from "../../../hooks/useControleAtividades";
 import { useAtividadesContrato } from "../../../hooks/useAtividadesContrato";
 import { useUsuarios } from "../../../hooks/useUsuarios";
 
-export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
+export const ModalEditarAtv = ({ open, setOpen, atvSelecionada, onSuccess }) => {
 
   const {
     controleAtv,
@@ -53,13 +53,13 @@ export const ModalEditarAtv = ({ open, setOpen, atvSelecionada }) => {
 
   const { usuarios, listarUsuarios } = useUsuarios();
 
-useEffect(() => {
-  if (open && atvSelecionada?.id) {
-    setAtividadeSelecionada(atvSelecionada);
-    setControleAtv({ ...controleAtvInicial, atividadeContratoId: atvSelecionada.id });
-    listarMovimentacoesAtividade(atvSelecionada.id);
-  }
-}, [open]);
+  useEffect(() => {
+    if (open && atvSelecionada?.id) {
+      setAtividadeSelecionada(atvSelecionada);
+      setControleAtv({ ...controleAtvInicial, atividadeContratoId: atvSelecionada.id });
+      listarMovimentacoesAtividade(atvSelecionada.id);
+    }
+  }, [open]);
 
   useEffect(() => {
     listarUsuarios();
@@ -70,8 +70,9 @@ useEffect(() => {
       isOpen={open}
       size="5xl"
       onClose={() => setOpen(false)}
-      onSave={() => {
-        salvarAtividadeContrato(); 
+      onSave={async () => {
+        await salvarAtividadeContrato();
+        if (onSuccess) onSuccess();
         setOpen(false);
       }}
       title={"Detalhes da atividade"}
@@ -208,7 +209,7 @@ useEffect(() => {
                 <option value={3}>Atrasada</option>
               </Select>
             </FormControl>
-             <FormControl display={'none'}>
+            <FormControl display={'none'}>
               <FormLabel>Sequência</FormLabel>
               <Input
                 type='number'

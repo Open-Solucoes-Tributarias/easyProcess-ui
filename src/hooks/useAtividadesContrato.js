@@ -62,42 +62,43 @@ export const useAtividadesContrato = () => {
   };
 
   const salvarAtividadesContratoEmLote = async (lista) => {
-  const sucesso = [];
-  const falhas = [];
+    const sucesso = [];
+    const falhas = [];
 
-  for (const raw of lista) {
-    try {
-      const payload = {
-        ...raw,
-        usuarioDelegadoId: Number(raw.usuarioDelegadoId || 0),
-        statusAtividade: Number(raw.statusAtividade || 0),
-        sequencia: Number(raw.sequencia || 0),
-        dataLimite: raw.dataLimite ? new Date(raw.dataLimite).toISOString() : null,
-        nomeUsuarioDelegado: raw.nomeUsuarioDelegado || ""
-      };
+    for (const raw of lista) {
+      try {
+        const payload = {
+          ...raw,
+          usuarioDelegadoId: Number(raw.usuarioDelegadoId || 0),
+          statusAtividade: Number(raw.statusAtividade || 0),
+          sequencia: Number(raw.sequencia || 0),
+          dataLimite: raw.dataLimite ? new Date(raw.dataLimite).toISOString() : null,
+          nomeUsuarioDelegado: raw.nomeUsuarioDelegado || "",
+          frenteDeTrabalhoIds: (Array.isArray(raw.frenteDeTrabalhoIds) && raw.frenteDeTrabalhoIds.length > 0) ? raw.frenteDeTrabalhoIds : null
+        };
 
-      const isEdicao = payload?.id && payload.id !== 0;
-      if (isEdicao) {
-        await editarAtividadesContrato(payload.id, payload);
-      } else {
-        payload.id = 0;
-        await registrarAtividadesContrato(payload);
+        const isEdicao = payload?.id && payload.id !== 0;
+        if (isEdicao) {
+          await editarAtividadesContrato(payload.id, payload);
+        } else {
+          payload.id = 0;
+          await registrarAtividadesContrato(payload);
+        }
+
+        sucesso.push(payload.atividadeId);
+      } catch (err) {
+        falhas.push({ descricaoCustomizada: raw.descricaoCustomizada, error: String(err) });
       }
-
-      sucesso.push(payload.atividadeId);
-    } catch (err) {
-      falhas.push({ descricaoCustomizada: raw.descricaoCustomizada, error: String(err) });
     }
-  }
 
-  // reconsulta só uma vez no final
-  const contratoId = lista[0]?.contratoId;
-  if (contratoId) {
-    await listarAtividadesContrato(contratoId);
-  }
+    // reconsulta só uma vez no final
+    const contratoId = lista[0]?.contratoId;
+    if (contratoId) {
+      await listarAtividadesContrato(contratoId);
+    }
 
-  return { sucesso, falhas, total: lista.length }; //retorno de sucesso para feedback da UI
-};
+    return { sucesso, falhas, total: lista.length }; //retorno de sucesso para feedback da UI
+  };
 
   const excluirAtividadeContrato = async (id, contratoId) => {
     try {

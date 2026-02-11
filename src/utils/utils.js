@@ -79,6 +79,8 @@ export const criarAtvRecorrentes = (atvs = [], contrato = {}) => {
       usuarioDelegadoId: uid,
       statusAtividade: 0,
       nomeUsuarioDelegado: nomeResp,
+      // Copia info da frente para uso na UI (badges)
+      frenteDeTrabalhoIds: atv?.frenteDeTrabalhoIds || [],
     };
 
     const tipo = Number(atv?.tipo ?? 1);     // 1 = única, 2 = recorrente
@@ -89,6 +91,7 @@ export const criarAtvRecorrentes = (atvs = [], contrato = {}) => {
     if (tipo !== 2 || !(fim instanceof Date) || isNaN(fim)) {
       saida.push({
         ...baseObj,
+        tempId: Date.now() + Math.random(), // Identificador único temporário
         sequencia: saida.length,
         descricaoCustomizada: montarDescricao(atv),
         dataLimite: atv?.proximaExecucao ? new Date(atv.proximaExecucao) : new Date(),
@@ -101,6 +104,7 @@ export const criarAtvRecorrentes = (atvs = [], contrato = {}) => {
     while (atual <= fim) {
       saida.push({
         ...baseObj,
+        tempId: Date.now() + Math.random(), // Identificador único temporário
         sequencia: saida.length,
         descricaoCustomizada: montarDescricao(atv),
         dataLimite: new Date(atual),

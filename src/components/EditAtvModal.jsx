@@ -10,7 +10,8 @@ import {
     InputGroup,
     InputLeftElement,
     Avatar,
-    AvatarBadge
+    AvatarBadge,
+    Checkbox
 } from "@chakra-ui/react";
 import { DialogModal } from "./DialogModal";
 import { useUsuarios } from "../hooks/useUsuarios";
@@ -28,7 +29,12 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
             statusAtividade: atvSelecionada?.statusAtividade ?? "",
             descricaoCustomizada: atvSelecionada?.descricaoCustomizada ?? "",
             dataLimite: atvSelecionada?.dataLimite ?? "",
-            nomeUsuarioDelegado: atvSelecionada?.nomeUsuarioDelegado ?? ""
+            descricaoCustomizada: atvSelecionada?.descricaoCustomizada ?? "",
+            dataLimite: atvSelecionada?.dataLimite ?? "",
+            nomeUsuarioDelegado: atvSelecionada?.nomeUsuarioDelegado ?? "",
+            tipo: atvSelecionada?.tipo ?? 1,
+            periodo: atvSelecionada?.periodo ?? 0,
+            intervaloEmDias: atvSelecionada?.intervaloEmDias ?? 0
         }),
         [atvSelecionada]
     );
@@ -57,7 +63,7 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
             return;
         }
 
-        if (name === "sequencia" || name === "statusAtividade") {
+        if (name === "sequencia" || name === "statusAtividade" || name === "periodo" || name === "intervaloEmDias" || name === "tipo") {
             setDraftAtv(p => ({ ...p, [name]: value === "" ? "" : Number(value) }));
             return;
         }
@@ -132,6 +138,46 @@ export const EditAtvModal = ({ open, setOpen, atvSelecionada, onConfirm }) => {
                             onChange={handleChange}
                         />
                     </FormControl>
+
+                    <FormControl display="flex" alignItems="center" mt={8}>
+                        <Checkbox
+                            isChecked={draftAtv.tipo === 2}
+                            onChange={(e) => setDraftAtv(p => ({ ...p, tipo: e.target.checked ? 2 : 1 }))}
+                        >
+                            Recorrente?
+                        </Checkbox>
+                    </FormControl>
+
+                    {draftAtv.tipo === 2 && (
+                        <FormControl>
+                            <FormLabel>Periodicidade</FormLabel>
+                            <Select
+                                name="periodo"
+                                value={draftAtv.periodo}
+                                onChange={handleChange}
+                            >
+                                <option value="0">Selecione...</option>
+                                <option value="1">A cada X dias</option>
+                                <option value="2">Semanal</option>
+                                <option value="3">Quinzenal</option>
+                                <option value="4">Mensal</option>
+                                <option value="5">Trimestral</option>
+                                <option value="6">Anual</option>
+                            </Select>
+                        </FormControl>
+                    )}
+
+                    {draftAtv.tipo === 2 && draftAtv.periodo == 1 && (
+                        <FormControl>
+                            <FormLabel>Intervalo (dias)</FormLabel>
+                            <Input
+                                type="number"
+                                name="intervaloEmDias"
+                                value={draftAtv.intervaloEmDias}
+                                onChange={handleChange}
+                            />
+                        </FormControl>
+                    )}
 
                     <FormControl>
                         <FormLabel>Status</FormLabel>
