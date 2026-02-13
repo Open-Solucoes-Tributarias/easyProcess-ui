@@ -118,7 +118,7 @@ export const Contratos = ({ onSelectContrato }) => {
                       {dateConverter(contrato?.dataInicio)} à {dateConverter(contrato?.dataFim)}
                     </Text>
                     <Text fontSize="xs" fontWeight="bold">
-                      {cliente.razaoSocial}
+                      {cliente?.razaoSocial || "Razão social não informada"}
                     </Text>
                   </Flex>
                 </Flex>
